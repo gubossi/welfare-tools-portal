@@ -10,7 +10,6 @@ export default {
       return proxyTo(request, "https://lottery-webapp.gubossi.workers.dev", "/lottery");
     }
 
-    // 나머지는 정적 사이트 자산(index.html, guide/, privacy/, terms/ 등)
     return env.ASSETS.fetch(request);
   },
 };
@@ -43,8 +42,8 @@ async function proxyTo(request, upstreamOrigin, mountPath) {
   const response = await fetch(upstreamRequest);
 
   const newHeaders = new Headers(response.headers);
-
   const location = newHeaders.get("location");
+
   if (location) {
     try {
       const locUrl = new URL(location, upstreamOrigin);
@@ -54,9 +53,7 @@ async function proxyTo(request, upstreamOrigin, mountPath) {
         locUrl.pathname = mountPath + (locUrl.pathname === "/" ? "/" : locUrl.pathname);
         newHeaders.set("location", locUrl.toString());
       }
-    } catch (e) {
-      // 그대로 둠
-    }
+    } catch {}
   }
 
   return new Response(response.body, {
