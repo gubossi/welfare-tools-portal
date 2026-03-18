@@ -3,26 +3,6 @@ export default {
     const url = new URL(request.url);
 
     if (url.pathname === "/salary" || url.pathname.startsWith("/salary/")) {
-      return new Response("salary route hit", {
-        headers: { "content-type": "text/plain; charset=UTF-8" },
-      });
-    }
-
-    if (url.pathname === "/lottery" || url.pathname.startsWith("/lottery/")) {
-      return new Response("lottery route hit", {
-        headers: { "content-type": "text/plain; charset=UTF-8" },
-      });
-    }
-
-    return env.ASSETS.fetch(request);
-  },
-};
-
-export default {
-  async fetch(request, env) {
-    const url = new URL(request.url);
-
-    if (url.pathname === "/salary" || url.pathname.startsWith("/salary/")) {
       return proxyTo(request, "https://welfare-8nl.pages.dev", "/salary");
     }
 
