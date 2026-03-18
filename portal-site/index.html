@@ -2,499 +2,88 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>복지업무 도구모음</title>
-  <meta name="description" content="사회복지 실무와 범용 업무에 도움이 되는 공개형 웹도구를 모아 제공하는 포털" />
-  <style>
-    :root {
-      --bg: #f8fafc;
-      --surface: #ffffff;
-      --surface-2: #f1f5f9;
-      --text: #0f172a;
-      --muted: #64748b;
-      --line: #e2e8f0;
-      --primary: #0f172a;
-      --primary-2: #1e293b;
-      --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
-      --radius-xl: 24px;
-      --radius-lg: 18px;
-      --max: 1180px;
-    }
-
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-    }
-    a { color: inherit; text-decoration: none; }
-    img { max-width: 100%; display: block; }
-    .container { width: min(var(--max), calc(100% - 32px)); margin: 0 auto; }
-    .header {
-      position: sticky; top: 0; z-index: 20;
-      backdrop-filter: blur(8px);
-      background: rgba(255,255,255,0.92);
-      border-bottom: 1px solid var(--line);
-    }
-    .header-inner {
-      display: flex; align-items: center; justify-content: space-between;
-      min-height: 74px; gap: 16px;
-    }
-    .brand { display: flex; align-items: center; gap: 12px; }
-    .brand-badge {
-      width: 44px; height: 44px; border-radius: 16px;
-      background: var(--primary); color: white; font-weight: 800;
-      display: grid; place-items: center; font-size: 14px;
-    }
-    .brand small { display: block; color: var(--muted); letter-spacing: 0.16em; text-transform: uppercase; font-size: 11px; font-weight: 700; }
-    .brand strong { font-size: 20px; }
-    .nav { display: flex; gap: 22px; flex-wrap: wrap; }
-    .nav a { color: var(--muted); font-weight: 600; font-size: 14px; }
-    .nav a:hover { color: var(--text); }
-
-    .hero {
-      padding: 72px 0 40px;
-      display: grid; gap: 24px;
-      grid-template-columns: 1.15fr 0.85fr;
-      align-items: center;
-    }
-    .pill {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 10px 14px; border-radius: 999px; background: var(--surface);
-      border: 1px solid var(--line); box-shadow: var(--shadow);
-      color: var(--primary-2); font-size: 14px; font-weight: 600;
-    }
-    h1 {
-      margin: 18px 0 0; font-size: clamp(38px, 5vw, 58px);
-      line-height: 1.1; letter-spacing: -0.03em;
-    }
-    .hero p.lead {
-      margin: 18px 0 0; max-width: 760px; color: var(--muted);
-      font-size: 18px; line-height: 1.85;
-    }
-    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
-    .btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      padding: 14px 18px; border-radius: 18px; font-weight: 700; font-size: 15px;
-      border: 1px solid transparent; transition: transform .15s ease, box-shadow .15s ease;
-    }
-    .btn:hover { transform: translateY(-1px); }
-    .btn-primary { background: var(--primary); color: white; box-shadow: var(--shadow); }
-    .btn-secondary { background: var(--surface); color: var(--text); border-color: var(--line); }
-
-    .card {
-      background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-xl);
-      box-shadow: var(--shadow);
-    }
-    .card-pad { padding: 26px; }
-    .card h2, .card h3, .card h4, section h2, section h3 { margin: 0; }
-    .muted { color: var(--muted); }
-    .section { padding: 22px 0 18px; }
-    .section-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; margin-bottom: 18px; }
-    .section-kicker { color: var(--muted); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
-    .section-title { font-size: 32px; letter-spacing: -0.03em; }
-
-    .quick-list { display: grid; gap: 12px; margin-top: 14px; }
-    .quick-item {
-      display: block; padding: 16px; border: 1px solid var(--line); border-radius: 18px;
-      background: var(--surface);
-    }
-    .quick-item:hover { background: var(--surface-2); }
-    .tag {
-      display: inline-flex; align-items: center; padding: 6px 10px;
-      border-radius: 999px; background: var(--surface-2); color: var(--muted);
-      font-size: 12px; font-weight: 700;
-    }
-    .grid-3 { display: grid; gap: 18px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .grid-4 { display: grid; gap: 18px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
-    .grid-2 { display: grid; gap: 18px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-
-    .tool-card h4 { font-size: 21px; margin-top: 14px; }
-    .tool-card p { color: var(--muted); margin: 12px 0 0; min-height: 72px; }
-    .tool-card .actions { margin-top: 18px; }
-
-    .list-clean { list-style: none; padding: 0; margin: 16px 0 0; }
-    .list-clean li {
-      padding: 11px 13px; border-radius: 14px; background: var(--surface-2); margin-top: 10px;
-      color: var(--primary-2); font-size: 14px;
-    }
-
-    .route-box {
-      padding: 14px 16px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface);
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 14px;
-      word-break: break-all;
-    }
-
-    .guide-card { display: block; padding: 18px; border: 1px solid var(--line); border-radius: 18px; }
-    .guide-card:hover { background: var(--surface-2); }
-    .dark-card {
-      background: var(--primary); color: white; border-radius: var(--radius-xl); padding: 26px; box-shadow: var(--shadow);
-    }
-    .dark-card .muted { color: #cbd5e1; }
-
-    .split { display: grid; gap: 18px; grid-template-columns: 1fr 0.72fr; }
-    .about-grid { display: grid; gap: 18px; grid-template-columns: 1fr 0.75fr; }
-
-    .policy {
-      margin-top: 14px; padding: 22px; border-radius: 24px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow);
-    }
-    .policy h3 { margin-top: 0; font-size: 18px; }
-    .policy-block + .policy-block { margin-top: 18px; }
-    .footer { margin-top: 42px; border-top: 1px solid var(--line); background: var(--surface); }
-    .footer-grid { display: grid; gap: 24px; grid-template-columns: 1.4fr 1fr 1fr 1fr; padding: 36px 0; }
-    .footer ul { list-style: none; padding: 0; margin: 14px 0 0; }
-    .footer li { margin-top: 8px; color: var(--muted); font-size: 14px; }
-    .footer p { color: var(--muted); font-size: 14px; }
-
-    .notice-box {
-      border-radius: 22px; background: var(--surface-2); padding: 16px 18px; color: var(--primary-2);
-      font-size: 14px; line-height: 1.8;
-    }
-
-    .adsense-note {
-      margin-top: 14px; font-size: 13px; color: var(--muted);
-      border-top: 1px dashed var(--line); padding-top: 14px;
-    }
-
-    @media (max-width: 980px) {
-      .hero, .split, .about-grid, .grid-4, .grid-3, .grid-2, .footer-grid { grid-template-columns: 1fr 1fr; }
-      .hero { padding-top: 44px; }
-    }
-    @media (max-width: 720px) {
-      .nav { display: none; }
-      .hero, .split, .about-grid, .grid-4, .grid-3, .grid-2, .footer-grid { grid-template-columns: 1fr; }
-      .header-inner { min-height: 66px; }
-      .section-title { font-size: 28px; }
-      .card-pad { padding: 20px; }
-      .container { width: min(var(--max), calc(100% - 24px)); }
-    }
-  </style>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Welmoa Tools | 복지 실무 도구 포털</title>
+  <meta name="description" content="복지 실무자를 위한 급여조회, 신청자 추첨 등 업무 도구 포털" />
+  <link rel="stylesheet" href="/assets/shared.css" />
 </head>
 <body>
-  <header class="header">
-    <div class="container header-inner">
-      <a class="brand" href="#top">
-        <span class="brand-badge">복지</span>
-        <span>
-          <small>Welfare Practical Tools</small>
-          <strong>복지업무 도구모음</strong>
-        </span>
-      </a>
-      <nav class="nav">
-        <a href="#tools">도구모음</a>
-        <a href="#guide">업무가이드</a>
-        <a href="#about">소개</a>
-        <a href="#privacy">개인정보처리방침</a>
-        <a href="#terms">이용약관</a>
-      </nav>
-    </div>
-  </header>
+  <div class="site-shell">
+    <div id="site-header"></div>
 
-  <main id="top" class="container">
-    <section class="hero">
-      <div>
-        <span class="pill">로그인 없이 바로 사용하는 공개형 업무도구 포털</span>
-        <h1>사회복지 실무와 일상 업무에<br />바로 쓰는 웹도구 모음</h1>
-        <p class="lead">
-          급여 조회, 신청자 추첨, 계산기, 문서 보조 도구 등 자주 쓰는 기능을 한곳에 모았습니다.
-          이미 운영 중인 웹앱은 그대로 연결하고, 앞으로 필요한 실무용 웹앱을 계속 추가할 수 있도록 구성했습니다.
-        </p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#tools">도구 보러가기</a>
-          <a class="btn btn-secondary" href="#guide">사용 가이드 보기</a>
-        </div>
-        <p class="adsense-note">
-          광고를 적용할 경우 이 메인 포털은 소개·설명·연결 허브 역할을 하고, 실제 도구는 외부 웹앱으로 연결하는 구조를 기준으로 설계했습니다.
-        </p>
-      </div>
+    <main class="page-main">
+      <div class="page-wrap">
+        <section class="hero">
+          <div class="hero-kicker">Welmoa Tools</div>
+          <h1>복지 실무를 위한 업무 도구 포털</h1>
+          <p>
+            급여조회, 신청자 추첨 등 실무에 자주 필요한 기능을 한 곳에서 사용할 수 있도록
+            구성한 웰모아 도구 포털입니다.
+          </p>
 
-      <div class="card card-pad">
-        <div class="section-head" style="margin-bottom: 10px;">
-          <h3 style="font-size: 22px;">지금 바로 많이 찾는 도구</h3>
-          <span class="tag">Top 2 운영중</span>
-        </div>
-        <div class="quick-list">
-          <a class="quick-item" href="/salary/" rel="noopener noreferrer">
-            <div style="display:flex; justify-content:space-between; gap:12px; align-items:center;">
-              <strong>사회복지시설 종사자 급여 조회</strong>
-              <span class="tag">급여·수당</span>
-            </div>
-            <div class="muted" style="margin-top:8px; font-size:14px;">기준표와 수당 항목을 바탕으로 급여를 빠르게 확인하는 도구</div>
-          </a>
-          <a class="quick-item" href="/lottery/" rel="noopener noreferrer">
-            <div style="display:flex; justify-content:space-between; gap:12px; align-items:center;">
-              <strong>프로그램 신청자 추첨</strong>
-              <span class="tag">추첨·선발</span>
-            </div>
-            <div class="muted" style="margin-top:8px; font-size:14px;">신청자 명단을 붙여넣고 공정하게 추첨 결과를 확인하는 도구</div>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <section id="tools" class="section">
-      <div class="section-head">
-        <div>
-          <div class="section-kicker">Featured Tools</div>
-          <h2 class="section-title">대표 도구</h2>
-          <p class="muted" style="margin:8px 0 0;">기존에 운영 중인 웹앱은 새로 만들지 않고 그대로 연결하는 방식입니다.</p>
-        </div>
-      </div>
-
-      <div class="grid-3">
-        <article class="card card-pad tool-card">
-          <span class="tag">급여·수당</span>
-          <h4>사회복지시설 종사자 급여 조회</h4>
-          <p>기준표와 수당 항목을 바탕으로 급여를 빠르게 확인하는 외부 웹앱입니다.</p>
-          <div class="actions"><a class="btn btn-primary" href="https://welfare-8nl.pages.dev/" target="_blank" rel="noopener noreferrer">기존 페이지 열기</a></div>
-        </article>
-
-        <article class="card card-pad tool-card">
-          <span class="tag">추첨·선발</span>
-          <h4>프로그램 신청자 추첨</h4>
-          <p>신청자 명단을 붙여넣고 중복 제거, 예비자 추첨, 결과 확인까지 진행하는 외부 웹앱입니다.</p>
-          <div class="actions"><a class="btn btn-primary" href="https://lottery-webapp.gubossi.workers.dev/" target="_blank" rel="noopener noreferrer">기존 페이지 열기</a></div>
-        </article>
-
-        <article class="card card-pad tool-card">
-          <span class="tag">추가 예정</span>
-          <h4>앞으로 붙일 새 도구들</h4>
-          <p>근무일수 계산기, 명단 정리, 예산 비율 계산기, 시간외근무 계산기 등을 같은 방식으로 확장할 수 있습니다.</p>
-          <div class="actions"><a class="btn btn-secondary" href="#routes">연결 구조 보기</a></div>
-        </article>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section-head">
-        <div>
-          <div class="section-kicker">Categories</div>
-          <h2 class="section-title">카테고리별 도구 모음</h2>
-        </div>
-      </div>
-
-      <div class="grid-4">
-        <div class="card card-pad">
-          <h3>급여·수당</h3>
-          <ul class="list-clean">
-            <li>급여 조회</li>
-            <li>시간외근무 계산기</li>
-            <li>가족수당 참고</li>
-            <li>공제 참고 계산</li>
-          </ul>
-        </div>
-        <div class="card card-pad">
-          <h3>추첨·선발</h3>
-          <ul class="list-clean">
-            <li>신청자 추첨</li>
-            <li>예비자 순번 추첨</li>
-            <li>팀 배정 랜덤</li>
-            <li>번호 뽑기</li>
-          </ul>
-        </div>
-        <div class="card card-pad">
-          <h3>문서·서식</h3>
-          <ul class="list-clean">
-            <li>공문 문구 도우미</li>
-            <li>결과보고 문장 도우미</li>
-            <li>회의록 초안</li>
-            <li>만족도 문항 예시</li>
-          </ul>
-        </div>
-        <div class="card card-pad">
-          <h3>계산·변환</h3>
-          <ul class="list-clean">
-            <li>근무일수 계산</li>
-            <li>비율 계산</li>
-            <li>전화번호 형식 변환</li>
-            <li>텍스트 정리</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section id="routes" class="section">
-      <div class="card card-pad">
-        <div class="section-kicker">Recommended Routes</div>
-        <h2 class="section-title">권장 주소 구조</h2>
-        <p class="muted" style="margin:10px 0 0;">현재는 포털 + 외부 개별 앱 연결 구조로 두고, 나중에 필요하면 하위 경로 방식으로 통합할 수 있습니다.</p>
-        <div class="grid-3" style="margin-top:18px;">
-          <div class="route-box">/</div>
-          <div class="route-box">https://welfare-8nl.pages.dev/</div>
-          <div class="route-box">https://lottery-webapp.gubossi.workers.dev/</div>
-          <div class="route-box">/guide</div>
-          <div class="route-box">#privacy</div>
-          <div class="route-box">#terms</div>
-        </div>
-      </div>
-    </section>
-
-    <section id="guide" class="section split">
-      <div class="card card-pad">
-        <div class="section-kicker">Guide Content</div>
-        <h2 class="section-title">업무가이드와 설명 콘텐츠</h2>
-        <p class="muted" style="margin:10px 0 0;">
-          공개형 도구 사이트는 기능 자체도 중요하지만, 사용법, 주의사항, 활용 예시, FAQ 같은 설명 콘텐츠가 함께 있어야 더 안정적으로 운영할 수 있습니다.
-        </p>
-        <div class="quick-list" style="margin-top:18px;">
-          <a class="guide-card" href="https://welfare-8nl.pages.dev/" target="_blank" rel="noopener noreferrer">
-            <strong>사회복지시설 급여 계산 시 먼저 확인할 항목</strong>
-            <div class="muted" style="margin-top:8px; font-size:14px;">호봉, 직종, 수당 반영 기준, 공제 항목을 먼저 확인하면 계산 오류를 줄일 수 있습니다.</div>
-          </a>
-          <a class="guide-card" href="https://lottery-webapp.gubossi.workers.dev/" target="_blank" rel="noopener noreferrer">
-            <strong>프로그램 신청자 추첨을 공정하게 운영하는 방법</strong>
-            <div class="muted" style="margin-top:8px; font-size:14px;">명단 정리, 중복 제거, 추첨 기준 공개, 결과 보관까지 한 흐름으로 운영하는 것이 좋습니다.</div>
-          </a>
-          <div class="guide-card">
-            <strong>명단 정리 전 개인정보 입력 시 주의할 점</strong>
-            <div class="muted" style="margin-top:8px; font-size:14px;">민감정보는 최소화하고, 저장 없이 처리하는 공개형 도구 구조를 권장합니다.</div>
+          <div class="badge-row">
+            <span class="soft-badge">통합 포털</span>
+            <span class="soft-badge">공통 UI</span>
+            <span class="soft-badge">빠른 접근</span>
           </div>
-        </div>
-      </div>
+        </section>
 
-      <aside class="dark-card">
-        <div class="section-kicker" style="color:#cbd5e1;">AdSense Friendly Layout</div>
-        <h2 style="font-size:32px; letter-spacing:-0.03em; margin-top:6px;">운영 시 꼭 챙길 점</h2>
-        <ul class="list-clean" style="margin-top:18px;">
-          <li style="background:rgba(255,255,255,0.08); color:#fff;">각 도구 페이지마다 설명과 FAQ를 함께 제공</li>
-          <li style="background:rgba(255,255,255,0.08); color:#fff;">홈, 소개, 개인정보처리방침, 이용약관 페이지 구성</li>
-          <li style="background:rgba(255,255,255,0.08); color:#fff;">복제형 페이지 대신 실제로 다른 기능을 제공</li>
-          <li style="background:rgba(255,255,255,0.08); color:#fff;">모바일 화면에서도 사용 가능하도록 반응형 구성</li>
-          <li style="background:rgba(255,255,255,0.08); color:#fff;">민감정보는 저장하지 않는 공개형 구조 유지</li>
-        </ul>
-      </aside>
-    </section>
+        <section class="grid-2">
+          <article class="card">
+            <h2 class="section-title">주요 도구</h2>
+            <p class="section-desc">
+              현재 제공 중인 기능입니다. 각 도구는 동일한 헤더, 푸터, 카드형 레이아웃을 사용합니다.
+            </p>
 
-    <section id="about" class="section about-grid">
-      <div class="card card-pad">
-        <div class="section-kicker">About This Portal</div>
-        <h2 class="section-title">개별 웹앱을 모아 연결하는 공개형 실무 포털</h2>
-        <p class="muted" style="margin:10px 0 0;">
-          각 도구는 독립적으로 운영하되, 하나의 홈페이지에서 자연스럽게 연결되도록 설계했습니다.
-          지금은 급여 조회와 신청자 추첨부터 시작하고, 앞으로 실무에 필요한 유틸리티를 계속 추가하는 방식에 잘 맞습니다.
-        </p>
-        <div class="hero-actions" style="margin-top:18px;">
-          <a class="btn btn-primary" href="https://welfare-8nl.pages.dev/" target="_blank" rel="noopener noreferrer">급여조회 열기</a>
-          <a class="btn btn-secondary" href="https://lottery-webapp.gubossi.workers.dev/" target="_blank" rel="noopener noreferrer">추첨도구 열기</a>
-        </div>
-      </div>
-      <div class="card card-pad">
-        <div class="section-kicker">Starter Pages</div>
-        <h2 class="section-title">처음 함께 둘 구성</h2>
-        <ul class="list-clean">
-          <li>홈 페이지</li>
-          <li>전체 도구 소개 섹션</li>
-          <li>급여 조회 외부 링크</li>
-          <li>신청자 추첨 외부 링크</li>
-          <li>개인정보처리방침</li>
-          <li>이용약관</li>
-        </ul>
-      </div>
-    </section>
+            <div class="card-list">
+              <div class="mini-card">
+                <h3>급여조회</h3>
+                <p>사회복지시설 종사자 급여 정보를 쉽고 빠르게 확인할 수 있는 도구입니다.</p>
+                <div class="tool-actions">
+                  <a class="btn btn-primary" href="/salary">급여조회 바로가기</a>
+                </div>
+              </div>
 
-    <section id="privacy" class="section">
-      <div class="section-kicker">Privacy Policy</div>
-      <h2 class="section-title">개인정보처리방침</h2>
-      <div class="policy">
-        <div class="policy-block">
-          <h3>1. 기본 원칙</h3>
-          <p>복지업무 도구모음은 누구나 로그인 없이 사용할 수 있는 공개형 웹도구를 제공하며, 가능한 한 개인정보를 수집하거나 저장하지 않는 방향으로 서비스를 운영합니다.</p>
-        </div>
-        <div class="policy-block">
-          <h3>2. 수집하는 정보</h3>
-          <p>원칙적으로 회원가입 정보는 수집하지 않습니다. 다만 서비스 운영 과정에서 방문 기록, 브라우저 정보, 접속 환경 정보, 쿠키 등 비식별 정보가 통계 또는 광고 제공 목적으로 처리될 수 있습니다.</p>
-        </div>
-        <div class="policy-block">
-          <h3>3. 도구 입력 데이터 처리</h3>
-          <p>사용자가 급여 계산, 추첨, 명단 정리 등의 도구에 직접 입력한 데이터는 기본적으로 사용자 화면 내 처리만을 우선으로 하며, 별도 저장 기능을 제공하지 않는 구조를 권장합니다. 민감하거나 식별 가능한 개인정보는 최소한으로 입력해 주세요.</p>
-        </div>
-        <div class="policy-block">
-          <h3>4. 쿠키 및 광고</h3>
-          <p>본 사이트는 방문자 통계 분석 또는 광고 서비스 제공을 위해 쿠키를 사용할 수 있습니다. 향후 Google AdSense 등 외부 광고 서비스가 적용될 경우 해당 사업자의 정책에 따라 쿠키가 사용될 수 있습니다.</p>
-        </div>
-        <div class="policy-block">
-          <h3>5. 외부 링크</h3>
-          <p>사이트 내에는 외부 웹페이지 또는 외부 웹앱 링크가 포함될 수 있으며, 외부 사이트에서의 개인정보 처리에 대해서는 해당 사이트의 정책이 적용됩니다.</p>
-        </div>
-        <div class="policy-block">
-          <h3>6. 문의</h3>
-          <p>정식 문의 페이지 또는 연락처가 추가되면 본 방침에 함께 반영합니다.</p>
-        </div>
-        <p class="muted" style="font-size:13px; margin-top:14px;">시행일: 2026-03-17</p>
-      </div>
-    </section>
+              <div class="mini-card">
+                <h3>신청자 추첨</h3>
+                <p>프로그램 신청자 데이터를 기반으로 공정하게 추첨할 수 있는 도구입니다.</p>
+                <div class="tool-actions">
+                  <a class="btn btn-primary" href="/lottery">신청자 추첨 바로가기</a>
+                </div>
+              </div>
+            </div>
+          </article>
 
-    <section id="terms" class="section">
-      <div class="section-kicker">Terms of Service</div>
-      <h2 class="section-title">이용약관</h2>
-      <div class="policy">
-        <div class="policy-block">
-          <h3>1. 목적</h3>
-          <p>이 약관은 복지업무 도구모음이 제공하는 공개형 웹도구 및 관련 정보 서비스의 이용 조건과 기본 사항을 정하는 것을 목적으로 합니다.</p>
-        </div>
-        <div class="policy-block">
-          <h3>2. 서비스 성격</h3>
-          <p>본 사이트는 업무 편의를 돕기 위한 계산, 정리, 추첨, 안내성 도구를 제공합니다. 제공되는 결과는 참고용으로 활용해야 하며, 최종 판단과 책임은 이용자에게 있습니다.</p>
-        </div>
-        <div class="policy-block">
-          <h3>3. 이용자의 책임</h3>
-          <p>이용자는 법령 또는 사회통념에 반하는 방식으로 서비스를 사용해서는 안 되며, 민감한 개인정보나 제3자의 정보를 무단 입력하거나 공개해서는 안 됩니다.</p>
-        </div>
-        <div class="policy-block">
-          <h3>4. 서비스 변경</h3>
-          <p>운영자는 서비스 품질 향상과 기능 개선을 위해 일부 도구, 경로, 화면 구성, 제공 내용을 변경하거나 중단할 수 있습니다.</p>
-        </div>
-        <div class="policy-block">
-          <h3>5. 면책</h3>
-          <p>운영자는 이용자가 본 서비스를 활용해 수행한 업무 결과, 입력값 오류, 외부 환경 문제, 링크된 외부 서비스 이용 과정에서 발생한 손해에 대해 직접적인 책임을 지지 않습니다.</p>
-        </div>
-        <div class="policy-block">
-          <h3>6. 약관의 변경</h3>
-          <p>본 약관은 필요 시 수정될 수 있으며, 변경 시 사이트 내 페이지를 통해 반영합니다.</p>
-        </div>
-        <p class="muted" style="font-size:13px; margin-top:14px;">시행일: 2026-03-17</p>
-      </div>
-    </section>
-  </main>
+          <aside class="card">
+            <h2 class="section-title">포털 안내</h2>
+            <p class="section-desc">
+              분리된 기능 페이지라도 같은 서비스처럼 보이도록 공통 구조로 통합했습니다.
+            </p>
 
-  <footer class="footer">
-    <div class="container footer-grid">
-      <div>
-        <h3 style="margin:0; font-size:18px;">복지업무 도구모음</h3>
-        <p>사회복지 실무와 범용 업무에 도움이 되는 공개형 웹도구를 모아 제공하는 포털</p>
-      </div>
-      <div>
-        <strong>도구</strong>
-        <ul>
-          <li><a href="https://welfare-8nl.pages.dev/" target="_blank" rel="noopener noreferrer">급여 조회</a></li>
-          <li><a href="https://lottery-webapp.gubossi.workers.dev/" target="_blank" rel="noopener noreferrer">신청자 추첨</a></li>
-          <li><a href="#tools">추가 도구 예정</a></li>
-        </ul>
-      </div>
-      <div>
-        <strong>안내</strong>
-        <ul>
-          <li><a href="#about">사이트 소개</a></li>
-          <li><a href="#guide">업무가이드</a></li>
-          <li><a href="#routes">연결 구조</a></li>
-        </ul>
-      </div>
-      <div>
-        <strong>정책</strong>
-        <ul>
-          <li><a href="#privacy">개인정보처리방침</a></li>
-          <li><a href="#terms">이용약관</a></li>
-          <li>문의 페이지 추후 추가</li>
-        </ul>
-      </div>
-    </div>
-  </footer>
+            <div class="card-list">
+              <div class="mini-card">
+                <h3>공통 헤더</h3>
+                <p>어느 페이지에서든 같은 메뉴 구조로 이동할 수 있습니다.</p>
+              </div>
 
-  <!-- Google AdSense를 적용할 경우 아래 head 또는 body 적절 위치에 스크립트를 추가하세요. -->
-  <!-- 예시 위치만 남겨두고 실제 pub 코드는 비워두었습니다. -->
-  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+              <div class="mini-card">
+                <h3>공통 푸터</h3>
+                <p>하단 정보와 메뉴도 통일해 포털 전체의 연결감을 높였습니다.</p>
+              </div>
+
+              <div class="mini-card">
+                <h3>확장 가능한 구조</h3>
+                <p>앞으로 도구가 추가되어도 같은 스타일로 쉽게 확장할 수 있습니다.</p>
+              </div>
+            </div>
+          </aside>
+        </section>
+      </div>
+    </main>
+
+    <div id="site-footer"></div>
+  </div>
+
+  <script src="/assets/shared.js"></script>
 </body>
 </html>
