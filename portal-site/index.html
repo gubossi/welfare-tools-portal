@@ -3,572 +3,293 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+
   <title>Welmoa Tools | 복지 실무 도구 포털</title>
-  <meta
-    name="description"
-    content="사회복지시설 급여조회, 신청자 추첨 등 복지 실무자를 위한 업무 도구 포털"
-  />
-  <meta name="theme-color" content="#2563eb" />
+  <meta name="description" content="급여조회, 신청자 추첨, 만족도 분석, 예산 계산 등 복지 실무에 필요한 도구를 제공하는 Welmoa Tools 포털입니다." />
+  <meta name="robots" content="index,follow" />
+  <link rel="canonical" href="https://tools.welmoa.kr/" />
 
-  <style>
-    :root{
-      --bg:#f4f7fb;
-      --surface:#ffffff;
-      --surface-soft:#f8fbff;
-      --text:#16202a;
-      --muted:#627083;
-      --line:#dbe4ee;
-      --primary:#2563eb;
-      --primary-soft:#eaf2ff;
-      --shadow-sm:0 8px 20px rgba(15,23,42,.06);
-      --shadow-md:0 18px 40px rgba(15,23,42,.08);
-      --radius-xl:32px;
-      --radius-lg:24px;
-      --radius-md:16px;
-      --max:1180px;
-    }
+  <meta property="og:title" content="Welmoa Tools | 복지 실무 도구 포털" />
+  <meta property="og:description" content="급여조회, 신청자 추첨, 만족도 분석, 예산 계산 등 복지 실무에 필요한 도구를 한 곳에서 제공합니다." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://tools.welmoa.kr/" />
+  <meta property="og:image" content="https://tools.welmoa.kr/assets/img/og-default.png" />
 
-    *{ box-sizing:border-box; }
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="theme-color" content="#1f6feb" />
 
-    html{ scroll-behavior:smooth; }
+  <link rel="stylesheet" href="/assets/css/site.css" />
 
-    body{
-      margin:0;
-      font-family:"Pretendard","Noto Sans KR","Apple SD Gothic Neo",Arial,sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(circle at top left, rgba(37,99,235,.08), transparent 22%),
-        linear-gradient(180deg,#f8fbff 0%,#f3f6fa 100%);
-      line-height:1.6;
-    }
-
-    a{
-      color:inherit;
-      text-decoration:none;
-    }
-
-    .wrap{
-      max-width:var(--max);
-      margin:0 auto;
-      padding:0 20px;
-    }
-
-    .site-header{
-      position:sticky;
-      top:0;
-      z-index:100;
-      background:rgba(255,255,255,.84);
-      backdrop-filter:blur(14px);
-      border-bottom:1px solid rgba(219,228,238,.9);
-    }
-
-    .site-header-inner{
-      max-width:var(--max);
-      margin:0 auto;
-      padding:14px 20px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:16px;
-    }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      min-width:0;
-    }
-
-    .brand-mark{
-      width:44px;
-      height:44px;
-      border-radius:14px;
-      display:grid;
-      place-items:center;
-      background:linear-gradient(135deg,#2563eb 0%,#60a5fa 100%);
-      color:#fff;
-      font-weight:800;
-      box-shadow:var(--shadow-sm);
-      flex:0 0 auto;
-    }
-
-    .brand-title{
-      font-size:1rem;
-      font-weight:800;
-      line-height:1.2;
-      letter-spacing:-.02em;
-    }
-
-    .brand-sub{
-      font-size:.83rem;
-      color:var(--muted);
-      margin-top:2px;
-      line-height:1.2;
-    }
-
-    .nav{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    .nav-link{
-      padding:10px 14px;
-      border-radius:999px;
-      font-weight:700;
-      color:var(--muted);
-      transition:.2s ease;
-    }
-
-    .nav-link:hover{
-      background:var(--primary-soft);
-      color:var(--primary);
-    }
-
-    .nav-link.active{
-      background:var(--primary);
-      color:#fff;
-    }
-
-    .page{
-      padding:34px 0 60px;
-    }
-
-    .hero{
-      position:relative;
-      overflow:hidden;
-      background:linear-gradient(135deg,#ffffff 0%,#f4f8ff 100%);
-      border:1px solid var(--line);
-      border-radius:var(--radius-xl);
-      box-shadow:var(--shadow-md);
-      padding:38px;
-      margin-bottom:24px;
-    }
-
-    .hero::after{
-      content:"";
-      position:absolute;
-      right:-70px;
-      top:-70px;
-      width:240px;
-      height:240px;
-      border-radius:50%;
-      background:radial-gradient(circle, rgba(37,99,235,.10) 0%, rgba(37,99,235,0) 70%);
-      pointer-events:none;
-    }
-
-    .kicker{
-      display:inline-flex;
-      align-items:center;
-      padding:8px 12px;
-      border-radius:999px;
-      background:var(--primary-soft);
-      color:var(--primary);
-      font-weight:800;
-      font-size:.85rem;
-      margin-bottom:16px;
-    }
-
-    .hero h1{
-      margin:0 0 12px;
-      font-size:clamp(2rem, 4vw, 3.2rem);
-      line-height:1.18;
-      letter-spacing:-.04em;
-    }
-
-    .hero p{
-      margin:0;
-      max-width:760px;
-      color:var(--muted);
-      font-size:1.05rem;
-    }
-
-    .badge-row{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:18px;
-    }
-
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      padding:8px 12px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background:#f7faff;
-      color:#4f6074;
-      font-size:.92rem;
-      font-weight:600;
-    }
-
-    .hero-actions{
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-top:24px;
-    }
-
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-height:48px;
-      padding:0 18px;
-      border-radius:14px;
-      font-weight:800;
-      transition:.2s ease;
-    }
-
-    .btn-primary{
-      background:var(--primary);
-      color:#fff;
-      box-shadow:var(--shadow-sm);
-    }
-
-    .btn-primary:hover{
-      transform:translateY(-1px);
-    }
-
-    .btn-secondary{
-      background:#fff;
-      border:1px solid var(--line);
-      color:var(--text);
-    }
-
-    .btn-secondary:hover{
-      background:#f8fbff;
-    }
-
-    .grid{
-      display:grid;
-      grid-template-columns:1.15fr .85fr;
-      gap:20px;
-    }
-
-    .card{
-      background:var(--surface);
-      border:1px solid var(--line);
-      border-radius:var(--radius-lg);
-      box-shadow:var(--shadow-md);
-      padding:26px;
-    }
-
-    .section-title{
-      margin:0 0 8px;
-      font-size:1.25rem;
-      font-weight:800;
-      letter-spacing:-.02em;
-    }
-
-    .section-desc{
-      margin:0 0 20px;
-      color:var(--muted);
-    }
-
-    .tool-list{
-      display:grid;
-      gap:16px;
-    }
-
-    .tool-card{
-      border:1px solid var(--line);
-      background:linear-gradient(180deg,#ffffff 0%,#fbfdff 100%);
-      border-radius:20px;
-      padding:20px;
-    }
-
-    .tool-top{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:14px;
-      margin-bottom:10px;
-    }
-
-    .tool-icon{
-      width:46px;
-      height:46px;
-      border-radius:14px;
-      display:grid;
-      place-items:center;
-      background:var(--primary-soft);
-      color:var(--primary);
-      font-size:1.15rem;
-      font-weight:800;
-      flex:0 0 auto;
-    }
-
-    .tool-title{
-      margin:0;
-      font-size:1.08rem;
-      font-weight:800;
-      letter-spacing:-.02em;
-    }
-
-    .tool-desc{
-      margin:0;
-      color:var(--muted);
-      font-size:.97rem;
-    }
-
-    .tool-meta{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-top:14px;
-    }
-
-    .tool-meta span{
-      padding:6px 10px;
-      border-radius:999px;
-      background:#f5f8fc;
-      border:1px solid var(--line);
-      color:#546577;
-      font-size:.85rem;
-      font-weight:600;
-    }
-
-    .tool-actions{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:16px;
-    }
-
-    .mini-list{
-      display:grid;
-      gap:14px;
-    }
-
-    .mini-item{
-      padding:16px 18px;
-      border-radius:18px;
-      border:1px solid var(--line);
-      background:#fbfdff;
-    }
-
-    .mini-item h3{
-      margin:0 0 6px;
-      font-size:1rem;
-    }
-
-    .mini-item p{
-      margin:0;
-      color:var(--muted);
-      font-size:.95rem;
-    }
-
-    .footer{
-      margin-top:42px;
-      border-top:1px solid var(--line);
-      background:rgba(255,255,255,.82);
-    }
-
-    .footer-inner{
-      max-width:var(--max);
-      margin:0 auto;
-      padding:24px 20px 34px;
-      display:flex;
-      justify-content:space-between;
-      gap:20px;
-      flex-wrap:wrap;
-      color:var(--muted);
-      font-size:.94rem;
-    }
-
-    .footer-title{
-      color:var(--text);
-      font-weight:800;
-      margin-bottom:4px;
-    }
-
-    .footer-links{
-      display:flex;
-      gap:14px;
-      flex-wrap:wrap;
-    }
-
-    .footer-links a:hover{
-      color:var(--primary);
-    }
-
-    @media (max-width: 940px){
-      .grid{
-        grid-template-columns:1fr;
-      }
-    }
-
-    @media (max-width: 860px){
-      .site-header-inner{
-        flex-direction:column;
-        align-items:flex-start;
-      }
-
-      .nav{
-        width:100%;
-        justify-content:flex-start;
-      }
-
-      .hero{
-        padding:26px;
-        border-radius:24px;
-      }
-
-      .card{
-        padding:20px;
-      }
-
-      .page{
-        padding:24px 0 46px;
-      }
-
-      .wrap{
-        padding:0 16px;
-      }
-    }
-  </style>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"WebSite",
+    "name":"Welmoa Tools",
+    "url":"https://tools.welmoa.kr/",
+    "inLanguage":"ko-KR",
+    "description":"복지 실무를 위한 계산·분석·운영 도구 포털"
+  }
+  </script>
 </head>
 <body>
+  <a class="skip-link" href="#main">본문 바로가기</a>
+
   <header class="site-header">
-    <div class="site-header-inner">
-      <a class="brand" href="/">
-        <div class="brand-mark">W</div>
-        <div>
-          <div class="brand-title">Welmoa Tools</div>
-          <div class="brand-sub">복지 실무자를 위한 업무 도구 포털</div>
-        </div>
+    <div class="container header-inner">
+      <a class="brand" href="/" aria-label="Welmoa Tools 홈">
+        <span class="brand-mark">W</span>
+        <span class="brand-text-group">
+          <strong class="brand-text">Welmoa Tools</strong>
+          <span class="brand-sub">복지 실무 도구 포털</span>
+        </span>
       </a>
 
-      <nav class="nav" aria-label="주요 메뉴">
-        <a class="nav-link active" href="/">포털 홈</a>
-        <a class="nav-link" href="/salary">급여조회</a>
-        <a class="nav-link" href="/lottery">신청자 추첨</a>
+      <nav class="main-nav" aria-label="주 메뉴">
+        <a href="/" aria-current="page">홈</a>
+        <a href="/tools">도구</a>
+        <a href="/guide">가이드</a>
+        <a href="/updates">업데이트</a>
+        <a href="/about">소개</a>
       </nav>
+
+      <div class="header-actions">
+        <a class="btn btn-sm btn-outline" href="/salary">급여조회</a>
+        <a class="btn btn-sm btn-primary" href="/lottery">신청자 추첨</a>
+      </div>
     </div>
   </header>
 
-  <main class="page">
-    <div class="wrap">
-      <section class="hero">
-        <div class="kicker">Welmoa Tools</div>
-        <h1>복지 실무를 위한<br>업무 도구 포털</h1>
-        <p>
-          급여조회와 신청자 추첨처럼 실무에서 자주 필요한 기능을
-          한 곳에서 빠르게 사용할 수 있도록 구성한 웰모아 도구 포털입니다.
-        </p>
-
-        <div class="badge-row">
-          <span class="badge">통합 포털</span>
-          <span class="badge">복지 실무 중심</span>
-          <span class="badge">빠른 접근</span>
-        </div>
-
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="/salary">급여조회 바로가기</a>
-          <a class="btn btn-secondary" href="/lottery">신청자 추첨 바로가기</a>
-        </div>
-      </section>
-
-      <section class="grid">
-        <article class="card">
-          <h2 class="section-title">주요 도구</h2>
-          <p class="section-desc">
-            현재 제공 중인 핵심 기능입니다. 같은 포털 안에서 자연스럽게 이동할 수 있도록 연결했습니다.
+  <main id="main">
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="hero-copy card">
+          <p class="eyebrow">복지 실무를 위한 도구 포털</p>
+          <h1>Welmoa Tools</h1>
+          <p class="hero-desc">
+            급여조회, 신청자 추첨, 만족도 분석, 예산 계산, URL 단축 등
+            실무에 필요한 도구를 한 곳에서 쉽고 빠르게 제공합니다.
           </p>
 
-          <div class="tool-list">
-            <div class="tool-card">
-              <div class="tool-top">
-                <div style="display:flex; gap:14px;">
-                  <div class="tool-icon">₩</div>
-                  <div>
-                    <h3 class="tool-title">급여조회</h3>
-                    <p class="tool-desc">
-                      사회복지시설 종사자 급여 기준을 편리하게 확인하고,
-                      세부 계산 화면으로 이동할 수 있는 도구입니다.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="tool-meta">
-                <span>급여 계산</span>
-                <span>세부 페이지 연결</span>
-                <span>실무형 도구</span>
-              </div>
-
-              <div class="tool-actions">
-                <a class="btn btn-primary" href="/salary">급여조회 열기</a>
-              </div>
-            </div>
-
-            <div class="tool-card">
-              <div class="tool-top">
-                <div style="display:flex; gap:14px;">
-                  <div class="tool-icon">추</div>
-                  <div>
-                    <h3 class="tool-title">신청자 추첨</h3>
-                    <p class="tool-desc">
-                      프로그램 신청자 명단을 기반으로 공정하고 빠르게
-                      선발자와 대기자를 추첨할 수 있는 도구입니다.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="tool-meta">
-                <span>랜덤 추첨</span>
-                <span>로그 저장</span>
-                <span>CSV 활용</span>
-              </div>
-
-              <div class="tool-actions">
-                <a class="btn btn-primary" href="/lottery">추첨 도구 열기</a>
-              </div>
-            </div>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="/tools">도구 시작하기</a>
+            <a class="btn btn-outline" href="/updates">업데이트 보기</a>
           </div>
-        </article>
 
-        <aside class="card">
-          <h2 class="section-title">포털 안내</h2>
-          <p class="section-desc">
-            Welmoa Tools는 분리된 실무 앱을 하나의 포털처럼 사용할 수 있도록 구성되어 있습니다.
-          </p>
+          <ul class="hero-status">
+            <li><strong>운영 중</strong> 급여조회, 신청자 추첨</li>
+            <li><strong>준비 중</strong> 만족도 분석, 예산 계산</li>
+            <li><strong>검토 중</strong> URL 단축</li>
+          </ul>
+        </div>
 
-          <div class="mini-list">
-            <div class="mini-item">
-              <h3>통합된 이동 경험</h3>
-              <p>상단 메뉴를 통해 포털 홈, 급여조회, 신청자 추첨 페이지를 자연스럽게 오갈 수 있습니다.</p>
-            </div>
+        <aside class="hero-panel">
+          <div class="card hero-panel-card">
+            <h2>빠른 이동</h2>
+            <p class="muted">자주 사용하는 도구와 안내 페이지로 바로 이동할 수 있습니다.</p>
 
-            <div class="mini-item">
-              <h3>복지 실무 맞춤 구조</h3>
-              <p>실제 복지 현장에서 자주 사용하는 도구를 중심으로 계속 확장할 수 있는 구조입니다.</p>
-            </div>
+            <div class="quick-link-list">
+              <a class="quick-link" href="/salary">
+                <span class="quick-link-title">급여조회</span>
+                <span class="quick-link-desc">급여 및 수당 기준 확인</span>
+              </a>
 
-            <div class="mini-item">
-              <h3>앞으로 확장 가능</h3>
-              <p>향후 만족도 분석, 보조금 예산 계산, URL 단축 같은 추가 도구도 같은 방식으로 연결할 수 있습니다.</p>
+              <a class="quick-link" href="/lottery">
+                <span class="quick-link-title">신청자 추첨</span>
+                <span class="quick-link-desc">신청자 무작위 추첨 지원</span>
+              </a>
+
+              <a class="quick-link" href="/tools">
+                <span class="quick-link-title">전체 도구 보기</span>
+                <span class="quick-link-desc">운영 중·준비 중 도구 확인</span>
+              </a>
+
+              <a class="quick-link" href="/guide">
+                <span class="quick-link-title">사용 가이드</span>
+                <span class="quick-link-desc">도구 이용 방법 안내</span>
+              </a>
             </div>
           </div>
         </aside>
-      </section>
-    </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>대표 도구</h2>
+          <p>현재 운영 중이거나 준비 중인 도구를 확인해보세요.</p>
+        </div>
+
+        <div class="tool-grid">
+          <article class="tool-card card">
+            <div class="tool-card-top">
+              <span class="badge badge-live">운영중</span>
+            </div>
+            <h3>급여조회</h3>
+            <p>사회복지시설 종사자 급여 및 수당 기준을 확인할 수 있습니다.</p>
+            <div class="tool-card-actions">
+              <a class="btn btn-primary" href="/salary">바로가기</a>
+              <a class="btn btn-outline" href="/salary/about">소개보기</a>
+            </div>
+          </article>
+
+          <article class="tool-card card">
+            <div class="tool-card-top">
+              <span class="badge badge-live">운영중</span>
+            </div>
+            <h3>신청자 추첨</h3>
+            <p>프로그램 신청자 정보를 바탕으로 무작위 추첨을 지원합니다.</p>
+            <div class="tool-card-actions">
+              <a class="btn btn-primary" href="/lottery">바로가기</a>
+              <a class="btn btn-outline" href="/lottery/about">소개보기</a>
+            </div>
+          </article>
+
+          <article class="tool-card card">
+            <div class="tool-card-top">
+              <span class="badge badge-beta">준비중</span>
+            </div>
+            <h3>만족도 분석</h3>
+            <p>설문 응답 결과를 요약하고 시각화하여 보고용으로 정리합니다.</p>
+            <div class="tool-card-actions">
+              <a class="btn btn-outline" href="/satisfaction/about">자세히 보기</a>
+            </div>
+          </article>
+
+          <article class="tool-card card">
+            <div class="tool-card-top">
+              <span class="badge badge-beta">준비중</span>
+            </div>
+            <h3>예산 계산</h3>
+            <p>사업비, 인건비, 예산 편성 검토를 돕는 계산 도구입니다.</p>
+            <div class="tool-card-actions">
+              <a class="btn btn-outline" href="/budget/about">자세히 보기</a>
+            </div>
+          </article>
+
+          <article class="tool-card card">
+            <div class="tool-card-top">
+              <span class="badge badge-plan">검토중</span>
+            </div>
+            <h3>URL 단축</h3>
+            <p>긴 주소를 짧고 관리하기 쉬운 링크로 변환하는 도구를 준비 중입니다.</p>
+            <div class="tool-card-actions">
+              <a class="btn btn-outline" href="/shorturl/about">자세히 보기</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-soft">
+      <div class="container">
+        <div class="section-head">
+          <h2>업무별 활용</h2>
+          <p>실제 실무 흐름에 맞게 도구를 찾아볼 수 있습니다.</p>
+        </div>
+
+        <div class="usecase-grid">
+          <article class="usecase-card card">
+            <h3>급여·인사 실무</h3>
+            <p>급여조회, 수당 확인, 기준 비교 등 인사·행정 업무에 활용할 수 있습니다.</p>
+          </article>
+
+          <article class="usecase-card card">
+            <h3>프로그램 운영</h3>
+            <p>신청자 접수 이후 무작위 추첨과 선정 과정 정리에 활용할 수 있습니다.</p>
+          </article>
+
+          <article class="usecase-card card">
+            <h3>성과·보고</h3>
+            <p>만족도 분석과 결과 요약, 보고자료 정리 기능을 순차적으로 확장할 예정입니다.</p>
+          </article>
+
+          <article class="usecase-card card">
+            <h3>행정 지원</h3>
+            <p>예산 계산, URL 단축 등 반복적인 실무를 돕는 보조 도구를 추가할 예정입니다.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>최근 업데이트</h2>
+          <p>Welmoa Tools의 최신 변경 내용을 확인할 수 있습니다.</p>
+        </div>
+
+        <div class="update-list">
+          <article class="update-item card">
+            <time datetime="2026-03-18">2026-03-18</time>
+            <h3>신청자 추첨 페이지 통합 레이아웃 정리</h3>
+            <p>공통 상·하단 적용 및 중앙 정렬 보정을 완료했습니다.</p>
+          </article>
+
+          <article class="update-item card">
+            <time datetime="2026-03-17">2026-03-17</time>
+            <h3>급여조회 하위 페이지 경로 통합</h3>
+            <p>/salary 하위 페이지 이동과 공통 레이아웃 연결을 정리했습니다.</p>
+          </article>
+
+          <article class="update-item card">
+            <time datetime="2026-03-16">2026-03-16</time>
+            <h3>Welmoa Tools 포털 2단계 설계 시작</h3>
+            <p>도구 확장, 업데이트 로그, 가이드 구조를 포함한 포털 고도화 작업을 시작했습니다.</p>
+          </article>
+        </div>
+
+        <div class="section-actions">
+          <a class="btn btn-outline" href="/updates">전체 업데이트 보기</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-compact">
+      <div class="container">
+        <div class="support-box card">
+          <div class="support-copy">
+            <h2>처음 방문하셨나요?</h2>
+            <p>도구 소개와 사용 가이드를 먼저 확인하면 더 쉽게 이용할 수 있습니다.</p>
+          </div>
+          <div class="support-actions">
+            <a class="btn btn-outline" href="/guide">사용 가이드</a>
+            <a class="btn btn-outline" href="/about">서비스 소개</a>
+            <a class="btn btn-primary" href="/contact">개선 제안</a>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <footer class="footer">
-    <div class="footer-inner">
+  <footer class="site-footer">
+    <div class="container footer-grid">
       <div>
-        <div class="footer-title">Welmoa Tools</div>
-        <div>사회복지 실무에 필요한 기능을 한 곳에서 편리하게.</div>
+        <h3>Welmoa Tools</h3>
+        <p>복지 실무를 위한 계산·분석·운영 도구 포털</p>
       </div>
 
-      <div class="footer-links">
-        <a href="/">포털 홈</a>
-        <a href="/salary">급여조회</a>
-        <a href="/lottery">신청자 추첨</a>
+      <div>
+        <h4>도구</h4>
+        <ul class="footer-links">
+          <li><a href="/salary">급여조회</a></li>
+          <li><a href="/lottery">신청자 추첨</a></li>
+          <li><a href="/satisfaction/about">만족도 분석</a></li>
+          <li><a href="/budget/about">예산 계산</a></li>
+          <li><a href="/shorturl/about">URL 단축</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>안내</h4>
+        <ul class="footer-links">
+          <li><a href="/tools">전체 도구</a></li>
+          <li><a href="/guide">사용 가이드</a></li>
+          <li><a href="/updates">업데이트 로그</a></li>
+          <li><a href="/about">서비스 소개</a></li>
+          <li><a href="/policy/privacy">개인정보처리방침</a></li>
+          <li><a href="/policy/terms">이용안내</a></li>
+        </ul>
       </div>
     </div>
   </footer>
