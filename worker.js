@@ -163,7 +163,6 @@ function rewriteLocationHeader(originalHeaders, upstreamOrigin, incomingUrl, mou
       if (mountPath) {
         locUrl.pathname = mountPath + (locUrl.pathname === "/" ? "" : locUrl.pathname);
       } else if (activeKey === "salary") {
-        // 급여 앱의 루트 페이지 리다이렉트도 /salary 아래로 모아줌
         locUrl.pathname = "/salary" + (locUrl.pathname === "/" ? "" : locUrl.pathname);
       }
 
@@ -504,6 +503,17 @@ body{
 
 .welmoa-footer-links a:hover{
   color: var(--welmoa-primary);
+}
+
+/* lottery 앱 중앙 정렬 */
+#welmoa-shell[data-active="lottery"] ~ * {
+  max-width: 980px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#welmoa-shell[data-active="lottery"] ~ .welmoa-footer {
+  max-width: none;
 }
 
 @media (max-width: 860px){
