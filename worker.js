@@ -13,14 +13,14 @@ export default {
       return proxyTo(request, "https://lottery-webapp.gubossi.workers.dev", "/lottery");
     }
 
-    // 루트(/)는 index.html로 연결
+    // 루트 접속 처리
     if (pathname === "/") {
-      const indexUrl = new URL(request.url);
-      indexUrl.pathname = "/index.html";
-      return env.ASSETS.fetch(new Request(indexUrl.toString(), request));
+      return env.ASSETS.fetch(
+        new Request(new URL("/index.html", request.url), request)
+      );
     }
 
-    // 나머지는 portal-site 기준 정적 파일 그대로 처리
+    // 나머지는 그대로 정적 자산
     return env.ASSETS.fetch(request);
   }
 };
@@ -30,7 +30,7 @@ async function proxyTo(request, targetOrigin, mountPath) {
 
   let upstreamPath = incomingUrl.pathname;
   if (mountPath && upstreamPath.startsWith(mountPath)) {
-    upstreamPath = incomingUrl.pathname.slice(mountPath.length) || "/";
+    upstreamPath = upstreamPath.slice(mountPath.length) || "/";
   }
 
   const upstreamUrl = new URL(targetOrigin);
@@ -38,6 +38,7 @@ async function proxyTo(request, targetOrigin, mountPath) {
   upstreamUrl.search = incomingUrl.search;
 
   const proxyRequest = new Request(upstreamUrl.toString(), request);
+
   const response = await fetch(proxyRequest, {
     redirect: "follow"
   });
