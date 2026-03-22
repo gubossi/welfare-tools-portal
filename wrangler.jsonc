@@ -5,6 +5,5 @@
   "assets": {
     "directory": "./portal-site",
     "binding": "ASSETS",
-    "run_worker_first": true
   }
 }
