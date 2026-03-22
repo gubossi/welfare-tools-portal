@@ -23,68 +23,28 @@ export default {
       });
     }
 
-    // 1. 포털 정적 자산 우선 처리
-    if (pathname.startsWith("/assets/")) {
-      return env.ASSETS.fetch(request);
-    }
-
-    // 2. 포털 페이지 라우팅
-    const portalPageMap = {
-      "/": "/index.html",
-      "/tools": "/tools.html",
-      "/updates": "/updates.html",
-      "/about": "/about.html"
-    };
-
-    if (portalPageMap[pathname]) {
-      const assetUrl = new URL(portalPageMap[pathname], url.origin);
-      return env.ASSETS.fetch(new Request(assetUrl.toString(), request));
-    }
-
-    // 직접 html 접근 허용
-    if (
-      pathname === "/index.html" ||
-      pathname === "/tools.html" ||
-      pathname === "/updates.html" ||
-      pathname === "/about.html" ||
-      pathname === "/favicon.ico"
-    ) {
-      return env.ASSETS.fetch(request);
-    }
-
-    // 3. salary 앱 프록시
+    // 1. salary 앱 프록시
     if (pathname === "/salary" || pathname.startsWith("/salary/")) {
       return proxyToWithShell(
         request,
         "https://welfare-8nl.pages.dev",
-        "/salary",
-        "salary"
+        "/salary"
       );
     }
 
-    // 4. lottery 앱 프록시
+    // 2. lottery 앱 프록시
     if (pathname === "/lottery" || pathname.startsWith("/lottery/")) {
       return proxyToWithShell(
         request,
         "https://lottery-webapp.gubossi.workers.dev",
-        "/lottery",
-        "lottery"
+        "/lottery"
       );
     }
 
-    // 5. 급여 앱 루트 정적 자산 fallback
-    // 예: /main.js, /app.css 같은 salary 앱의 루트 자산
-    if (isSalaryTopLevelRoute(pathname)) {
-      return proxyToWithShell(
-        request,
-        "https://welfare-8nl.pages.dev",
-        "",
-        "salary"
-      );
-    }
+    // 3. 포털 정적 파일은 portal-site 아래에서 찾기
+    const portalRequest = mapPortalAssetRequest(request);
+    const assetResponse = await env.ASSETS.fetch(portalRequest);
 
-    // 6. 나머지는 포털 정적 파일에서 찾기
-    const assetResponse = await env.ASSETS.fetch(request);
     if (assetResponse.status !== 404) {
       return assetResponse;
     }
@@ -98,44 +58,78 @@ export default {
   }
 };
 
-function isSalaryTopLevelRoute(pathname) {
-  if (
-    pathname === "/" ||
-    pathname.startsWith("/assets/") ||
-    pathname.startsWith("/salary") ||
-    pathname.startsWith("/lottery") ||
-    pathname.startsWith("/_welmoa") ||
-    pathname.startsWith("/tools") ||
-    pathname.startsWith("/updates") ||
-    pathname.startsWith("/about")
-  ) {
-    return false;
+function mapPortalAssetRequest(request) {
+  const url = new URL(request.url);
+  const pathname = url.pathname;
+
+  // 루트 접속 -> portal-site/index.html
+  if (pathname === "/") {
+    url.pathname = "/portal-site/index.html";
+    return new Request(url.toString(), request);
   }
 
-  if (pathname.endsWith(".html")) return true;
-
-  if (
-    pathname.endsWith(".css") ||
-    pathname.endsWith(".js") ||
-    pathname.endsWith(".json") ||
-    pathname.endsWith(".png") ||
-    pathname.endsWith(".jpg") ||
-    pathname.endsWith(".jpeg") ||
-    pathname.endsWith(".svg") ||
-    pathname.endsWith(".webp") ||
-    pathname.endsWith(".ico") ||
-    pathname.endsWith(".woff") ||
-    pathname.endsWith(".woff2") ||
-    pathname.endsWith(".ttf") ||
-    pathname.endsWith(".map")
-  ) {
-    return true;
+  // 포털 전용 페이지
+  if (pathname === "/tools") {
+    url.pathname = "/portal-site/tools.html";
+    return new Request(url.toString(), request);
   }
 
-  return false;
+  if (pathname === "/updates") {
+    url.pathname = "/portal-site/updates.html";
+    return new Request(url.toString(), request);
+  }
+
+  if (pathname === "/about") {
+    url.pathname = "/portal-site/about.html";
+    return new Request(url.toString(), request);
+  }
+
+  // 정적 자산
+  if (pathname.startsWith("/assets/")) {
+    url.pathname = "/portal-site" + pathname;
+    return new Request(url.toString(), request);
+  }
+
+  // guide, privacy, terms 같은 폴더형 페이지
+  if (
+    pathname === "/guide" ||
+    pathname.startsWith("/guide/") ||
+    pathname === "/privacy" ||
+    pathname.startsWith("/privacy/") ||
+    pathname === "/terms" ||
+    pathname.startsWith("/terms/")
+  ) {
+    url.pathname = "/portal-site" + pathname;
+    return new Request(url.toString(), request);
+  }
+
+  // html 직접 접근
+  if (
+    pathname === "/index.html" ||
+    pathname === "/tools.html" ||
+    pathname === "/updates.html" ||
+    pathname === "/about.html"
+  ) {
+    url.pathname = "/portal-site" + pathname;
+    return new Request(url.toString(), request);
+  }
+
+  // favicon, robots, sitemap
+  if (
+    pathname === "/favicon.ico" ||
+    pathname === "/robots.txt" ||
+    pathname === "/sitemap.xml"
+  ) {
+    url.pathname = "/portal-site" + pathname;
+    return new Request(url.toString(), request);
+  }
+
+  // 그 외도 일단 portal-site 아래에서 찾기
+  url.pathname = "/portal-site" + pathname;
+  return new Request(url.toString(), request);
 }
 
-async function proxyToWithShell(request, targetOrigin, mountPath, appName) {
+async function proxyToWithShell(request, targetOrigin, mountPath) {
   const incomingUrl = new URL(request.url);
 
   let upstreamPath = incomingUrl.pathname;
@@ -154,14 +148,9 @@ async function proxyToWithShell(request, targetOrigin, mountPath, appName) {
 
   const contentType = response.headers.get("content-type") || "";
 
-  // HTML 응답은 필요 시 여기서 후처리 가능
   if (contentType.includes("text/html")) {
     let html = await response.text();
-
-    // 앱 루트 경로 기준 링크 보정
-    if (mountPath) {
-      html = rewriteHtmlPaths(html, mountPath, appName);
-    }
+    html = rewriteHtmlPaths(html, mountPath);
 
     const headers = new Headers(response.headers);
     headers.set("content-type", "text/html; charset=utf-8");
@@ -178,10 +167,9 @@ async function proxyToWithShell(request, targetOrigin, mountPath, appName) {
   });
 }
 
-function rewriteHtmlPaths(html, mountPath, appName) {
+function rewriteHtmlPaths(html, mountPath) {
   const prefix = mountPath === "/" ? "" : mountPath;
 
-  // 절대경로 자산을 /salary/... 또는 /lottery/... 아래로 보정
   html = html.replace(
     /(src|href)=["']\/(?!\/)([^"']+)["']/gi,
     (match, attr, path) => {
@@ -211,7 +199,6 @@ function rewriteHtmlPaths(html, mountPath, appName) {
     }
   );
 
-  // SPA 라우팅용 base 태그가 없으면 삽입
   if (!/<base\s/i.test(html)) {
     html = html.replace(
       /<head([^>]*)>/i,
