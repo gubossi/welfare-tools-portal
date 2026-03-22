@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welmoa Tools | 도구</title>
-  <meta name="description" content="Welmoa Tools에서 제공하는 복지 실무 도구를 한곳에서 확인하세요." />
+  <title>Welmoa Tools | 업데이트</title>
+  <meta name="description" content="Welmoa Tools의 업데이트 내역을 확인하세요." />
   <link rel="stylesheet" href="/assets/css/site.css" />
 </head>
 <body>
@@ -13,8 +13,8 @@
       <a class="site-brand" href="/">Welmoa Tools</a>
       <nav class="site-nav" aria-label="주요 메뉴">
         <a href="/">홈</a>
-        <a href="/tools" aria-current="page">도구</a>
-        <a href="/updates">업데이트</a>
+        <a href="/tools">도구</a>
+        <a href="/updates" aria-current="page">업데이트</a>
         <a href="/about">소개</a>
         <a href="/guide">가이드</a>
         <a href="/privacy">개인정보처리방침</a>
@@ -25,65 +25,59 @@
 
   <main class="container page-section">
     <section class="hero hero-compact">
-      <span class="eyebrow">TOOLS</span>
-      <h1>Welmoa Tools 도구 모음</h1>
+      <span class="eyebrow">UPDATES</span>
+      <h1>업데이트 내역</h1>
       <p>
-        복지 현장에서 자주 사용하는 실무 도구를 한곳에서 빠르게 이용할 수 있도록 정리했습니다.
+        Welmoa Tools 포털과 각 도구의 주요 변경 사항을 정리합니다.
       </p>
     </section>
 
     <section class="section-card">
-      <div class="section-head">
-        <h2>주요 도구</h2>
-        <p>현재 사용 가능한 도구입니다.</p>
-      </div>
-
-      <div class="tool-grid">
-        <a class="tool-card" href="/salary">
-          <div class="tool-card-top">
-            <span class="tool-badge">운영 중</span>
+      <div class="update-list">
+        <article class="update-item">
+          <div class="update-date">2026.03</div>
+          <div class="update-body">
+            <h2>Welmoa Tools 포털 기본 구조 구성</h2>
+            <p>
+              메인 포털과 급여조회, 신청자 추첨 도구를 하나의 도메인 안에서 연결하는 구조를 정비했습니다.
+            </p>
+            <ul>
+              <li>메인 홈 화면 연결</li>
+              <li><code>/salary</code> 급여조회 연결</li>
+              <li><code>/lottery</code> 신청자 추첨 연결</li>
+            </ul>
           </div>
-          <h3>급여조회</h3>
-          <p>
-            사회복지시설 종사자 급여(인건비) 구조를 이해하고,
-            계산기를 통해 참고 금액을 확인할 수 있습니다.
-          </p>
-          <span class="tool-link">바로가기 →</span>
-        </a>
+        </article>
 
-        <a class="tool-card" href="/lottery">
-          <div class="tool-card-top">
-            <span class="tool-badge">운영 중</span>
+        <article class="update-item">
+          <div class="update-date">2026.03</div>
+          <div class="update-body">
+            <h2>정적 자산 및 라우팅 안정화</h2>
+            <p>
+              CSS, 정적 파일, 각 안내 페이지가 올바르게 열리도록 자산 경로와 Worker 라우팅을 정리했습니다.
+            </p>
+            <ul>
+              <li><code>/assets</code> 정적 파일 정상 서빙</li>
+              <li><code>/guide</code>, <code>/privacy</code>, <code>/terms</code> 경로 정리</li>
+              <li>포털 홈 접속 안정화</li>
+            </ul>
           </div>
-          <h3>신청자 추첨</h3>
-          <p>
-            프로그램 신청자 명단을 바탕으로 공정하게 랜덤 추첨을 진행하고,
-            결과를 정리할 수 있습니다.
-          </p>
-          <span class="tool-link">바로가기 →</span>
-        </a>
-      </div>
-    </section>
+        </article>
 
-    <section class="section-card">
-      <div class="section-head">
-        <h2>추가 예정</h2>
-        <p>Welmoa Tools에 순차적으로 확장할 수 있는 도구 예시입니다.</p>
-      </div>
-
-      <div class="info-grid">
-        <div class="info-card">
-          <h3>문서·서식 지원</h3>
-          <p>안내문, 보고서, 결과보고, 공지문 작성 보조 기능</p>
-        </div>
-        <div class="info-card">
-          <h3>참여자 관리 도구</h3>
-          <p>명단 정리, 기본 형식 변환, 연락처 정규화 보조 기능</p>
-        </div>
-        <div class="info-card">
-          <h3>링크·배포 도구</h3>
-          <p>짧은 링크, QR, 이용안내 연결 등 운영 지원 기능</p>
-        </div>
+        <article class="update-item">
+          <div class="update-date">2026.03</div>
+          <div class="update-body">
+            <h2>Welmoa Tools 포털 메뉴 확장</h2>
+            <p>
+              도구, 업데이트, 소개 페이지를 추가하여 서비스 구조를 더 명확하게 정리할 수 있도록 구성했습니다.
+            </p>
+            <ul>
+              <li><code>/tools</code> 도구 모음 페이지 추가</li>
+              <li><code>/updates</code> 업데이트 내역 페이지 추가</li>
+              <li><code>/about</code> 소개 페이지 추가</li>
+            </ul>
+          </div>
+        </article>
       </div>
     </section>
   </main>
