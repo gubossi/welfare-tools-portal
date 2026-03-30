@@ -329,48 +329,62 @@
       }
     }
 
-    async function loadHistory() {
-      try {
-        const response = await fetch("/api/shorten");
-        const data = await response.json();
+<script>
+  async function loadHistory() {
+    try {
+      const response = await fetch("/api/shorten");
+      const data = await response.json();
 
-        if (!response.ok || !data.ok) {
-          throw new Error(data.message || "목록을 불러오지 못했습니다.");
-        }
-
-        const items = Array.isArray(data.items) ? data.items : [];
-
-        if (!items.length) {
-          historyList.innerHTML = '<div class="empty-state">아직 생성된 링크가 없습니다.</div>';
-          return;
-        }
-
-        historyList.innerHTML = items.map((item) => {
-          const createdAt = item.createdAt
-            ? new Date(item.createdAt).toLocaleString("ko-KR")
-            : "";
-
-          return `
-            <article class="history-item">
-              <div class="history-item__top">
-                <div>
-                  <div class="history-item__title">${escapeHtml(item.shortUrl)}</div>
-                  <div class="history-item__meta">원본: ${escapeHtml(item.url)}</div>
-                  <div class="history-item__meta">생성일: ${escapeHtml(createdAt)}</div>
-                </div>
-              </div>
-              <div class="history-item__actions">
-                <button class="btn btn--primary" type="button" onclick="copyText('${escapeHtml(item.shortUrl)}')">복사</button>
-                <a class="btn btn--ghost" href="${escapeHtml(item.shortUrl)}" target="_blank" rel="noopener noreferrer">열기</a>
-                <button class="btn btn--ghost" type="button" onclick="deleteShortUrl('${escapeHtml(item.slug)}')">삭제</button>
-              </div>
-            </article>
-          `;
-        }).join("");
-      } catch (error) {
-        historyList.innerHTML = '<div class="empty-state">목록을 불러오지 못했습니다.</div>';
+      if (!response.ok || !data.ok) {
+        throw new Error(data.message || "목록을 불러오지 못했습니다.");
       }
+
+      const items = Array.isArray(data.items) ? data.items : [];
+
+      if (!items.length) {
+        historyList.innerHTML = '<div class="empty-state">아직 생성된 링크가 없습니다.</div>';
+        return;
+      }
+
+      historyList.innerHTML = items.map((item) => {
+        const createdAt = item.createdAt
+          ? new Date(item.createdAt).toLocaleString("ko-KR")
+          : "";
+
+        const lastClickedAt = item.lastClickedAt
+          ? new Date(item.lastClickedAt).toLocaleString("ko-KR")
+          : "기록 없음";
+
+        const clicks = Number(item.clicks || 0);
+
+        return `
+          <article class="history-item">
+            <div class="history-item__top">
+              <div>
+                <div class="history-item__title">${escapeHtml(item.shortUrl)}</div>
+                <div class="history-item__meta">원본: ${escapeHtml(item.url)}</div>
+                <div class="history-item__meta">생성일: ${escapeHtml(createdAt)}</div>
+<div class="history-item__meta">
+  클릭수: <strong>${escapeHtml(String(clicks))}</strong>
+</div>
+<div class="history-item__meta">
+  마지막 클릭: <strong>${escapeHtml(lastClickedAt)}</strong>
+</div>
+              </div>
+            </div>
+            <div class="history-item__actions">
+              <button class="btn btn--primary" type="button" onclick="copyText('${escapeHtml(item.shortUrl)}')">복사</button>
+              <a class="btn btn--ghost" href="${escapeHtml(item.shortUrl)}" target="_blank" rel="noopener noreferrer">열기</a>
+              <button class="btn btn--ghost" type="button" onclick="deleteShortUrl('${escapeHtml(item.slug)}')">삭제</button>
+            </div>
+          </article>
+        `;
+      }).join("");
+    } catch (error) {
+      historyList.innerHTML = '<div class="empty-state">목록을 불러오지 못했습니다.</div>';
     }
+  }
+</script>
 
     async function copyCurrentShortUrl() {
       const value = shortUrlOutput.value.trim();
