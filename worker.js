@@ -31,7 +31,7 @@ export default {
 
     // lottery reverse proxy
     if (pathname === "/lottery" || pathname.startsWith("/lottery/")) {
-      const targetBase = "https://lottery-webapp.gubossi.workers.dev/";
+      const targetBase = "https://lottery-webapp.gubossi.workers.dev";
       return proxyWithShell(request, targetBase, "/lottery");
     }
 
