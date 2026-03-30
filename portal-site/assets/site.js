@@ -1,18 +1,15 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const path = window.location.pathname.replace(/\/+$/, "") || "/";
-  const navLinks = document.querySelectorAll("[data-nav]");
+function sharedJs() {
+  return `
+console.log("Welmoa UI applied");
 
-  navLinks.forEach((link) => {
-    const href = link.getAttribute("href");
-    if (!href) return;
+// 일부 앱이 body margin 이상하게 줄 경우 보정
+document.body.style.marginTop = "0";
 
-    if (href === "/" && path === "/") {
-      link.classList.add("is-active");
-      return;
-    }
-
-    if (href !== "/" && path === href) {
-      link.classList.add("is-active");
-    }
-  });
-});
+// 상단바 때문에 내용 가려지는 경우 보정
+const bar = document.querySelector(".welmoa-bar");
+if (bar) {
+  const h = bar.offsetHeight;
+  document.body.style.paddingTop = h + "px";
+}
+`;
+}
