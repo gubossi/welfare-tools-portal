@@ -1,35 +1,19 @@
 function sharedCss() {
   return `
-:root {
-  --main: #2563eb;
-  --bg: #f6f8fc;
-  --card: #ffffff;
-  --text: #1e293b;
-  --sub: #64748b;
-  --line: #e2e8f0;
-}
-
-/* 전체 배경 */
-body {
-  background: var(--bg) !important;
-  color: var(--text) !important;
-  font-family: Pretendard, sans-serif !important;
-}
-
-/* 상단바 */
+/* 상단바만 스타일링 */
 .welmoa-bar {
   position: sticky;
   top: 0;
   z-index: 9999;
-  background: #ffffffdd;
+  background: rgba(255,255,255,0.95);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .welmoa-inner {
-  max-width: 1200px;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 14px 20px;
+  padding: 12px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -39,63 +23,23 @@ body {
   font-weight: 800;
   font-size: 18px;
   text-decoration: none;
-  color: var(--text);
+  color: #111827;
 }
 
 .welmoa-menu a {
-  margin-left: 12px;
+  margin-left: 14px;
   text-decoration: none;
-  color: var(--sub);
+  color: #6b7280;
   font-weight: 600;
 }
 
 .welmoa-menu a:hover {
-  color: var(--main);
+  color: #2563eb;
 }
 
-/* 컨텐츠 정렬 */
-body > *:not(.welmoa-bar) {
-  max-width: 1100px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 20px;
-}
-
-/* 카드화 */
-div, section, main {
-  border-radius: 14px;
-}
-
-/* 버튼 통일 */
-button,
-.btn,
-input[type="button"],
-input[type="submit"] {
-  background: var(--main) !important;
-  color: #fff !important;
-  border: none !important;
-  border-radius: 10px !important;
-  padding: 10px 16px !important;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-/* 입력창 */
-input, select, textarea {
-  border: 1px solid var(--line) !important;
-  border-radius: 8px !important;
-  padding: 8px 10px !important;
-}
-
-/* 테이블 */
-table {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-th, td {
-  border-bottom: 1px solid var(--line);
-  padding: 8px;
+/* 상단바 높이만 보정 */
+body {
+  margin-top: 0 !important;
 }
 `;
 }
