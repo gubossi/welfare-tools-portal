@@ -9,7 +9,16 @@
       "/salary",
       "/salary/*",
       "/lottery",
-      "/lottery/*"
+      "/lottery/*",
+      "/api/shorten",
+      "/api/shorten/*",
+      "/s/*"
     ]
-  }
+  },
+  "kv_namespaces": [
+    {
+      "binding": "SHORT_LINKS",
+      "id": "여기에_KV_NAMESPACE_ID"
+    }
+  ]
 }
