@@ -1,8 +1,9 @@
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const pathname = url.pathname;
 
+    // 공통 CSS
     if (pathname === "/_welmoa/shared.css") {
       return new Response(sharedCss(), {
         headers: {
@@ -12,6 +13,7 @@ export default {
       });
     }
 
+    // 공통 JS
     if (pathname === "/_welmoa/shared.js") {
       return new Response(sharedJs(), {
         headers: {
@@ -21,154 +23,149 @@ export default {
       });
     }
 
+    // salary reverse proxy
     if (pathname === "/salary" || pathname.startsWith("/salary/")) {
-      return proxyWithShell(
-        request,
-        "https://welfare-8nl.pages.dev",
-        "/salary",
-        "salary"
-      );
+      const targetBase = "https://welfare-8nl.pages.dev";
+      return proxyWithShell(request, targetBase, "/salary");
     }
 
+    // lottery reverse proxy
     if (pathname === "/lottery" || pathname.startsWith("/lottery/")) {
-      return proxyWithShell(
-        request,
-        "https://lottery-webapp.gubossi.workers.dev",
-        "/lottery",
-        "lottery"
-      );
+      const targetBase = "https://lottery-webapp.pages.dev";
+      return proxyWithShell(request, targetBase, "/lottery");
     }
 
+    // 나머지는 Assets
     return env.ASSETS.fetch(request);
   }
 };
 
-async function proxyWithShell(request, targetOrigin, mountPath, appName) {
-  const incomingUrl = new URL(request.url);
+async function proxyWithShell(request, targetBase, mountPath) {
+  const reqUrl = new URL(request.url);
+  const upstreamPath = reqUrl.pathname.replace(mountPath, "") || "/";
+  const upstreamUrl = new URL(targetBase + upstreamPath + reqUrl.search);
 
-  let upstreamPath = incomingUrl.pathname;
-  if (upstreamPath.startsWith(mountPath)) {
-    upstreamPath = upstreamPath.slice(mountPath.length) || "/";
-  }
-
-  const upstreamUrl = new URL(targetOrigin);
-  upstreamUrl.pathname = upstreamPath;
-  upstreamUrl.search = incomingUrl.search;
-
-  const response = await fetch(new Request(upstreamUrl.toString(), request), {
-    redirect: "follow"
-  });
+  const upstreamRequest = new Request(upstreamUrl.toString(), request);
+  const response = await fetch(upstreamRequest);
 
   const contentType = response.headers.get("content-type") || "";
+
+  // HTML만 리라이트
   if (!contentType.includes("text/html")) {
-    return new Response(response.body, {
-      status: response.status,
-      headers: response.headers
-    });
+    return response;
   }
 
-  let html = await response.text();
-
-  if (html.includes("</head>")) {
-    html = html.replace(
-      "</head>",
-      `<link rel="stylesheet" href="/_welmoa/shared.css">
+  const rewriter = new HTMLRewriter()
+    .on("head", {
+      element(el) {
+        el.append(`
+<link rel="stylesheet" href="/_welmoa/shared.css">
 <script defer src="/_welmoa/shared.js"></script>
-</head>`
-    );
-  }
-
-  html = html.replace(
-    /<body([^>]*)>/i,
-    `<body$1>${renderShell(appName)}<div class="welmoa-page-body">`
-  );
-
-  html = html.replace(/<\/body>/i, `</div></body>`);
-
-  html = rewriteAssetPaths(html, mountPath);
-
-  const headers = new Headers(response.headers);
-  headers.set("content-type", "text/html; charset=utf-8");
-
-  return new Response(html, {
-    status: response.status,
-    headers
-  });
-}
-
-function rewriteAssetPaths(html, mountPath) {
-  return html.replace(
-    /(src|href|action)=["']\/(?!\/)([^"']+)["']/gi,
-    (match, attr, path) => {
-      if (path.startsWith("_welmoa/")) return match;
-
-      if (
-        path.startsWith("assets/") ||
-        path.startsWith("static/") ||
-        path.startsWith("icons/") ||
-        path.startsWith("images/") ||
-        path.startsWith("img/") ||
-        path.startsWith("fonts/") ||
-        path.startsWith("favicon") ||
-        path.startsWith("manifest") ||
-        path.endsWith(".css") ||
-        path.endsWith(".js") ||
-        path.endsWith(".json") ||
-        path.endsWith(".png") ||
-        path.endsWith(".jpg") ||
-        path.endsWith(".jpeg") ||
-        path.endsWith(".svg") ||
-        path.endsWith(".webp") ||
-        path.endsWith(".ico") ||
-        path.endsWith(".woff") ||
-        path.endsWith(".woff2") ||
-        path.endsWith(".ttf") ||
-        path.endsWith(".map")
-      ) {
-        return `${attr}="${mountPath}/${path}"`;
+`, { html: true });
       }
-      return match;
-    }
-  );
+    })
+    .on("body", {
+      element(el) {
+        el.prepend(proxyTopbar(), { html: true });
+      }
+    });
+
+  return rewriter.transform(response);
 }
 
-function renderShell(active) {
+function proxyTopbar() {
   return `
-<header class="welmoa-topbar">
-  <div class="welmoa-wrap">
-    <a class="welmoa-brand" href="/">Welmoa Tools</a>
-    <nav class="welmoa-nav">
+<div class="welmoa-proxybar">
+  <div class="welmoa-proxybar__inner">
+    <a class="welmoa-proxybar__brand" href="/">Welmoa Tools</a>
+    <nav class="welmoa-proxybar__nav" aria-label="주요 메뉴">
       <a href="/">홈</a>
-      <a href="/salary" class="${active === "salary" ? "is-active" : ""}">급여조회</a>
-      <a href="/lottery" class="${active === "lottery" ? "is-active" : ""}">신청자 추첨</a>
-      <a href="/guide">가이드</a>
-      <a href="/privacy">개인정보</a>
-      <a href="/terms">이용약관</a>
+      <a href="/tools">도구</a>
+      <a href="/updates">업데이트</a>
+      <a href="/about">소개</a>
     </nav>
   </div>
-</header>`;
+</div>
+`;
 }
 
 function sharedCss() {
   return `
 :root {
-  --welmoa-bg:#f8fafc;
-  --welmoa-border:#e5e7eb;
-  --welmoa-text:#111827;
-  --welmoa-primary:#2563eb;
-  --welmoa-primary-soft:#eff6ff;
+  --welmoa-bg: #f6f8fc;
+  --welmoa-surface: #ffffff;
+  --welmoa-surface-2: #f8fbff;
+  --welmoa-text: #18212f;
+  --welmoa-text-soft: #5d6b82;
+  --welmoa-line: #dbe3ef;
+  --welmoa-primary: #2563eb;
+  --welmoa-primary-strong: #1d4ed8;
+  --welmoa-radius: 18px;
+  --welmoa-shadow: 0 12px 36px rgba(15, 23, 42, 0.08);
+  --welmoa-max: 1200px;
 }
-body { margin:0; background:var(--welmoa-bg); color:var(--welmoa-text); font-family:"Pretendard","Noto Sans KR",system-ui,sans-serif; }
-.welmoa-topbar { position:sticky; top:0; z-index:1000; background:rgba(255,255,255,.96); border-bottom:1px solid var(--welmoa-border); }
-.welmoa-wrap { max-width:1280px; margin:0 auto; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; gap:24px; }
-.welmoa-brand { font-size:22px; font-weight:800; color:var(--welmoa-text); text-decoration:none; }
-.welmoa-nav { display:flex; flex-wrap:wrap; gap:10px; }
-.welmoa-nav a { text-decoration:none; color:#374151; padding:8px 12px; border-radius:10px; }
-.welmoa-nav a.is-active { background:var(--welmoa-primary-soft); color:#1d4ed8; font-weight:700; }
-.welmoa-page-body { max-width:1280px; margin:0 auto; padding:24px 20px 40px; }
+
+.welmoa-proxybar {
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--welmoa-line);
+}
+
+.welmoa-proxybar__inner {
+  max-width: var(--welmoa-max);
+  margin: 0 auto;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.welmoa-proxybar__brand {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--welmoa-text);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.welmoa-proxybar__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.welmoa-proxybar__nav a {
+  text-decoration: none;
+  color: var(--welmoa-text-soft);
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.welmoa-proxybar__nav a:hover {
+  background: #eef4ff;
+  color: var(--welmoa-primary-strong);
+}
+
+@media (max-width: 720px) {
+  .welmoa-proxybar__inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .welmoa-proxybar__nav {
+    width: 100%;
+  }
+}
 `;
 }
 
 function sharedJs() {
-  return `console.log("Welmoa shared shell loaded");`;
+  return `
+console.log("Welmoa shared UI loaded");
+`;
 }
