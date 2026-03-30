@@ -244,16 +244,34 @@ html, body {
 function sharedJs() {
   return `
 (function () {
+  function setActive(target) {
+    document.querySelectorAll("[data-welmoa-nav]").forEach((a) => {
+      if (a.getAttribute("data-welmoa-nav") === target) {
+        a.classList.add("is-active");
+      }
+    });
+  }
+
   function markActiveMenu() {
     const path = window.location.pathname.replace(/\\/+$/, "") || "/";
+
     document.querySelectorAll("[data-welmoa-nav]").forEach((link) => {
       const target = link.getAttribute("data-welmoa-nav");
+
       if (target === "/" && path === "/") {
         link.classList.add("is-active");
       } else if (target !== "/" && path === target) {
         link.classList.add("is-active");
       }
     });
+
+    if (path.startsWith("/salary")) {
+      setActive("/tools");
+    }
+
+    if (path.startsWith("/lottery")) {
+      setActive("/tools");
+    }
   }
 
   function buildShell() {
