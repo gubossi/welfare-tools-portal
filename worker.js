@@ -23,6 +23,24 @@ export default {
       });
     }
 
+    // URL 단축 API
+    if (pathname === "/api/shorten" && request.method === "POST") {
+      return handleCreateShortUrl(request, env);
+    }
+
+    if (pathname === "/api/shorten" && request.method === "GET") {
+      return handleListShortUrls(request, env);
+    }
+
+    if (pathname.startsWith("/api/shorten/") && request.method === "DELETE") {
+      return handleDeleteShortUrl(request, env);
+    }
+
+    // 단축 URL 리다이렉트
+    if (pathname.startsWith("/s/")) {
+      return handleShortRedirect(request, env);
+    }
+
     // salary reverse proxy
     if (pathname === "/salary" || pathname.startsWith("/salary/")) {
       return proxyWithShell(
@@ -45,6 +63,192 @@ export default {
     return env.ASSETS.fetch(request);
   }
 };
+
+async function handleCreateShortUrl(request, env) {
+  try {
+    const body = await request.json();
+    const rawUrl = String(body.url || "").trim();
+    const rawSlug = String(body.slug || "").trim().toLowerCase();
+
+    if (!rawUrl) {
+      return json(
+        { ok: false, message: "원본 URL을 입력해 주세요." },
+        400
+      );
+    }
+
+    let targetUrl;
+    try {
+      targetUrl = new URL(rawUrl);
+    } catch {
+      return json(
+        { ok: false, message: "올바른 URL 형식이 아닙니다." },
+        400
+      );
+    }
+
+    if (!["http:", "https:"].includes(targetUrl.protocol)) {
+      return json(
+        { ok: false, message: "http 또는 https 주소만 사용할 수 있습니다." },
+        400
+      );
+    }
+
+    let slug = rawSlug;
+    if (slug) {
+      if (!/^[a-z0-9_-]{3,30}$/.test(slug)) {
+        return json(
+          {
+            ok: false,
+            message: "단축코드는 3~30자의 영문 소문자, 숫자, -, _ 만 사용할 수 있습니다."
+          },
+          400
+        );
+      }
+
+      const existing = await env.SHORT_LINKS.get(slug);
+      if (existing) {
+        return json(
+          { ok: false, message: "이미 사용 중인 단축코드입니다." },
+          409
+        );
+      }
+    } else {
+      slug = await generateUniqueSlug(env);
+    }
+
+    const now = new Date().toISOString();
+    const record = {
+      url: targetUrl.toString(),
+      slug,
+      createdAt: now
+    };
+
+    await env.SHORT_LINKS.put(slug, JSON.stringify(record));
+
+    const origin = new URL(request.url).origin;
+    return json({
+      ok: true,
+      slug,
+      shortUrl: `${origin}/s/${slug}`,
+      url: record.url,
+      createdAt: now
+    });
+  } catch (error) {
+    return json(
+      { ok: false, message: "단축 URL 생성 중 오류가 발생했습니다." },
+      500
+    );
+  }
+}
+
+async function handleListShortUrls(request, env) {
+  try {
+    const list = await env.SHORT_LINKS.list({ limit: 100 });
+    const items = [];
+
+    for (const key of list.keys) {
+      const value = await env.SHORT_LINKS.get(key.name);
+      if (!value) continue;
+
+      try {
+        items.push(JSON.parse(value));
+      } catch {
+        // 무시
+      }
+    }
+
+    items.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
+
+    const origin = new URL(request.url).origin;
+    return json({
+      ok: true,
+      items: items.map((item) => ({
+        ...item,
+        shortUrl: `${origin}/s/${item.slug}`
+      }))
+    });
+  } catch (error) {
+    return json(
+      { ok: false, message: "목록을 불러오는 중 오류가 발생했습니다." },
+      500
+    );
+  }
+}
+
+async function handleDeleteShortUrl(request, env) {
+  try {
+    const url = new URL(request.url);
+    const slug = decodeURIComponent(url.pathname.replace("/api/shorten/", "")).trim();
+
+    if (!slug) {
+      return json({ ok: false, message: "삭제할 단축코드가 없습니다." }, 400);
+    }
+
+    const existing = await env.SHORT_LINKS.get(slug);
+    if (!existing) {
+      return json({ ok: false, message: "해당 단축코드를 찾을 수 없습니다." }, 404);
+    }
+
+    await env.SHORT_LINKS.delete(slug);
+    return json({ ok: true, slug });
+  } catch (error) {
+    return json(
+      { ok: false, message: "삭제 중 오류가 발생했습니다." },
+      500
+    );
+  }
+}
+
+async function handleShortRedirect(request, env) {
+  const url = new URL(request.url);
+  const slug = decodeURIComponent(url.pathname.replace("/s/", "")).trim();
+
+  if (!slug) {
+    return new Response("Short URL not found", { status: 404 });
+  }
+
+  const value = await env.SHORT_LINKS.get(slug);
+  if (!value) {
+    return new Response("Short URL not found", { status: 404 });
+  }
+
+  try {
+    const record = JSON.parse(value);
+    if (!record.url) {
+      return new Response("Short URL not found", { status: 404 });
+    }
+
+    return Response.redirect(record.url, 302);
+  } catch {
+    return new Response("Short URL not found", { status: 404 });
+  }
+}
+
+async function generateUniqueSlug(env) {
+  const chars = "abcdefghjkmnpqrstuvwxyz23456789";
+  for (let i = 0; i < 20; i++) {
+    let slug = "";
+    for (let j = 0; j < 6; j++) {
+      slug += chars[Math.floor(Math.random() * chars.length)];
+    }
+
+    const exists = await env.SHORT_LINKS.get(slug);
+    if (!exists) return slug;
+  }
+
+  throw new Error("slug generation failed");
+}
+
+function json(data, status = 200) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: {
+      "content-type": "application/json; charset=utf-8",
+      "cache-control": "no-store"
+    }
+  });
+}
 
 async function proxyWithShell(request, targetBase, mountPath) {
   const reqUrl = new URL(request.url);
@@ -125,12 +329,10 @@ function sharedCss() {
   --welmoa-max: 1200px;
 }
 
-/* 배경만 통일 */
 html, body {
   background: var(--welmoa-bg) !important;
 }
 
-/* 상단 헤더 */
 .welmoa-proxy-header {
   position: sticky;
   top: 0;
@@ -209,18 +411,15 @@ html, body {
   color: var(--welmoa-primary-strong);
 }
 
-/* 원본 앱을 담는 바깥 쉘 */
 .welmoa-proxy-shell {
   width: min(var(--welmoa-max), calc(100% - 32px));
   margin: 24px auto 40px;
 }
 
-/* 원본 앱의 최상단 단순 텍스트 링크 네비 제거용 */
 .welmoa-hide-legacy-nav {
   display: none !important;
 }
 
-/* 모바일 */
 @media (max-width: 720px) {
   .welmoa-proxy-header__inner {
     min-height: auto;
