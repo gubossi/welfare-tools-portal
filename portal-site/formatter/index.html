@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>명단 정리 | Welmoa Tools</title>
+  <meta name="description" content="이름, 생년월일, 연락처 형식을 빠르게 정리하는 명단 정리 도구">
+  <link rel="stylesheet" href="/assets/site.css">
+  <script defer src="/assets/site.js"></script>
+  <style>
+    .tool-layout {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 20px;
+    }
+
+    .tool-panel {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      padding: 24px;
+    }
+
+    .tool-panel h2 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+    }
+
+    .tool-help {
+      margin: 0 0 16px;
+      color: var(--text-soft);
+      font-size: 14px;
+    }
+
+    .tool-textarea {
+      width: 100%;
+      min-height: 360px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 16px;
+      font: inherit;
+      line-height: 1.6;
+      background: #fff;
+      color: var(--text);
+    }
+
+    .tool-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .tool-actions .btn {
+      cursor: pointer;
+    }
+
+    .result-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .result-meta .badge {
+      min-height: 34px;
+    }
+
+    .result-table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+    }
+
+    .result-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 760px;
+    }
+
+    .result-table th,
+    .result-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+      font-size: 14px;
+    }
+
+    .result-table thead th {
+      background: #f8fbff;
+      font-weight: 800;
+      color: var(--text);
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .result-table tbody tr:hover {
+      background: #fbfdff;
+    }
+
+    .result-empty {
+      padding: 28px 18px;
+      color: var(--text-soft);
+    }
+
+    .output-box {
+      width: 100%;
+      min-height: 180px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 16px;
+      font: inherit;
+      line-height: 1.6;
+      background: #fff;
+      color: var(--text);
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .mini-card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .mini-card h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: var(--text-soft);
+      font-size: 14px;
+    }
+
+    .code-chip {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--primary-soft);
+      color: var(--primary-strong);
+      font-size: 12px;
+      font-weight: 800;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 980px) {
+      .tool-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .mini-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="site-brand" href="/">
+        <span class="site-brand__logo">W</span>
+        <span class="site-brand__text">
+          <span class="site-brand__title">Welmoa Tools</span>
+          <span class="site-brand__sub">복지업무 도구 포털</span>
+        </span>
+      </a>
+
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/" data-nav>홈</a>
+        <a href="/tools" data-nav>도구</a>
+        <a href="/updates" data-nav>업데이트</a>
+        <a href="/about" data-nav>소개</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-title">
+      <div class="container">
+        <h1>명단 정리 도구</h1>
+        <p>이름, 생년월일, 연락처가 섞여 있는 명단을 빠르게 정리해 표와 CSV로 변환합니다.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="tool-layout">
+          <section class="tool-panel">
+            <h2>원본 데이터 붙여넣기</h2>
+            <p class="tool-help">
+              한 줄에 한 사람씩 입력하세요. 탭, 쉼표, 여러 칸 공백이 섞여 있어도 인식합니다.<br>
+              예: <code>홍길동 2019-03-02 01012345678</code>
+            </p>
+
+            <textarea id="sourceInput" class="tool-textarea" placeholder="예시
+홍길동 2019-03-02 01012345678
+김영희	2018-11-07	010-2222-3333
+박민수,2017.05.01,01044445555"></textarea>
+
+            <div class="tool-actions">
+              <button class="btn btn--primary" id="parseBtn" type="button">명단 정리하기</button>
+              <button class="btn btn--ghost" id="sampleBtn" type="button">예시 넣기</button>
+              <button class="btn btn--ghost" id="clearBtn" type="button">입력 지우기</button>
+            </div>
+
+            <div class="mini-grid">
+              <div class="mini-card">
+                <h3>정리 항목</h3>
+                <p>성명 · 생년월일 · 연락처 · 이름+생년월일8자리 조합을 자동 생성합니다.</p>
+              </div>
+              <div class="mini-card">
+                <h3>인식 형식</h3>
+                <p>생년월일은 <span class="code-chip">YYYYMMDD</span>, <span class="code-chip">YYYY-MM-DD</span>, <span class="code-chip">YYYY.MM.DD</span> 등을 지원합니다.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="tool-panel">
+            <h2>정리 결과</h2>
+
+            <div class="result-meta">
+              <span class="badge badge--blue">총 <strong id="totalCount">0</strong>건</span>
+              <span class="badge">생년월일 인식 <strong id="birthCount">0</strong>건</span>
+              <span class="badge">연락처 인식 <strong id="phoneCount">0</strong>건</span>
+            </div>
+
+            <div class="result-table-wrap">
+              <div id="tableEmpty" class="result-empty">아직 정리된 결과가 없습니다.</div>
+              <table id="resultTable" class="result-table" hidden>
+                <thead>
+                  <tr>
+                    <th>연번</th>
+                    <th>성명</th>
+                    <th>생년월일</th>
+                    <th>연락처</th>
+                    <th>이름+생년월일</th>
+                    <th>원본</th>
+                  </tr>
+                </thead>
+                <tbody id="resultTbody"></tbody>
+              </table>
+            </div>
+
+            <div style="margin-top:16px;">
+              <label for="copyOutput" class="tool-help" style="display:block; margin-bottom:8px;">
+                복사용 텍스트 (탭 구분)
+              </label>
+              <textarea id="copyOutput" class="output-box" readonly placeholder="정리 결과가 여기에 생성됩니다."></textarea>
+            </div>
+
+            <div class="tool-actions">
+              <button class="btn btn--primary" id="copyBtn" type="button">결과 복사</button>
+              <button class="btn btn--ghost" id="csvBtn" type="button">CSV 다운로드</button>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <div>© Welmoa Tools. Practical tools for welfare work.</div>
+      <nav class="site-footer__nav" aria-label="하단 메뉴">
+        <a href="/guide">가이드</a>
+        <a href="/privacy">개인정보처리방침</a>
+        <a href="/terms">이용약관</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    const sourceInput = document.getElementById("sourceInput");
+    const parseBtn = document.getElementById("parseBtn");
+    const sampleBtn = document.getElementById("sampleBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const resultTable = document.getElementById("resultTable");
+    const resultTbody = document.getElementById("resultTbody");
+    const tableEmpty = document.getElementById("tableEmpty");
+    const copyOutput = document.getElementById("copyOutput");
+    const copyBtn = document.getElementById("copyBtn");
+    const csvBtn = document.getElementById("csvBtn");
+    const totalCount = document.getElementById("totalCount");
+    const birthCount = document.getElementById("birthCount");
+    const phoneCount = document.getElementById("phoneCount");
+
+    let parsedRows = [];
+
+    function normalizeWhitespace(line) {
+      return line.replace(/\\u00A0/g, " ").trim();
+    }
+
+    function splitLine(line) {
+      const normalized = normalizeWhitespace(line);
+
+      if (!normalized) return [];
+
+      if (normalized.includes("\\t")) {
+        return normalized.split(/\\t+/).map(v => v.trim()).filter(Boolean);
+      }
+
+      if (normalized.includes(",")) {
+        return normalized.split(/,+/).map(v => v.trim()).filter(Boolean);
+      }
+
+      return normalized.split(/\\s{2,}|\\s+/).map(v => v.trim()).filter(Boolean);
+    }
+
+    function normalizeBirth(value) {
+      if (!value) return "";
+
+      const raw = String(value).trim();
+      const digits = raw.replace(/\\D/g, "");
+
+      if (digits.length === 8) {
+        const y = digits.slice(0, 4);
+        const m = digits.slice(4, 6);
+        const d = digits.slice(6, 8);
+
+        const month = Number(m);
+        const day = Number(d);
+
+        if (month >= 1 && month <= 12 && day >= 1 && day <= 31) {
+          return \`\${y}-\${m}-\${d}\`;
+        }
+      }
+
+      const match = raw.match(/^(\\d{4})[-./](\\d{1,2})[-./](\\d{1,2})$/);
+      if (match) {
+        const y = match[1];
+        const m = match[2].padStart(2, "0");
+        const d = match[3].padStart(2, "0");
+
+        const month = Number(m);
+        const day = Number(d);
+
+        if (month >= 1 && month <= 12 && day >= 1 && day <= 31) {
+          return \`\${y}-\${m}-\${d}\`;
+        }
+      }
+
+      return "";
+    }
+
+    function normalizePhone(value) {
+      if (!value) return "";
+
+      const digits = String(value).replace(/\\D/g, "");
+
+      if (digits.length === 11 && digits.startsWith("010")) {
+        return \`\${digits.slice(0, 3)}-\${digits.slice(3, 7)}-\${digits.slice(7)}\`;
+      }
+
+      if (digits.length === 10 && digits.startsWith("02")) {
+        return \`\${digits.slice(0, 2)}-\${digits.slice(2, 6)}-\${digits.slice(6)}\`;
+      }
+
+      if (digits.length === 10 && digits.startsWith("0")) {
+        return \`\${digits.slice(0, 3)}-\${digits.slice(3, 6)}-\${digits.slice(6)}\`;
+      }
+
+      return "";
+    }
+
+    function birthToCompact(birth) {
+      return birth ? birth.replace(/-/g, "") : "";
+    }
+
+    function looksLikePhone(value) {
+      const digits = String(value || "").replace(/\\D/g, "");
+      return digits.length >= 9 && digits.length <= 11 && digits.startsWith("0");
+    }
+
+    function looksLikeBirth(value) {
+      return Boolean(normalizeBirth(value));
+    }
+
+    function looksLikeName(value) {
+      if (!value) return false;
+      const v = String(value).trim();
+
+      if (!v) return false;
+      if (looksLikeBirth(v)) return false;
+      if (looksLikePhone(v)) return false;
+
+      return true;
+    }
+
+    function parsePersonLine(line, index) {
+      const tokens = splitLine(line);
+
+      let name = "";
+      let birth = "";
+      let phone = "";
+
+      for (const token of tokens) {
+        if (!birth && looksLikeBirth(token)) {
+          birth = normalizeBirth(token);
+          continue;
+        }
+
+        if (!phone && looksLikePhone(token)) {
+          phone = normalizePhone(token);
+          continue;
+        }
+
+        if (!name && looksLikeName(token)) {
+          name = token;
+        }
+      }
+
+      if (!name && tokens.length > 0) {
+        name = tokens[0];
+      }
+
+      const compactBirth = birthToCompact(birth);
+      const combined = name && compactBirth ? \`\${name}\${compactBirth}\` : "";
+
+      return {
+        no: index + 1,
+        name,
+        birth,
+        phone,
+        combined,
+        raw: line
+      };
+    }
+
+    function renderRows(rows) {
+      parsedRows = rows;
+
+      totalCount.textContent = String(rows.length);
+      birthCount.textContent = String(rows.filter(row => row.birth).length);
+      phoneCount.textContent = String(rows.filter(row => row.phone).length);
+
+      resultTbody.innerHTML = "";
+
+      if (!rows.length) {
+        resultTable.hidden = true;
+        tableEmpty.hidden = false;
+        copyOutput.value = "";
+        return;
+      }
+
+      tableEmpty.hidden = true;
+      resultTable.hidden = false;
+
+      rows.forEach((row) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = \`
+          <td>\${row.no}</td>
+          <td>\${escapeHtml(row.name)}</td>
+          <td>\${escapeHtml(row.birth)}</td>
+          <td>\${escapeHtml(row.phone)}</td>
+          <td>\${escapeHtml(row.combined)}</td>
+          <td>\${escapeHtml(row.raw)}</td>
+        \`;
+        resultTbody.appendChild(tr);
+      });
+
+      copyOutput.value = rows
+        .map(row => [row.name, row.birth, row.phone, row.combined].join("\\t"))
+        .join("\\n");
+    }
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function parseInput() {
+      const raw = sourceInput.value || "";
+      const lines = raw
+        .split(/\\r?\\n/)
+        .map(line => line.trim())
+        .filter(Boolean);
+
+      const rows = lines.map((line, index) => parsePersonLine(line, index));
+      renderRows(rows);
+    }
+
+    function downloadCsv() {
+      if (!parsedRows.length) return;
+
+      const header = ["연번", "성명", "생년월일", "연락처", "이름+생년월일", "원본"];
+      const lines = [header, ...parsedRows.map(row => [
+        row.no,
+        row.name,
+        row.birth,
+        row.phone,
+        row.combined,
+        row.raw
+      ])];
+
+      const csv = lines
+        .map(cols => cols.map(csvEscape).join(","))
+        .join("\\n");
+
+      const blob = new Blob(["\\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "welmoa_formatter.csv";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function csvEscape(value) {
+      const str = String(value ?? "");
+      if (/[",\\n]/.test(str)) {
+        return '"' + str.replace(/"/g, '""') + '"';
+      }
+      return str;
+    }
+
+    async function copyResults() {
+      if (!copyOutput.value.trim()) return;
+
+      try {
+        await navigator.clipboard.writeText(copyOutput.value);
+        alert("정리 결과를 복사했습니다.");
+      } catch (error) {
+        copyOutput.focus();
+        copyOutput.select();
+        document.execCommand("copy");
+        alert("정리 결과를 복사했습니다.");
+      }
+    }
+
+    sampleBtn.addEventListener("click", () => {
+      sourceInput.value = [
+        "홍길동 2019-03-02 01012345678",
+        "김영희\\t2018.11.07\\t010-2222-3333",
+        "박민수,20170501,01044445555",
+        "최서연 2016/09/14 010 9876 5432"
+      ].join("\\n");
+    });
+
+    clearBtn.addEventListener("click", () => {
+      sourceInput.value = "";
+      renderRows([]);
+    });
+
+    parseBtn.addEventListener("click", parseInput);
+    copyBtn.addEventListener("click", copyResults);
+    csvBtn.addEventListener("click", downloadCsv);
+
+    sourceInput.addEventListener("keydown", (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+        parseInput();
+      }
+    });
+
+    renderRows([]);
+  </script>
+</body>
+</html>
