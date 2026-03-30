@@ -121,7 +121,9 @@ async function handleCreateShortUrl(request, env) {
     const record = {
       url: targetUrl.toString(),
       slug,
-      createdAt: now
+      createdAt: now,
+      clicks: 0,
+      lastClickedAt: ""
     };
 
     await env.SHORT_LINKS.put(slug, JSON.stringify(record));
@@ -132,7 +134,9 @@ async function handleCreateShortUrl(request, env) {
       slug,
       shortUrl: `${origin}/s/${slug}`,
       url: record.url,
-      createdAt: now
+      createdAt: now,
+      clicks: 0,
+      lastClickedAt: ""
     });
   } catch (error) {
     return json(
@@ -165,6 +169,8 @@ async function handleListShortUrls(request, env) {
       ok: true,
       items: items.map((item) => ({
         ...item,
+        clicks: item.clicks || 0,
+        lastClickedAt: item.lastClickedAt || "",
         shortUrl: `${origin}/s/${item.slug}`
       }))
     });
@@ -215,9 +221,15 @@ async function handleShortRedirect(request, env) {
 
   try {
     const record = JSON.parse(value);
+
     if (!record.url) {
       return new Response("Short URL not found", { status: 404 });
     }
+
+    record.clicks = (record.clicks || 0) + 1;
+    record.lastClickedAt = new Date().toISOString();
+
+    await env.SHORT_LINKS.put(slug, JSON.stringify(record));
 
     return Response.redirect(record.url, 302);
   } catch {
@@ -227,6 +239,7 @@ async function handleShortRedirect(request, env) {
 
 async function generateUniqueSlug(env) {
   const chars = "abcdefghjkmnpqrstuvwxyz23456789";
+
   for (let i = 0; i < 20; i++) {
     let slug = "";
     for (let j = 0; j < 6; j++) {
