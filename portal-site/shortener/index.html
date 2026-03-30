@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>URL 단축 | Welmoa Tools</title>
+  <meta name="description" content="긴 URL을 짧은 링크로 변환하는 Welmoa Tools URL 단축 도구">
+  <link rel="stylesheet" href="/assets/site.css">
+  <script defer src="/assets/site.js"></script>
+  <style>
+    .tool-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .tool-panel {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      padding: 24px;
+    }
+
+    .tool-panel h2 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+    }
+
+    .tool-help {
+      margin: 0 0 16px;
+      color: var(--text-soft);
+      font-size: 14px;
+    }
+
+    .field-group + .field-group {
+      margin-top: 16px;
+    }
+
+    .field-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .field-input {
+      width: 100%;
+      min-height: 48px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px 14px;
+      font: inherit;
+      background: #fff;
+      color: var(--text);
+    }
+
+    .tool-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .result-box {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      padding: 16px;
+      min-height: 150px;
+    }
+
+    .result-box p {
+      margin: 0 0 10px;
+      color: var(--text-soft);
+    }
+
+    .short-link-box {
+      display: flex;
+      gap: 10px;
+      align-items: stretch;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .short-link-input {
+      flex: 1 1 360px;
+      min-height: 48px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px 14px;
+      font: inherit;
+      background: #fff;
+      color: var(--text);
+    }
+
+    .history-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .history-item {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      padding: 16px;
+    }
+
+    .history-item__top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .history-item__title {
+      font-weight: 800;
+      color: var(--text);
+      word-break: break-all;
+    }
+
+    .history-item__meta {
+      margin-top: 6px;
+      color: var(--text-soft);
+      font-size: 13px;
+      word-break: break-all;
+    }
+
+    .history-item__actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .empty-state {
+      color: var(--text-soft);
+      padding: 10px 0;
+    }
+
+    .status-text {
+      margin-top: 12px;
+      font-size: 14px;
+      color: var(--text-soft);
+    }
+
+    @media (max-width: 980px) {
+      .tool-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="site-brand" href="/">
+        <span class="site-brand__logo">W</span>
+        <span class="site-brand__text">
+          <span class="site-brand__title">Welmoa Tools</span>
+          <span class="site-brand__sub">복지업무 도구 포털</span>
+        </span>
+      </a>
+
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="/" data-nav>홈</a>
+        <a href="/tools" data-nav>도구</a>
+        <a href="/updates" data-nav>업데이트</a>
+        <a href="/about" data-nav>소개</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-title">
+      <div class="container">
+        <h1>URL 단축 도구</h1>
+        <p>긴 링크를 짧고 관리하기 쉬운 주소로 변환합니다.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="tool-layout">
+          <section class="tool-panel">
+            <h2>새 단축 링크 만들기</h2>
+            <p class="tool-help">
+              원본 URL을 입력하고, 원하면 직접 단축코드를 지정할 수 있습니다.
+            </p>
+
+            <div class="field-group">
+              <label class="field-label" for="urlInput">원본 URL</label>
+              <input
+                id="urlInput"
+                class="field-input"
+                type="url"
+                placeholder="https://example.com/very/long/url"
+              >
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="slugInput">단축코드 (선택)</label>
+              <input
+                id="slugInput"
+                class="field-input"
+                type="text"
+                placeholder="예: event-2026"
+              >
+            </div>
+
+            <div class="tool-actions">
+              <button class="btn btn--primary" id="createBtn" type="button">단축 링크 만들기</button>
+              <button class="btn btn--ghost" id="clearBtn" type="button">입력 지우기</button>
+            </div>
+
+            <div class="status-text" id="statusText"></div>
+
+            <div class="result-box" style="margin-top:18px;">
+              <strong>생성 결과</strong>
+              <p>생성된 단축 링크를 바로 복사하거나 새 탭에서 열 수 있습니다.</p>
+
+              <div class="short-link-box">
+                <input id="shortUrlOutput" class="short-link-input" type="text" readonly placeholder="생성된 단축 링크가 여기에 표시됩니다.">
+                <button class="btn btn--primary" id="copyBtn" type="button">복사</button>
+              </div>
+
+              <div class="tool-actions">
+                <a class="btn btn--ghost" id="openLinkBtn" href="#" target="_blank" rel="noopener noreferrer">새 탭에서 열기</a>
+              </div>
+            </div>
+          </section>
+
+          <section class="tool-panel">
+            <h2>최근 생성된 링크</h2>
+            <p class="tool-help">
+              최근 100개까지 불러옵니다. 필요 없는 링크는 삭제할 수 있습니다.
+            </p>
+
+            <div id="historyList" class="history-list">
+              <div class="empty-state">아직 생성된 링크가 없습니다.</div>
+            </div>
+
+            <div class="tool-actions">
+              <button class="btn btn--ghost" id="refreshBtn" type="button">목록 새로고침</button>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <div>© Welmoa Tools. Practical tools for welfare work.</div>
+      <nav class="site-footer__nav" aria-label="하단 메뉴">
+        <a href="/guide">가이드</a>
+        <a href="/privacy">개인정보처리방침</a>
+        <a href="/terms">이용약관</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    const urlInput = document.getElementById("urlInput");
+    const slugInput = document.getElementById("slugInput");
+    const createBtn = document.getElementById("createBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const statusText = document.getElementById("statusText");
+    const shortUrlOutput = document.getElementById("shortUrlOutput");
+    const copyBtn = document.getElementById("copyBtn");
+    const openLinkBtn = document.getElementById("openLinkBtn");
+    const historyList = document.getElementById("historyList");
+    const refreshBtn = document.getElementById("refreshBtn");
+
+    function setStatus(message, isError = false) {
+      statusText.textContent = message || "";
+      statusText.style.color = isError ? "#b91c1c" : "";
+    }
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    async function createShortUrl() {
+      const url = urlInput.value.trim();
+      const slug = slugInput.value.trim();
+
+      if (!url) {
+        setStatus("원본 URL을 입력해 주세요.", true);
+        urlInput.focus();
+        return;
+      }
+
+      createBtn.disabled = true;
+      setStatus("단축 링크를 생성하고 있습니다...");
+
+      try {
+        const response = await fetch("/api/shorten", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json"
+          },
+          body: JSON.stringify({ url, slug })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.ok) {
+          throw new Error(data.message || "단축 링크 생성에 실패했습니다.");
+        }
+
+        shortUrlOutput.value = data.shortUrl || "";
+        openLinkBtn.href = data.shortUrl || "#";
+        setStatus("단축 링크를 생성했습니다.");
+        slugInput.value = data.slug || "";
+        await loadHistory();
+      } catch (error) {
+        setStatus(error.message || "오류가 발생했습니다.", true);
+      } finally {
+        createBtn.disabled = false;
+      }
+    }
+
+    async function loadHistory() {
+      try {
+        const response = await fetch("/api/shorten");
+        const data = await response.json();
+
+        if (!response.ok || !data.ok) {
+          throw new Error(data.message || "목록을 불러오지 못했습니다.");
+        }
+
+        const items = Array.isArray(data.items) ? data.items : [];
+
+        if (!items.length) {
+          historyList.innerHTML = '<div class="empty-state">아직 생성된 링크가 없습니다.</div>';
+          return;
+        }
+
+        historyList.innerHTML = items.map((item) => {
+          const createdAt = item.createdAt
+            ? new Date(item.createdAt).toLocaleString("ko-KR")
+            : "";
+
+          return `
+            <article class="history-item">
+              <div class="history-item__top">
+                <div>
+                  <div class="history-item__title">${escapeHtml(item.shortUrl)}</div>
+                  <div class="history-item__meta">원본: ${escapeHtml(item.url)}</div>
+                  <div class="history-item__meta">생성일: ${escapeHtml(createdAt)}</div>
+                </div>
+              </div>
+              <div class="history-item__actions">
+                <button class="btn btn--primary" type="button" onclick="copyText('${escapeHtml(item.shortUrl)}')">복사</button>
+                <a class="btn btn--ghost" href="${escapeHtml(item.shortUrl)}" target="_blank" rel="noopener noreferrer">열기</a>
+                <button class="btn btn--ghost" type="button" onclick="deleteShortUrl('${escapeHtml(item.slug)}')">삭제</button>
+              </div>
+            </article>
+          `;
+        }).join("");
+      } catch (error) {
+        historyList.innerHTML = '<div class="empty-state">목록을 불러오지 못했습니다.</div>';
+      }
+    }
+
+    async function copyCurrentShortUrl() {
+      const value = shortUrlOutput.value.trim();
+      if (!value) return;
+
+      try {
+        await navigator.clipboard.writeText(value);
+        setStatus("단축 링크를 복사했습니다.");
+      } catch {
+        shortUrlOutput.focus();
+        shortUrlOutput.select();
+        document.execCommand("copy");
+        setStatus("단축 링크를 복사했습니다.");
+      }
+    }
+
+    async function copyText(value) {
+      try {
+        await navigator.clipboard.writeText(value);
+        setStatus("단축 링크를 복사했습니다.");
+      } catch {
+        setStatus("복사에 실패했습니다.", true);
+      }
+    }
+
+    async function deleteShortUrl(slug) {
+      if (!slug) return;
+
+      const ok = window.confirm("이 단축 링크를 삭제할까요?");
+      if (!ok) return;
+
+      try {
+        const response = await fetch("/api/shorten/" + encodeURIComponent(slug), {
+          method: "DELETE"
+        });
+        const data = await response.json();
+
+        if (!response.ok || !data.ok) {
+          throw new Error(data.message || "삭제에 실패했습니다.");
+        }
+
+        setStatus("단축 링크를 삭제했습니다.");
+        await loadHistory();
+      } catch (error) {
+        setStatus(error.message || "삭제 중 오류가 발생했습니다.", true);
+      }
+    }
+
+    clearBtn.addEventListener("click", () => {
+      urlInput.value = "";
+      slugInput.value = "";
+      shortUrlOutput.value = "";
+      openLinkBtn.href = "#";
+      setStatus("");
+    });
+
+    createBtn.addEventListener("click", createShortUrl);
+    copyBtn.addEventListener("click", copyCurrentShortUrl);
+    refreshBtn.addEventListener("click", loadHistory);
+
+    window.copyText = copyText;
+    window.deleteShortUrl = deleteShortUrl;
+
+    loadHistory();
+  </script>
+</body>
+</html>
