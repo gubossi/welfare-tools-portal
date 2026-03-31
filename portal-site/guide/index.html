@@ -1,77 +1,79 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>업무가이드 | 복지업무 도구모음</title>
-  <meta name="description" content="복지업무 도구모음 사용 가이드" />
-  <style>
-    body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans KR",Arial,sans-serif;background:#f8fafc;color:#0f172a;line-height:1.7}
-    .wrap{max-width:1040px;margin:0 auto;padding:24px}
-    .top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:18px 0}
-    a{text-decoration:none;color:inherit}.home{font-weight:800}.btn{display:inline-block;padding:10px 14px;border-radius:14px;background:#0f172a;color:#fff;font-weight:700}
-    .hero{background:#fff;border:1px solid #e2e8f0;border-radius:28px;padding:30px;box-shadow:0 10px 30px rgba(15,23,42,.06)}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px}
-    .card{background:#fff;border:1px solid #e2e8f0;border-radius:24px;padding:24px;box-shadow:0 10px 30px rgba(15,23,42,.05)}
-    h1{font-size:42px;letter-spacing:-.03em;margin:8px 0 0} h2{font-size:22px;margin:0 0 8px} .muted{color:#64748b}
-    ul,ol{padding-left:18px} li+li{margin-top:8px}
-    @media (max-width:760px){.grid{grid-template-columns:1fr}}
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>이용가이드 | Welmoa Tools</title>
+  <meta name="description" content="Welmoa Tools 이용가이드입니다." />
+  <link rel="stylesheet" href="/assets/site.css" />
 </head>
 <body>
-  <div class="wrap">
-    <div class="top">
-      <a class="home" href="/">복지업무 도구모음</a>
-      <a class="btn" href="/">홈으로</a>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="/">
+        <span class="brand__logo">W</span>
+        <span class="brand__text">
+          <span class="brand__title">Welmoa Tools</span>
+          <span class="brand__sub">복지 실무를 위한 간편 업무도구</span>
+        </span>
+      </a>
+      <nav class="site-nav">
+        <a href="/">홈</a>
+        <a href="/tools">도구</a>
+        <a class="is-active" href="/guide">이용가이드</a>
+        <a href="/updates">업데이트</a>
+        <a href="/about">소개</a>
+      </nav>
     </div>
+  </header>
 
-    <section class="hero">
-      <p class="muted">Guide</p>
-      <h1>업무가이드</h1>
-      <p class="muted">포털과 외부 웹앱을 함께 운영할 때 참고할 수 있는 기본 사용 안내입니다.</p>
+  <main class="container">
+    <section class="page-hero">
+      <h1>이용가이드</h1>
+      <p>Welmoa Tools의 각 기능은 웹 브라우저에서 바로 사용할 수 있습니다.</p>
     </section>
 
-    <section class="grid">
-      <article class="card">
-        <h2>급여조회 도구 사용 안내</h2>
-        <p><a href="https://welfare-8nl.pages.dev/" target="_blank" rel="noopener noreferrer">급여조회 페이지</a>는 외부 웹앱으로 운영합니다.</p>
-        <ol>
-          <li>시설유형, 직종, 호봉 등 필요한 기준을 확인합니다.</li>
-          <li>수당 항목 반영 여부를 점검합니다.</li>
-          <li>결과는 참고용으로 보고 기관 내부 기준으로 최종 확인합니다.</li>
-        </ol>
-      </article>
-
-      <article class="card">
-        <h2>신청자 추첨 운영 팁</h2>
-        <p><a href="https://lottery-webapp.gubossi.workers.dev/" target="_blank" rel="noopener noreferrer">신청자 추첨 페이지</a>는 외부 웹앱으로 운영합니다.</p>
-        <ol>
-          <li>추첨 전 명단 중복 여부를 먼저 정리합니다.</li>
-          <li>선발 기준과 예비자 운영 방식을 사전에 안내합니다.</li>
-          <li>결과를 저장하거나 출력해 보관하면 좋습니다.</li>
-        </ol>
-      </article>
-
-      <article class="card">
-        <h2>개인정보 최소 입력 원칙</h2>
-        <ul>
-          <li>이름, 전화번호 등은 꼭 필요한 경우에만 사용합니다.</li>
-          <li>민감정보는 가능한 입력하지 않는 구성을 권장합니다.</li>
-          <li>로그인 없이 사용하는 공개형 사이트인 만큼 저장 기능은 최소화하는 것이 좋습니다.</li>
-        </ul>
-      </article>
-
-      <article class="card">
-        <h2>앞으로 추가하면 좋은 도구</h2>
-        <ul>
-          <li>근무일수 계산기</li>
-          <li>시간외근무 계산기</li>
-          <li>참여자 명단 정리 도구</li>
-          <li>예산 비율 계산기</li>
-          <li>문서 문구 도우미</li>
-        </ul>
-      </article>
+    <section class="page-card">
+      <h2>기본 이용 방법</h2>
+      <ul>
+        <li>홈 또는 도구 페이지에서 원하는 기능을 선택합니다.</li>
+        <li>도구별 안내에 따라 필요한 정보를 입력합니다.</li>
+        <li>결과를 확인하고, 복사 또는 활용합니다.</li>
+      </ul>
     </section>
-  </div>
+
+    <section class="page-card">
+      <h2>주요 도구 안내</h2>
+
+      <h3>급여조회</h3>
+      <p>급여와 수당 기준을 확인하고 실무 계산에 활용할 수 있습니다.</p>
+
+      <h3>신청자 추첨</h3>
+      <p>프로그램 신청자 명단을 바탕으로 공정한 추첨을 진행할 수 있습니다.</p>
+
+      <h3>URL 단축</h3>
+      <p>긴 주소를 짧은 링크로 변환하여 공지, 안내문, 홍보물 등에 활용할 수 있습니다.</p>
+
+      <h3>명단정리</h3>
+      <p>이름, 생년월일, 연락처 등 명단 데이터를 일정한 형식으로 정리하는 데 활용할 수 있습니다.</p>
+    </section>
+
+    <section class="page-card">
+      <h2>유의사항</h2>
+      <div class="notice">
+        입력한 정보와 결과는 사용 목적에 맞게 확인 후 활용해 주세요. 일부 도구는 실무 편의를 위한 참고용 기능으로 제공됩니다.
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <div>© 2026 Welmoa Tools</div>
+      <div class="footer-links">
+        <a href="/privacy">개인정보처리방침</a>
+        <a href="/terms">이용약관</a>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
