@@ -1,99 +1,67 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>업데이트 | Welmoa Tools</title>
-  <meta name="description" content="Welmoa Tools 포털과 도구의 주요 변경 사항">
-  <link rel="stylesheet" href="/assets/site.css">
-  <script defer src="/assets/site.js"></script>
+  <meta name="description" content="Welmoa Tools 업데이트 내역입니다." />
+  <link rel="stylesheet" href="/assets/site.css" />
 </head>
 <body>
   <header class="site-header">
-    <div class="container site-header__inner">
-      <a class="site-brand" href="/">
-        <span class="site-brand__logo">W</span>
-        <span class="site-brand__text">
-          <span class="site-brand__title">Welmoa Tools</span>
-          <span class="site-brand__sub">복지업무 도구 포털</span>
+    <div class="site-header__inner">
+      <a class="brand" href="/">
+        <span class="brand__logo">W</span>
+        <span class="brand__text">
+          <span class="brand__title">Welmoa Tools</span>
+          <span class="brand__sub">복지 실무를 위한 간편 업무도구</span>
         </span>
       </a>
-
-      <nav class="site-nav" aria-label="주요 메뉴">
-        <a href="/" data-nav>홈</a>
-        <a href="/tools" data-nav>도구</a>
-        <a href="/updates" data-nav>업데이트</a>
-        <a href="/about" data-nav>소개</a>
+      <nav class="site-nav">
+        <a href="/">홈</a>
+        <a href="/tools">도구</a>
+        <a href="/guide">이용가이드</a>
+        <a class="is-active" href="/updates">업데이트</a>
+        <a href="/about">소개</a>
       </nav>
     </div>
   </header>
 
-  <main>
-    <section class="page-title">
-      <div class="container">
-        <h1>업데이트 내역</h1>
-        <p>Welmoa Tools 포털과 각 도구의 주요 변경 사항을 정리합니다.</p>
-      </div>
+  <main class="container">
+    <section class="page-hero">
+      <h1>업데이트</h1>
+      <p>Welmoa Tools의 기능 추가 및 개선 내역을 안내합니다.</p>
     </section>
 
-    <section class="section">
-      <div class="container">
-        <div class="update-list">
-          <article class="update-item">
-            <div class="update-item__top">
-              <h3>Welmoa Tools 포털 기본 구조 구성</h3>
-              <span class="update-date">2026.03</span>
-            </div>
-            <p>메인 포털과 급여조회, 신청자 추첨 도구를 하나의 도메인 안에서 연결하는 구조를 정비했습니다.</p>
-            <ul>
-              <li>메인 홈 화면 연결</li>
-              <li>/salary 급여조회 연결</li>
-              <li>/lottery 신청자 추첨 연결</li>
-            </ul>
-          </article>
+    <section class="page-card">
+      <h2>최근 업데이트</h2>
+      <ul>
+        <li>급여조회 도구 포털 연동</li>
+        <li>신청자 추첨 도구 포털 연동</li>
+        <li>URL 단축 기능 추가</li>
+        <li>명단정리 기능 추가</li>
+        <li>포털 공통 상단 메뉴 및 레이아웃 적용</li>
+      </ul>
+    </section>
 
-          <article class="update-item">
-            <div class="update-item__top">
-              <h3>정적 자산 및 라우팅 안정화</h3>
-              <span class="update-date">2026.03</span>
-            </div>
-            <p>CSS, 정적 파일, 각 안내 페이지가 올바르게 열리도록 자산 경로와 Worker 라우팅을 정리했습니다.</p>
-            <ul>
-              <li>/assets 정적 파일 정상 서빙</li>
-              <li>/guide, /privacy, /terms 경로 정리</li>
-              <li>포털 홈 접속 안정화</li>
-            </ul>
-          </article>
-
-          <article class="update-item">
-            <div class="update-item__top">
-              <h3>Welmoa Tools 포털 메뉴 확장</h3>
-              <span class="update-date">2026.03</span>
-            </div>
-            <p>도구, 업데이트, 소개 페이지를 추가하여 서비스 구조를 더 명확하게 정리할 수 있도록 구성했습니다.</p>
-            <ul>
-              <li>/tools 도구 모음 페이지 추가</li>
-              <li>/updates 업데이트 내역 페이지 추가</li>
-              <li>/about 소개 페이지 추가</li>
-            </ul>
-          </article>
-        </div>
-
-        <div class="notice">
-          추후에는 버전 번호, 변경 유형(추가 · 개선 · 수정), 날짜별 정렬 방식까지 함께 적용할 수 있습니다.
-        </div>
-      </div>
+    <section class="page-card">
+      <h2>예정된 개선 사항</h2>
+      <ul>
+        <li>도구별 설명 페이지 보강</li>
+        <li>명단정리 세부 옵션 확장</li>
+        <li>URL 단축 도구 관리 기능 개선</li>
+        <li>포털 정책 및 안내 페이지 정비</li>
+      </ul>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div class="container site-footer__inner">
-      <div>© Welmoa Tools. Practical tools for welfare work.</div>
-      <nav class="site-footer__nav" aria-label="하단 메뉴">
-        <a href="/guide">가이드</a>
+    <div class="site-footer__inner">
+      <div>© 2026 Welmoa Tools</div>
+      <div class="footer-links">
         <a href="/privacy">개인정보처리방침</a>
         <a href="/terms">이용약관</a>
-      </nav>
+      </div>
     </div>
   </footer>
 </body>
