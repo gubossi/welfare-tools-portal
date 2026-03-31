@@ -1,133 +1,76 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>도구 | Welmoa Tools</title>
-  <meta name="description" content="Welmoa Tools에서 사용할 수 있는 도구 목록">
-  <link rel="stylesheet" href="/assets/site.css">
-  <script defer src="/assets/site.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>도구 목록 | Welmoa Tools</title>
+  <meta name="description" content="Welmoa Tools에서 제공하는 업무도구 목록입니다." />
+  <link rel="stylesheet" href="/assets/site.css" />
 </head>
 <body>
   <header class="site-header">
-    <div class="container site-header__inner">
-      <a class="site-brand" href="/">
-        <span class="site-brand__logo">W</span>
-        <span class="site-brand__text">
-          <span class="site-brand__title">Welmoa Tools</span>
-          <span class="site-brand__sub">복지업무 도구 포털</span>
+    <div class="site-header__inner">
+      <a class="brand" href="/">
+        <span class="brand__logo">W</span>
+        <span class="brand__text">
+          <span class="brand__title">Welmoa Tools</span>
+          <span class="brand__sub">복지 실무를 위한 간편 업무도구</span>
         </span>
       </a>
-
-      <nav class="site-nav" aria-label="주요 메뉴">
-        <a href="/" data-nav>홈</a>
-        <a href="/tools" data-nav>도구</a>
-        <a href="/updates" data-nav>업데이트</a>
-        <a href="/about" data-nav>소개</a>
+      <nav class="site-nav">
+        <a href="/">홈</a>
+        <a class="is-active" href="/tools">도구</a>
+        <a href="/guide">이용가이드</a>
+        <a href="/updates">업데이트</a>
+        <a href="/about">소개</a>
       </nav>
     </div>
   </header>
 
-  <main>
-    <section class="page-title">
-      <div class="container">
-        <h1>Welmoa Tools 도구 모음</h1>
-        <p>복지 현장에서 자주 사용하는 실무 도구를 한곳에서 빠르게 이용할 수 있도록 정리했습니다.</p>
-      </div>
+  <main class="container">
+    <section class="page-hero">
+      <h1>업무도구 목록</h1>
+      <p>Welmoa Tools에서 현재 제공 중인 주요 기능입니다.</p>
     </section>
 
-    <section class="section">
-      <div class="container">
-        <div class="section__head">
-          <div class="section__eyebrow">주요 도구</div>
-          <h2 class="section__title">현재 사용할 수 있는 기능</h2>
-          <p class="section__desc">실제로 연결되어 있는 도구들입니다.</p>
-        </div>
+    <div class="grid grid--cards">
+      <article class="card">
+        <div class="card__icon">💰</div>
+        <h3>급여조회</h3>
+        <p>사회복지시설 급여와 수당 확인을 위한 도구입니다.</p>
+        <a class="card__link" href="/salary">도구 열기</a>
+      </article>
 
-        <div class="card-grid">
-  <article class="card card--tool">
-    <div class="card__icon">₩</div>
-    <h3 class="card__title">급여조회</h3>
-    <p class="card__text">급여, 수당, 공제 조건을 반영한 조회 도구</p>
-    <div class="card__meta">
-      <span class="badge badge--green">운영중</span>
-      <span class="badge badge--blue">계산</span>
+      <article class="card">
+        <div class="card__icon">🎲</div>
+        <h3>신청자 추첨</h3>
+        <p>프로그램 신청자 추첨 및 선정 지원 도구입니다.</p>
+        <a class="card__link" href="/lottery">도구 열기</a>
+      </article>
+
+      <article class="card">
+        <div class="card__icon">🔗</div>
+        <h3>URL 단축</h3>
+        <p>긴 링크를 짧은 주소로 변환하는 도구입니다.</p>
+        <a class="card__link" href="/shortener">도구 열기</a>
+      </article>
+
+      <article class="card">
+        <div class="card__icon">🧾</div>
+        <h3>명단정리</h3>
+        <p>명단 데이터 정리 및 포맷 변환을 지원하는 도구입니다.</p>
+        <a class="card__link" href="/name-tools">도구 열기</a>
+      </article>
     </div>
-    <div><a class="btn btn--primary" href="/salary">도구 열기</a></div>
-  </article>
-
-  <article class="card card--tool">
-    <div class="card__icon">🎲</div>
-    <h3 class="card__title">신청자 추첨</h3>
-    <p class="card__text">신청자 정보를 기반으로 무작위 추첨을 진행하는 도구</p>
-    <div class="card__meta">
-      <span class="badge badge--green">운영중</span>
-      <span class="badge badge--blue">추첨</span>
-    </div>
-    <div><a class="btn btn--primary" href="/lottery">도구 열기</a></div>
-  </article>
-
-  <article class="card card--tool">
-    <div class="card__icon">명</div>
-    <h3 class="card__title">명단 정리</h3>
-    <p class="card__text">참여자 명단의 성명, 생년월일, 연락처 형식을 빠르게 통일하는 정리 도구입니다.</p>
-    <div class="card__meta">
-      <span class="badge badge--green">운영중</span>
-      <span class="badge badge--blue">정리</span>
-    </div>
-    <div><a class="btn btn--primary" href="/formatter">도구 열기</a></div>
-  </article>
-
-  <article class="card card--tool">
-    <div class="card__icon">링</div>
-    <h3 class="card__title">URL 단축</h3>
-    <p class="card__text">긴 주소를 짧은 링크로 변환하고 관리하는 도구입니다.</p>
-    <div class="card__meta">
-      <span class="badge badge--green">운영중</span>
-      <span class="badge badge--blue">링크</span>
-    </div>
-    <div><a class="btn btn--primary" href="/shortener">도구 열기</a></div>
-  </article>
-</div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container">
-        <div class="section__head">
-          <div class="section__eyebrow">추가 예정</div>
-          <h2 class="section__title">확장 가능한 도구 예시</h2>
-          <p class="section__desc">Welmoa Tools에 순차적으로 확장할 수 있는 기능 예시입니다.</p>
-        </div>
-
-        <div class="card-grid">
-          <article class="card">
-            <h3 class="card__title">문서·서식 지원</h3>
-            <p class="card__text">안내문, 보고서, 결과보고, 공지문 작성 보조 기능</p>
-          </article>
-
-          <article class="card">
-            <h3 class="card__title">참여자 관리 도구</h3>
-            <p class="card__text">명단 정리, 기본 형식 변환, 연락처 정규화 보조 기능</p>
-          </article>
-
-          <article class="card">
-            <h3 class="card__title">링크·배포 도구</h3>
-            <p class="card__text">짧은 링크, QR, 이용안내 연결 등 운영 지원 기능</p>
-          </article>
-        </div>
-      </div>
-    </section>
   </main>
 
   <footer class="site-footer">
-    <div class="container site-footer__inner">
-      <div>© Welmoa Tools. Practical tools for welfare work.</div>
-      <nav class="site-footer__nav" aria-label="하단 메뉴">
-        <a href="/guide">가이드</a>
+    <div class="site-footer__inner">
+      <div>© 2026 Welmoa Tools</div>
+      <div class="footer-links">
         <a href="/privacy">개인정보처리방침</a>
         <a href="/terms">이용약관</a>
-      </nav>
+      </div>
     </div>
   </footer>
 </body>
