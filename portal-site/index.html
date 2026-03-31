@@ -1,29 +1,28 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Welmoa Tools</title>
-  <meta name="description" content="복지업무에 필요한 계산, 조회, 추첨 도구를 한 곳에서 이용할 수 있는 Welmoa Tools 포털">
-  <link rel="stylesheet" href="/assets/site.css">
-  <script defer src="/assets/site.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welmoa Tools | 복지 실무를 위한 업무도구 포털</title>
+  <meta name="description" content="사회복지 현장과 행정 실무를 위한 Welmoa Tools 포털입니다. 급여조회, 신청자 추첨, URL 단축, 명단정리 등 다양한 업무도구를 제공합니다." />
+  <link rel="stylesheet" href="/assets/site.css" />
 </head>
 <body>
   <header class="site-header">
-    <div class="container site-header__inner">
-      <a class="site-brand" href="/">
-        <span class="site-brand__logo">W</span>
-        <span class="site-brand__text">
-          <span class="site-brand__title">Welmoa Tools</span>
-          <span class="site-brand__sub">복지업무 도구 포털</span>
+    <div class="site-header__inner">
+      <a class="brand" href="/">
+        <span class="brand__logo">W</span>
+        <span class="brand__text">
+          <span class="brand__title">Welmoa Tools</span>
+          <span class="brand__sub">복지 실무를 위한 간편 업무도구</span>
         </span>
       </a>
-
-      <nav class="site-nav" aria-label="주요 메뉴">
-        <a href="/" data-nav>홈</a>
-        <a href="/tools" data-nav>도구</a>
-        <a href="/updates" data-nav>업데이트</a>
-        <a href="/about" data-nav>소개</a>
+      <nav class="site-nav">
+        <a class="is-active" href="/">홈</a>
+        <a href="/tools">도구</a>
+        <a href="/guide">이용가이드</a>
+        <a href="/updates">업데이트</a>
+        <a href="/about">소개</a>
       </nav>
     </div>
   </header>
@@ -31,160 +30,103 @@
   <main>
     <section class="hero">
       <div class="container">
-        <div class="hero__panel">
-          <div>
-            <div class="hero__eyebrow">업무에 바로 쓰는 실무형 포털</div>
-            <h1>복지업무 도구를<br>한 곳에서 빠르게</h1>
-            <p>
-              급여조회, 신청자 추첨 등 실무에 자주 사용하는 기능을
-              하나의 포털에서 일관된 화면과 흐름으로 제공합니다.
-            </p>
-
-            <div class="hero__actions">
-              <a class="btn btn--primary" href="/tools">도구 바로가기</a>
-              <a class="btn btn--ghost" href="/about">포털 소개</a>
-            </div>
-          </div>
-
-          <div class="hero__stats">
-            <div class="stat-card">
-              <div class="stat-card__label">운영 중 도구</div>
-              <div class="stat-card__value">2+</div>
-              <div class="stat-card__desc">급여조회 · 신청자 추첨</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-card__label">포털 페이지</div>
-              <div class="stat-card__value">4</div>
-              <div class="stat-card__desc">홈 · 도구 · 업데이트 · 소개</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-card__label">운영 방식</div>
-              <div class="stat-card__value">Cloudflare</div>
-              <div class="stat-card__desc">Workers + Assets 구조</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-card__label">목표</div>
-              <div class="stat-card__value">통합 UX</div>
-              <div class="stat-card__desc">하나의 서비스처럼 연결</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-<section class="section">
-  <div class="container">
-    <div class="section__head">
-      <div class="section__eyebrow">대표 도구</div>
-      <h2 class="section__title">바로 사용할 수 있는 기능</h2>
-      <p class="section__desc">자주 쓰는 도구를 빠르게 실행할 수 있도록 정리했습니다.</p>
-    </div>
-
-    <div class="card-grid">
-      <article class="card card--tool">
-        <div class="card__icon">₩</div>
-        <h3 class="card__title">급여조회</h3>
-        <p class="card__text">
-          직종, 호봉, 각종 수당 및 공제 조건을 반영해 급여를 확인할 수 있는 도구입니다.
-        </p>
-        <div class="card__meta">
-          <span class="badge badge--blue">계산</span>
-          <span class="badge badge--green">운영중</span>
-        </div>
-        <div>
-          <a class="btn btn--primary" href="/salary">열기</a>
-        </div>
-      </article>
-
-      <article class="card card--tool">
-        <div class="card__icon">🎲</div>
-        <h3 class="card__title">신청자 추첨</h3>
-        <p class="card__text">
-          이름, 생년월일, 연락처 등의 정보를 붙여넣어 공정하게 추첨할 수 있는 도구입니다.
-        </p>
-        <div class="card__meta">
-          <span class="badge badge--blue">추첨</span>
-          <span class="badge badge--green">운영중</span>
-        </div>
-        <div>
-          <a class="btn btn--primary" href="/lottery">열기</a>
-        </div>
-      </article>
-
-      <article class="card card--tool">
-        <div class="card__icon">명</div>
-        <h3 class="card__title">명단 정리</h3>
-        <p class="card__text">
-          이름, 생년월일, 연락처가 섞인 명단을 정리하고 복사용 텍스트나 CSV로 내보낼 수 있습니다.
-        </p>
-        <div class="card__meta">
-          <span class="badge badge--blue">정리</span>
-          <span class="badge badge--green">운영중</span>
-        </div>
-        <div>
-          <a class="btn btn--primary" href="/formatter">열기</a>
-        </div>
-      </article>
-
-      <article class="card card--tool">
-        <div class="card__icon">링</div>
-        <h3 class="card__title">URL 단축</h3>
-        <p class="card__text">
-          긴 링크를 짧은 주소로 바꾸고, 최근 생성한 링크를 확인하고 삭제할 수 있습니다.
-        </p>
-        <div class="card__meta">
-          <span class="badge badge--blue">링크</span>
-          <span class="badge badge--green">운영중</span>
-        </div>
-        <div>
-          <a class="btn btn--primary" href="/shortener">열기</a>
-        </div>
-      </article>
-    </div>
-  </div>
-</section>
-    
-    <section class="section">
-      <div class="container">
-        <div class="section__head">
-          <div class="section__eyebrow">바로가기</div>
-          <h2 class="section__title">자주 찾는 메뉴</h2>
-        </div>
-
-        <div class="quick-links">
-          <a class="quick-link" href="/tools">전체 도구 보기</a>
-          <a class="quick-link" href="/updates">업데이트 내역</a>
-          <a class="quick-link" href="/about">포털 소개</a>
-          <a class="quick-link" href="/salary">급여조회 시작</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container">
-        <div class="section__head">
-          <div class="section__eyebrow">안내</div>
-          <h2 class="section__title">사용 전 확인사항</h2>
-        </div>
-
-        <div class="content-box">
+        <div class="hero__box">
+          <span class="eyebrow">Welmoa Tools Portal</span>
+          <h1>복지 실무를 위한<br />간편 업무도구 포털</h1>
           <p>
-            본 포털의 계산 결과와 추첨 결과는 업무 보조를 위한 참고용 도구입니다.
-            실제 적용 시에는 기관 내부 기준, 최신 지침, 회계 및 인사 규정을 우선 확인해 주세요.
+            Welmoa Tools는 사회복지 현장과 행정 실무에서 반복적으로 사용하는 기능을
+            한 곳에서 빠르게 이용할 수 있도록 구성한 업무도구 포털입니다.
+            급여조회, 신청자 추첨, URL 단축, 명단정리 등 실무 중심 기능을 지속적으로 확장하고 있습니다.
           </p>
+          <div class="hero-actions">
+            <a class="button button--primary" href="/tools">도구 바로가기</a>
+            <a class="button button--secondary" href="/guide">이용가이드 보기</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section__head">
+          <h2>주요 업무도구</h2>
+          <p>실제 업무 현장에서 자주 사용하는 기능을 빠르게 이용할 수 있습니다.</p>
+        </div>
+
+        <div class="grid grid--cards">
+          <article class="card">
+            <div class="card__icon">💰</div>
+            <h3>급여조회</h3>
+            <p>사회복지시설 급여와 수당 정보를 손쉽게 확인하고 실무 계산에 활용할 수 있습니다.</p>
+            <div class="card__actions">
+              <a class="card__link" href="/salary">바로가기</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card__icon">🎲</div>
+            <h3>신청자 추첨</h3>
+            <p>프로그램 신청자를 공정하게 추첨하고 결과를 정리하는 데 활용할 수 있습니다.</p>
+            <div class="card__actions">
+              <a class="card__link" href="/lottery">바로가기</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card__icon">🔗</div>
+            <h3>URL 단축</h3>
+            <p>긴 인터넷 주소를 짧고 공유하기 쉬운 형태로 변환하여 안내문이나 홍보물에 활용할 수 있습니다.</p>
+            <div class="card__actions">
+              <a class="card__link" href="/shortener">바로가기</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card__icon">🧾</div>
+            <h3>명단정리</h3>
+            <p>이름, 생년월일, 연락처 등 명단 데이터를 실무에 맞게 빠르게 정리할 수 있습니다.</p>
+            <div class="card__actions">
+              <a class="card__link" href="/name-tools">바로가기</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section__head">
+          <h2>이용 안내</h2>
+          <p>Welmoa Tools는 실무 편의성과 간결한 사용 경험을 중심으로 운영됩니다.</p>
+        </div>
+
+        <div class="info-grid">
+          <div class="info-box">
+            <h3>실무 중심 구성</h3>
+            <p>사회복지 현장과 행정 업무에서 자주 활용되는 기능을 중심으로 구성하고 있습니다.</p>
+          </div>
+          <div class="info-box">
+            <h3>간편한 접근</h3>
+            <p>복잡한 설치 없이 웹 브라우저에서 바로 접근할 수 있도록 설계하고 있습니다.</p>
+          </div>
+          <div class="info-box">
+            <h3>지속적인 확장</h3>
+            <p>업무 활용도가 높은 기능을 중심으로 도구를 단계적으로 추가하고 개선할 예정입니다.</p>
+          </div>
         </div>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div class="container site-footer__inner">
-      <div>© Welmoa Tools. Practical tools for welfare work.</div>
-      <nav class="site-footer__nav" aria-label="하단 메뉴">
-        <a href="/tools">도구</a>
-        <a href="/updates">업데이트</a>
+    <div class="site-footer__inner">
+      <div>© 2026 Welmoa Tools. All rights reserved.</div>
+      <div class="footer-links">
         <a href="/about">소개</a>
-      </nav>
+        <a href="/guide">이용가이드</a>
+        <a href="/privacy">개인정보처리방침</a>
+        <a href="/terms">이용약관</a>
+      </div>
     </div>
   </footer>
 </body>
