@@ -269,16 +269,25 @@ async function proxyWithShell(request, targetBase, mountPath) {
   const upstreamPath =
     reqUrl.pathname === mountPath
       ? "/"
-      : reqUrl.pathname.slice(mountPath.length);
+      : reqUrl.pathname.slice(mountPath.length) || "/";
 
   const upstreamUrl = new URL(targetBase + upstreamPath + reqUrl.search);
 
-  const upstreamRequest = new Request(upstreamUrl.toString(), request);
-  const response = await fetch(upstreamRequest);
+  const upstreamRequest = new Request(upstreamUrl.toString(), {
+    method: request.method,
+    headers: request.headers,
+    body: shouldHaveBody(request.method) ? request.body : undefined,
+    redirect: "manual"
+  });
+
+  let response = await fetch(upstreamRequest);
+
+  // upstream redirect가 원본 도메인으로 튀지 않도록 보정
+  response = rewriteRedirectLocation(response, targetBase, mountPath);
 
   const contentType = response.headers.get("content-type") || "";
 
-  // HTML이 아닌 파일(css/js/img 등)은 그대로 전달
+  // HTML이 아닌 파일(css/js/img/json 등)은 그대로 전달
   if (!contentType.includes("text/html")) {
     return response;
   }
@@ -288,6 +297,7 @@ async function proxyWithShell(request, targetBase, mountPath) {
       element(el) {
         el.append(
           `
+<base href="${mountPath}/">
 <link rel="stylesheet" href="/_welmoa/shared.css">
 <script defer src="/_welmoa/shared.js"></script>
 `,
@@ -299,9 +309,138 @@ async function proxyWithShell(request, targetBase, mountPath) {
       element(el) {
         el.prepend(proxyTopbar(), { html: true });
       }
-    });
+    })
+    .on("a", new PrefixAttributeRewriter("href", mountPath))
+    .on("link", new PrefixAttributeRewriter("href", mountPath))
+    .on("script", new PrefixAttributeRewriter("src", mountPath))
+    .on("img", new PrefixAttributeRewriter("src", mountPath))
+    .on("iframe", new PrefixAttributeRewriter("src", mountPath))
+    .on("form", new PrefixAttributeRewriter("action", mountPath))
+    .on("source", new PrefixAttributeRewriter("src", mountPath))
+    .on("video", new PrefixAttributeRewriter("src", mountPath))
+    .on("audio", new PrefixAttributeRewriter("src", mountPath))
+    .on("meta", new MetaContentRewriter(mountPath));
 
-  return rewriter.transform(response);
+  return withNoBrokenEncoding(rewriter.transform(response));
+}
+
+function shouldHaveBody(method) {
+  return !["GET", "HEAD"].includes(String(method).toUpperCase());
+}
+
+function rewriteRedirectLocation(response, targetBase, mountPath) {
+  const status = response.status;
+  const location = response.headers.get("location");
+
+  if (!location || status < 300 || status >= 400) {
+    return response;
+  }
+
+  const headers = new Headers(response.headers);
+
+  try {
+    const upstreamOrigin = new URL(targetBase).origin;
+    const loc = new URL(location, upstreamOrigin);
+
+    if (loc.origin === upstreamOrigin) {
+      headers.set("location", `${mountPath}${loc.pathname}${loc.search}${loc.hash}`);
+    }
+  } catch {
+    // 무시
+  }
+
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers
+  });
+}
+
+function withNoBrokenEncoding(response) {
+  const headers = new Headers(response.headers);
+  headers.delete("content-length");
+
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers
+  });
+}
+
+class PrefixAttributeRewriter {
+  constructor(attr, mountPath) {
+    this.attr = attr;
+    this.mountPath = mountPath;
+  }
+
+  element(el) {
+    const value = el.getAttribute(this.attr);
+    if (!value) return;
+
+    // 건드리면 안 되는 것들
+    if (
+      value.startsWith("http://") ||
+      value.startsWith("https://") ||
+      value.startsWith("//") ||
+      value.startsWith("data:") ||
+      value.startsWith("mailto:") ||
+      value.startsWith("tel:") ||
+      value.startsWith("#") ||
+      value.startsWith("javascript:")
+    ) {
+      return;
+    }
+
+    // 이미 mountPath가 붙어 있으면 그대로 둠
+    if (value === this.mountPath || value.startsWith(this.mountPath + "/")) {
+      return;
+    }
+
+    // 루트 기준 경로
+    if (value.startsWith("/")) {
+      el.setAttribute(this.attr, this.mountPath + value);
+      return;
+    }
+
+    // 상대 경로
+    const normalized = value.replace(/^\.\//, "");
+    el.setAttribute(this.attr, `${this.mountPath}/${normalized}`);
+  }
+}
+
+class MetaContentRewriter {
+  constructor(mountPath) {
+    this.mountPath = mountPath;
+  }
+
+  element(el) {
+    const httpEquiv = (el.getAttribute("http-equiv") || "").toLowerCase();
+    const content = el.getAttribute("content");
+
+    if (httpEquiv !== "refresh" || !content) return;
+
+    const match = content.match(/^(\s*\d+\s*;\s*url=)(.+)$/i);
+    if (!match) return;
+
+    let target = match[2].trim();
+
+    if (
+      target.startsWith("http://") ||
+      target.startsWith("https://") ||
+      target.startsWith("//") ||
+      target.startsWith("data:") ||
+      target.startsWith("mailto:") ||
+      target.startsWith("tel:") ||
+      target.startsWith("#") ||
+      target.startsWith("javascript:")
+    ) {
+      return;
+    }
+
+    if (target.startsWith("/") && !target.startsWith(this.mountPath + "/")) {
+      el.setAttribute("content", `${match[1]}${this.mountPath}${target}`);
+    }
+  }
 }
 
 function proxyTopbar() {
