@@ -4,20 +4,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>업데이트 | Welmoa Tools</title>
-  <meta name="description" content="Welmoa Tools 업데이트 내역입니다." />
+  <meta
+    name="description"
+    content="Welmoa Tools의 기능 추가 및 개선 내역을 안내합니다."
+  />
   <link rel="stylesheet" href="/assets/site.css" />
 </head>
 <body>
   <header class="site-header">
-    <div class="site-header__inner">
-      <a class="brand" href="/">
-        <span class="brand__logo">W</span>
-        <span class="brand__text">
-          <span class="brand__title">Welmoa Tools</span>
-          <span class="brand__sub">복지 실무를 위한 간편 업무도구</span>
+    <div class="container site-header__inner">
+      <a class="site-brand" href="/">
+        <span class="site-brand__logo">W</span>
+        <span class="site-brand__text">
+          <span class="site-brand__title">Welmoa Tools</span>
+          <span class="site-brand__sub">복지 실무를 위한 간편 업무도구</span>
         </span>
       </a>
-      <nav class="site-nav">
+
+      <nav class="site-nav" aria-label="주요 메뉴">
         <a href="/">홈</a>
         <a href="/tools">도구</a>
         <a href="/guide">이용가이드</a>
@@ -27,38 +31,83 @@
     </div>
   </header>
 
-  <main class="container">
-    <section class="page-hero">
-      <h1>업데이트</h1>
-      <p>Welmoa Tools의 기능 추가 및 개선 내역을 안내합니다.</p>
+  <main>
+    <section class="page-title">
+      <div class="container">
+        <h1>업데이트</h1>
+        <p>
+          Welmoa Tools의 기능 추가 및 개선 내역을 안내합니다.
+        </p>
+      </div>
     </section>
 
-    <section class="page-card">
-      <h2>최근 업데이트</h2>
-      <ul>
-        <li>급여조회 도구 포털 연동</li>
-        <li>신청자 추첨 도구 포털 연동</li>
-        <li>URL 단축 기능 추가</li>
-        <li>명단정리 기능 추가</li>
-        <li>포털 공통 상단 메뉴 및 레이아웃 적용</li>
-      </ul>
-    </section>
+    <section class="section">
+      <div class="container">
+        <div class="update-list">
+          <article class="update-item">
+            <div class="update-item__top">
+              <h3>포털 기본 구조 정비</h3>
+              <div class="update-date">2026.03</div>
+            </div>
+            <p>
+              Welmoa Tools 메인 포털 구조를 정리하고, 홈·도구·소개·이용가이드·정책 페이지 구성을 정비했습니다.
+            </p>
+          </article>
 
-    <section class="page-card">
-      <h2>예정된 개선 사항</h2>
-      <ul>
-        <li>도구별 설명 페이지 보강</li>
-        <li>명단정리 세부 옵션 확장</li>
-        <li>URL 단축 도구 관리 기능 개선</li>
-        <li>포털 정책 및 안내 페이지 정비</li>
-      </ul>
+          <article class="update-item">
+            <div class="update-item__top">
+              <h3>급여조회 도구 포털 연동</h3>
+              <div class="update-date">2026.03</div>
+            </div>
+            <p>
+              급여조회 도구를 포털 내 서브경로로 연동하고, 공통 상단 메뉴와 레이아웃이 적용되도록 개선했습니다.
+            </p>
+          </article>
+
+          <article class="update-item">
+            <div class="update-item__top">
+              <h3>신청자 추첨 도구 포털 연동</h3>
+              <div class="update-date">2026.03</div>
+            </div>
+            <p>
+              신청자 추첨 기능을 Welmoa Tools 포털에 통합하여 하나의 서비스처럼 이용할 수 있도록 구성했습니다.
+            </p>
+          </article>
+
+          <article class="update-item">
+            <div class="update-item__top">
+              <h3>URL 단축 기능 추가</h3>
+              <div class="update-date">2026.03</div>
+            </div>
+            <p>
+              긴 링크를 짧은 주소로 변환하고, 생성된 단축 링크를 관리할 수 있는 기능을 추가했습니다.
+            </p>
+          </article>
+
+          <article class="update-item">
+            <div class="update-item__top">
+              <h3>명단정리 기능 추가</h3>
+              <div class="update-date">2026.03</div>
+            </div>
+            <p>
+              이름, 생년월일, 연락처 등 명단 데이터를 일정한 형식으로 정리할 수 있는 기능을 추가했습니다.
+            </p>
+          </article>
+        </div>
+
+        <div class="notice">
+          기능과 화면 구성은 운영 상황에 따라 계속 개선될 수 있습니다.
+        </div>
+      </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div class="site-footer__inner">
-      <div>© 2026 Welmoa Tools</div>
-      <div class="footer-links">
+    <div class="container site-footer__inner">
+      <div>© 2026 Welmoa Tools. All rights reserved.</div>
+      <div class="site-footer__nav">
+        <a href="/about">소개</a>
+        <a href="/guide">이용가이드</a>
         <a href="/privacy">개인정보처리방침</a>
         <a href="/terms">이용약관</a>
       </div>
