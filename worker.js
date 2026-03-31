@@ -1,7 +1,33 @@
+const ROOT_HTML = `
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Welmoa Tools</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="font-family:sans-serif; text-align:center; padding:60px;">
+  <h1>Welmoa Tools</h1>
+  <p>복지 실무를 위한 업무도구 포털입니다.</p>
+
+  <p style="margin-top:30px;">
+    👉 <a href="https://tools.welmoa.kr">포털 바로가기</a>
+  </p>
+</body>
+</html>
+`;
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     const pathname = url.pathname;
+
+    // 루트 도메인 처리 (welmoa.kr)
+if (url.hostname === "welmoa.kr") {
+  return new Response(ROOT_HTML, {
+    headers: { "content-type": "text/html; charset=utf-8" }
+  });
+}
 
     // 공통 프록시 CSS
     if (pathname === "/_welmoa/shared.css") {
