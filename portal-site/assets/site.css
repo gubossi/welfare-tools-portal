@@ -531,3 +531,31 @@ main > ol {
     padding: 18px 0 26px;
   }
 }
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  background: #eef4ff;
+  color: #3559a8;
+  border: 1px solid #d9e6ff;
+
+  padding: 10px 14px;
+  border-radius: 999px;
+
+  font-size: 0.95rem;
+  font-weight: 700;
+
+  transition: all 0.18s ease;
+}
+
+.cta::before {
+  content: "←";
+  font-size: 1rem;
+}
+
+.cta:hover {
+  background: #dbe7ff;
+  transform: translateY(-1px);
+}
