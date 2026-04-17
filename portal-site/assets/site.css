@@ -167,20 +167,20 @@ main > section h2:first-child {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
+  align-items: stretch;
 }
 
 .tool-card {
-  display: grid;
-  grid-template-rows: auto 1fr;
-  align-content: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
   width: 100%;
   height: 150px;
-
   background: var(--surface-soft);
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 22px 20px;
-
   transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
 }
 
@@ -195,8 +195,13 @@ main > section h2:first-child {
   color: inherit;
 }
 
+/* 카드 안쪽 요소 정렬 강제 통일 */
+.tool-card > * {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
 .tool-card h3 {
-  margin: 0;
   padding: 0;
   font-size: 1.15rem;
   font-weight: 800;
@@ -205,12 +210,11 @@ main > section h2:first-child {
 }
 
 .tool-card p {
-  margin: 12px 0 0 0;
+  margin-top: 12px !important;
   padding: 0;
   color: var(--muted);
   line-height: 1.6;
 }
-
 
 /* If main page is using a plain stack of cards */
 .section .card + .card,
