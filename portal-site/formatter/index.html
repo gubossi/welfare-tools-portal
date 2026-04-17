@@ -287,295 +287,295 @@
     </div>
   </footer>
 
-  <script>
-    const sourceInput = document.getElementById("sourceInput");
-    const parseBtn = document.getElementById("parseBtn");
-    const sampleBtn = document.getElementById("sampleBtn");
-    const clearBtn = document.getElementById("clearBtn");
-    const resultTable = document.getElementById("resultTable");
-    const resultTbody = document.getElementById("resultTbody");
-    const tableEmpty = document.getElementById("tableEmpty");
-    const copyOutput = document.getElementById("copyOutput");
-    const copyBtn = document.getElementById("copyBtn");
-    const csvBtn = document.getElementById("csvBtn");
-    const totalCount = document.getElementById("totalCount");
-    const birthCount = document.getElementById("birthCount");
-    const phoneCount = document.getElementById("phoneCount");
+<script>
+  const sourceInput = document.getElementById("sourceInput");
+  const parseBtn = document.getElementById("parseBtn");
+  const sampleBtn = document.getElementById("sampleBtn");
+  const clearBtn = document.getElementById("clearBtn");
+  const resultTable = document.getElementById("resultTable");
+  const resultTbody = document.getElementById("resultTbody");
+  const tableEmpty = document.getElementById("tableEmpty");
+  const copyOutput = document.getElementById("copyOutput");
+  const copyBtn = document.getElementById("copyBtn");
+  const csvBtn = document.getElementById("csvBtn");
+  const totalCount = document.getElementById("totalCount");
+  const birthCount = document.getElementById("birthCount");
+  const phoneCount = document.getElementById("phoneCount");
 
-    let parsedRows = [];
+  let parsedRows = [];
 
-    function normalizeWhitespace(line) {
-      return line.replace(/\\u00A0/g, " ").trim();
+  function normalizeWhitespace(line) {
+    return line.replace(/\u00A0/g, " ").trim();
+  }
+
+  function splitLine(line) {
+    const normalized = normalizeWhitespace(line);
+
+    if (!normalized) return [];
+
+    if (normalized.includes("\t")) {
+      return normalized.split(/\t+/).map(v => v.trim()).filter(Boolean);
     }
 
-    function splitLine(line) {
-      const normalized = normalizeWhitespace(line);
-
-      if (!normalized) return [];
-
-      if (normalized.includes("\\t")) {
-        return normalized.split(/\\t+/).map(v => v.trim()).filter(Boolean);
-      }
-
-      if (normalized.includes(",")) {
-        return normalized.split(/,+/).map(v => v.trim()).filter(Boolean);
-      }
-
-      return normalized.split(/\\s{2,}|\\s+/).map(v => v.trim()).filter(Boolean);
+    if (normalized.includes(",")) {
+      return normalized.split(/,+/).map(v => v.trim()).filter(Boolean);
     }
 
-    function normalizeBirth(value) {
-      if (!value) return "";
+    return normalized.split(/\s{2,}|\s+/).map(v => v.trim()).filter(Boolean);
+  }
 
-      const raw = String(value).trim();
-      const digits = raw.replace(/\\D/g, "");
+  function normalizeBirth(value) {
+    if (!value) return "";
 
-      if (digits.length === 8) {
-        const y = digits.slice(0, 4);
-        const m = digits.slice(4, 6);
-        const d = digits.slice(6, 8);
+    const raw = String(value).trim();
+    const digits = raw.replace(/\D/g, "");
 
-        const month = Number(m);
-        const day = Number(d);
+    if (digits.length === 8) {
+      const y = digits.slice(0, 4);
+      const m = digits.slice(4, 6);
+      const d = digits.slice(6, 8);
 
-        if (month >= 1 && month <= 12 && day >= 1 && day <= 31) {
-          return \`\${y}-\${m}-\${d}\`;
-        }
-      }
+      const month = Number(m);
+      const day = Number(d);
 
-      const match = raw.match(/^(\\d{4})[-./](\\d{1,2})[-./](\\d{1,2})$/);
-      if (match) {
-        const y = match[1];
-        const m = match[2].padStart(2, "0");
-        const d = match[3].padStart(2, "0");
-
-        const month = Number(m);
-        const day = Number(d);
-
-        if (month >= 1 && month <= 12 && day >= 1 && day <= 31) {
-          return \`\${y}-\${m}-\${d}\`;
-        }
-      }
-
-      return "";
-    }
-
-    function normalizePhone(value) {
-      if (!value) return "";
-
-      const digits = String(value).replace(/\\D/g, "");
-
-      if (digits.length === 11 && digits.startsWith("010")) {
-        return \`\${digits.slice(0, 3)}-\${digits.slice(3, 7)}-\${digits.slice(7)}\`;
-      }
-
-      if (digits.length === 10 && digits.startsWith("02")) {
-        return \`\${digits.slice(0, 2)}-\${digits.slice(2, 6)}-\${digits.slice(6)}\`;
-      }
-
-      if (digits.length === 10 && digits.startsWith("0")) {
-        return \`\${digits.slice(0, 3)}-\${digits.slice(3, 6)}-\${digits.slice(6)}\`;
-      }
-
-      return "";
-    }
-
-    function birthToCompact(birth) {
-      return birth ? birth.replace(/-/g, "") : "";
-    }
-
-    function looksLikePhone(value) {
-      const digits = String(value || "").replace(/\\D/g, "");
-      return digits.length >= 9 && digits.length <= 11 && digits.startsWith("0");
-    }
-
-    function looksLikeBirth(value) {
-      return Boolean(normalizeBirth(value));
-    }
-
-    function looksLikeName(value) {
-      if (!value) return false;
-      const v = String(value).trim();
-
-      if (!v) return false;
-      if (looksLikeBirth(v)) return false;
-      if (looksLikePhone(v)) return false;
-
-      return true;
-    }
-
-    function parsePersonLine(line, index) {
-      const tokens = splitLine(line);
-
-      let name = "";
-      let birth = "";
-      let phone = "";
-
-      for (const token of tokens) {
-        if (!birth && looksLikeBirth(token)) {
-          birth = normalizeBirth(token);
-          continue;
-        }
-
-        if (!phone && looksLikePhone(token)) {
-          phone = normalizePhone(token);
-          continue;
-        }
-
-        if (!name && looksLikeName(token)) {
-          name = token;
-        }
-      }
-
-      if (!name && tokens.length > 0) {
-        name = tokens[0];
-      }
-
-      const compactBirth = birthToCompact(birth);
-      const combined = name && compactBirth ? \`\${name}\${compactBirth}\` : "";
-
-      return {
-        no: index + 1,
-        name,
-        birth,
-        phone,
-        combined,
-        raw: line
-      };
-    }
-
-    function renderRows(rows) {
-      parsedRows = rows;
-
-      totalCount.textContent = String(rows.length);
-      birthCount.textContent = String(rows.filter(row => row.birth).length);
-      phoneCount.textContent = String(rows.filter(row => row.phone).length);
-
-      resultTbody.innerHTML = "";
-
-      if (!rows.length) {
-        resultTable.hidden = true;
-        tableEmpty.hidden = false;
-        copyOutput.value = "";
-        return;
-      }
-
-      tableEmpty.hidden = true;
-      resultTable.hidden = false;
-
-      rows.forEach((row) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = \`
-          <td>\${row.no}</td>
-          <td>\${escapeHtml(row.name)}</td>
-          <td>\${escapeHtml(row.birth)}</td>
-          <td>\${escapeHtml(row.phone)}</td>
-          <td>\${escapeHtml(row.combined)}</td>
-          <td>\${escapeHtml(row.raw)}</td>
-        \`;
-        resultTbody.appendChild(tr);
-      });
-
-      copyOutput.value = rows
-        .map(row => [row.name, row.birth, row.phone, row.combined].join("\\t"))
-        .join("\\n");
-    }
-
-    function escapeHtml(value) {
-      return String(value || "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#39;");
-    }
-
-    function parseInput() {
-      const raw = sourceInput.value || "";
-      const lines = raw
-        .split(/\\r?\\n/)
-        .map(line => line.trim())
-        .filter(Boolean);
-
-      const rows = lines.map((line, index) => parsePersonLine(line, index));
-      renderRows(rows);
-    }
-
-    function downloadCsv() {
-      if (!parsedRows.length) return;
-
-      const header = ["연번", "성명", "생년월일", "연락처", "이름+생년월일", "원본"];
-      const lines = [header, ...parsedRows.map(row => [
-        row.no,
-        row.name,
-        row.birth,
-        row.phone,
-        row.combined,
-        row.raw
-      ])];
-
-      const csv = lines
-        .map(cols => cols.map(csvEscape).join(","))
-        .join("\\n");
-
-      const blob = new Blob(["\\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "welmoa_formatter.csv";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    }
-
-    function csvEscape(value) {
-      const str = String(value ?? "");
-      if (/[",\\n]/.test(str)) {
-        return '"' + str.replace(/"/g, '""') + '"';
-      }
-      return str;
-    }
-
-    async function copyResults() {
-      if (!copyOutput.value.trim()) return;
-
-      try {
-        await navigator.clipboard.writeText(copyOutput.value);
-        alert("정리 결과를 복사했습니다.");
-      } catch (error) {
-        copyOutput.focus();
-        copyOutput.select();
-        document.execCommand("copy");
-        alert("정리 결과를 복사했습니다.");
+      if (month >= 1 && month <= 12 && day >= 1 && day <= 31) {
+        return `${y}-${m}-${d}`;
       }
     }
 
-    sampleBtn.addEventListener("click", () => {
-      sourceInput.value = [
-        "홍길동 2019-03-02 01012345678",
-        "김영희\\t2018.11.07\\t010-2222-3333",
-        "박민수,20170501,01044445555",
-        "최서연 2016/09/14 010 9876 5432"
-      ].join("\\n");
+    const match = raw.match(/^(\d{4})[-./](\d{1,2})[-./](\d{1,2})$/);
+    if (match) {
+      const y = match[1];
+      const m = match[2].padStart(2, "0");
+      const d = match[3].padStart(2, "0");
+
+      const month = Number(m);
+      const day = Number(d);
+
+      if (month >= 1 && month <= 12 && day >= 1 && day <= 31) {
+        return `${y}-${m}-${d}`;
+      }
+    }
+
+    return "";
+  }
+
+  function normalizePhone(value) {
+    if (!value) return "";
+
+    const digits = String(value).replace(/\D/g, "");
+
+    if (digits.length === 11 && digits.startsWith("010")) {
+      return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`;
+    }
+
+    if (digits.length === 10 && digits.startsWith("02")) {
+      return `${digits.slice(0, 2)}-${digits.slice(2, 6)}-${digits.slice(6)}`;
+    }
+
+    if (digits.length === 10 && digits.startsWith("0")) {
+      return `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`;
+    }
+
+    return "";
+  }
+
+  function birthToCompact(birth) {
+    return birth ? birth.replace(/-/g, "") : "";
+  }
+
+  function looksLikePhone(value) {
+    const digits = String(value || "").replace(/\D/g, "");
+    return digits.length >= 9 && digits.length <= 11 && digits.startsWith("0");
+  }
+
+  function looksLikeBirth(value) {
+    return Boolean(normalizeBirth(value));
+  }
+
+  function looksLikeName(value) {
+    if (!value) return false;
+    const v = String(value).trim();
+
+    if (!v) return false;
+    if (looksLikeBirth(v)) return false;
+    if (looksLikePhone(v)) return false;
+
+    return true;
+  }
+
+  function parsePersonLine(line, index) {
+    const tokens = splitLine(line);
+
+    let name = "";
+    let birth = "";
+    let phone = "";
+
+    for (const token of tokens) {
+      if (!birth && looksLikeBirth(token)) {
+        birth = normalizeBirth(token);
+        continue;
+      }
+
+      if (!phone && looksLikePhone(token)) {
+        phone = normalizePhone(token);
+        continue;
+      }
+
+      if (!name && looksLikeName(token)) {
+        name = token;
+      }
+    }
+
+    if (!name && tokens.length > 0) {
+      name = tokens[0];
+    }
+
+    const compactBirth = birthToCompact(birth);
+    const combined = name && compactBirth ? `${name}${compactBirth}` : "";
+
+    return {
+      no: index + 1,
+      name,
+      birth,
+      phone,
+      combined,
+      raw: line
+    };
+  }
+
+  function escapeHtml(value) {
+    return String(value || "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#39;");
+  }
+
+  function renderRows(rows) {
+    parsedRows = rows;
+
+    totalCount.textContent = String(rows.length);
+    birthCount.textContent = String(rows.filter(row => row.birth).length);
+    phoneCount.textContent = String(rows.filter(row => row.phone).length);
+
+    resultTbody.innerHTML = "";
+
+    if (!rows.length) {
+      resultTable.hidden = true;
+      tableEmpty.hidden = false;
+      copyOutput.value = "";
+      return;
+    }
+
+    tableEmpty.hidden = true;
+    resultTable.hidden = false;
+
+    rows.forEach((row) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${row.no}</td>
+        <td>${escapeHtml(row.name)}</td>
+        <td>${escapeHtml(row.birth)}</td>
+        <td>${escapeHtml(row.phone)}</td>
+        <td>${escapeHtml(row.combined)}</td>
+        <td>${escapeHtml(row.raw)}</td>
+      `;
+      resultTbody.appendChild(tr);
     });
 
-    clearBtn.addEventListener("click", () => {
-      sourceInput.value = "";
-      renderRows([]);
-    });
+    copyOutput.value = rows
+      .map(row => [row.name, row.birth, row.phone, row.combined].join("\t"))
+      .join("\n");
+  }
 
-    parseBtn.addEventListener("click", parseInput);
-    copyBtn.addEventListener("click", copyResults);
-    csvBtn.addEventListener("click", downloadCsv);
+  function parseInput() {
+    const raw = sourceInput.value || "";
+    const lines = raw
+      .split(/\r?\n/)
+      .map(line => line.trim())
+      .filter(Boolean);
 
-    sourceInput.addEventListener("keydown", (event) => {
-      if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
-        parseInput();
-      }
-    });
+    const rows = lines.map((line, index) => parsePersonLine(line, index));
+    renderRows(rows);
+  }
 
+  function csvEscape(value) {
+    const str = String(value ?? "");
+    if (/[",\n]/.test(str)) {
+      return '"' + str.replace(/"/g, '""') + '"';
+    }
+    return str;
+  }
+
+  function downloadCsv() {
+    if (!parsedRows.length) return;
+
+    const header = ["연번", "성명", "생년월일", "연락처", "이름+생년월일", "원본"];
+    const lines = [header, ...parsedRows.map(row => [
+      row.no,
+      row.name,
+      row.birth,
+      row.phone,
+      row.combined,
+      row.raw
+    ])];
+
+    const csv = lines
+      .map(cols => cols.map(csvEscape).join(","))
+      .join("\n");
+
+    const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "welmoa_formatter.csv";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  async function copyResults() {
+    if (!copyOutput.value.trim()) return;
+
+    try {
+      await navigator.clipboard.writeText(copyOutput.value);
+      alert("정리 결과를 복사했습니다.");
+    } catch (error) {
+      copyOutput.focus();
+      copyOutput.select();
+      document.execCommand("copy");
+      alert("정리 결과를 복사했습니다.");
+    }
+  }
+
+  sampleBtn.addEventListener("click", () => {
+    sourceInput.value = [
+      "홍길동 2019-03-02 01012345678",
+      "김영희\t2018.11.07\t010-2222-3333",
+      "박민수,20170501,01044445555",
+      "최서연 2016/09/14 01098765432"
+    ].join("\n");
+  });
+
+  clearBtn.addEventListener("click", () => {
+    sourceInput.value = "";
     renderRows([]);
-  </script>
+  });
+
+  parseBtn.addEventListener("click", parseInput);
+  copyBtn.addEventListener("click", copyResults);
+  csvBtn.addEventListener("click", downloadCsv);
+
+  sourceInput.addEventListener("keydown", (event) => {
+    if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+      parseInput();
+    }
+  });
+
+  renderRows([]);
+</script>
 </body>
 </html>
