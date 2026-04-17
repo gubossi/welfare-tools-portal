@@ -561,3 +561,68 @@ main > ol {
   background: #dbe7ff;
   transform: translateY(-1px);
 }
+
+.hero {
+  margin-bottom: 24px;
+}
+
+.hero-card {
+  background: linear-gradient(135deg, #f6f9ff, #eef4ff);
+  border: 1px solid #e3edff;
+  border-radius: 20px;
+
+  padding: 36px 28px;
+  text-align: left;
+
+  box-shadow: 0 10px 30px rgba(30, 64, 175, 0.05);
+}
+
+.hero h1 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  line-height: 1.4;
+  margin: 10px 0 14px;
+}
+
+.hero .lead {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* 버튼 */
+.btn-primary {
+  background: #3559a8;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.18s ease;
+}
+
+.btn-primary:hover {
+  background: #2a4c96;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: white;
+  color: #3559a8;
+  border: 1px solid #d9e6ff;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.18s ease;
+}
+
+.btn-secondary:hover {
+  background: #f3f7ff;
+}
