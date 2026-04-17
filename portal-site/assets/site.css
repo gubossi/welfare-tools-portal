@@ -167,6 +167,7 @@ main > section h2:first-child {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
+  align-items: stretch;
 }
 
 .card,
@@ -176,6 +177,14 @@ main > section h2:first-child {
   border-radius: 16px;
   padding: 20px;
   transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+}
+
+.tool-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 132px;
+  height: 100%;
 }
 
 .card:hover,
@@ -193,10 +202,26 @@ main > section h2:first-child {
   font-weight: 800;
 }
 
+.tool-card:link,
+.tool-card:visited {
+  color: inherit;
+}
+
+.tool-card h3 {
+  margin: 0 0 10px;
+  line-height: 1.4;
+  color: var(--text);
+}
+
 .card p,
 .tool-card p {
   margin: 10px 0 0;
   color: var(--muted);
+}
+
+.tool-card p {
+  margin: 0;
+  line-height: 1.6;
 }
 
 /* If main page is using a plain stack of cards */
@@ -406,68 +431,6 @@ main > ol {
   margin-bottom: 10px;
 }
 
-/* Responsive */
-@media (max-width: 860px) {
-  .card-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .hero-card,
-  .section,
-  main > section,
-  .page-card,
-  .page-content,
-  article,
-  .policy-card,
-  .doc-card {
-    padding: 22px;
-  }
-
-  .header-inner {
-    align-items: flex-start;
-    padding: 20px 0;
-  }
-
-  .brand {
-    font-size: 1.7rem;
-  }
-}
-
-@media (max-width: 560px) {
-  .container {
-    width: min(var(--max), calc(100% - 20px));
-  }
-
-  main.container {
-    padding-top: 16px;
-    padding-bottom: 28px;
-  }
-
-  .hero-card,
-  .section,
-  main > section,
-  .page-card,
-  .page-content,
-  article,
-  .policy-card,
-  .doc-card {
-    border-radius: 16px;
-    padding: 18px;
-  }
-
-  .site-header nav a {
-    padding: 8px 10px;
-    font-size: 0.9rem;
-  }
-
-  .post-item {
-    padding: 18px;
-  }
-
-  .footer-inner {
-    padding: 18px 0 26px;
-  }
-}
 .post {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -507,8 +470,72 @@ main > ol {
   margin-bottom: 8px;
 }
 
-@media (max-width: 560px) {
+/* Responsive */
+@media (max-width: 860px) {
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-card,
+  .section,
+  main > section,
+  .page-card,
+  .page-content,
+  article,
+  .policy-card,
+  .doc-card,
   .post {
+    padding: 22px;
+  }
+
+  .header-inner {
+    align-items: flex-start;
+    padding: 20px 0;
+  }
+
+  .brand {
+    font-size: 1.7rem;
+  }
+
+  .tool-card {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 560px) {
+  .container {
+    width: min(var(--max), calc(100% - 20px));
+  }
+
+  main.container {
+    padding-top: 16px;
+    padding-bottom: 28px;
+  }
+
+  .hero-card,
+  .section,
+  main > section,
+  .page-card,
+  .page-content,
+  article,
+  .policy-card,
+  .doc-card,
+  .post {
+    border-radius: 16px;
     padding: 18px;
+  }
+
+  .site-header nav a {
+    padding: 8px 10px;
+    font-size: 0.9rem;
+  }
+
+  .post-item,
+  .tool-card {
+    padding: 18px;
+  }
+
+  .footer-inner {
+    padding: 18px 0 26px;
   }
 }
