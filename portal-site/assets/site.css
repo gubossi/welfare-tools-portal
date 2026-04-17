@@ -218,7 +218,6 @@ main > section h2:first-child {
 
 /* If main page is using a plain stack of cards */
 .section .card + .card,
-.section .tool-card + .tool-card {
   margin-top: 14px;
 }
 
