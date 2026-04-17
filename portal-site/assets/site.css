@@ -132,3 +132,36 @@ footer a:hover {
     padding: 15px;
   }
 }
+/* 블로그 리스트 */
+.post-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.post-item {
+  display: block;
+  background: #f9fafc;
+  padding: 18px;
+  border-radius: 10px;
+  border: 1px solid #e6e8eb;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.post-item:hover {
+  background: #f1f5ff;
+  transform: translateY(-2px);
+}
+
+.post-item h3 {
+  margin: 0 0 5px;
+  font-size: 18px;
+  color: #2c3e50;
+}
+
+.post-item p {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+}
