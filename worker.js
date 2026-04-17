@@ -23,11 +23,11 @@ export default {
     const pathname = url.pathname;
 
     // 루트 도메인 처리 (welmoa.kr)
-if (url.hostname === "welmoa.kr") {
-  return new Response(ROOT_HTML, {
-    headers: { "content-type": "text/html; charset=utf-8" }
-  });
-}
+    if (url.hostname === "welmoa.kr") {
+      return new Response(ROOT_HTML, {
+        headers: { "content-type": "text/html; charset=utf-8" }
+      });
+    }
 
     // 공통 프록시 CSS
     if (pathname === "/_welmoa/shared.css") {
@@ -72,7 +72,8 @@ if (url.hostname === "welmoa.kr") {
       return proxyWithShell(
         request,
         "https://welfare-8nl.pages.dev",
-        "/salary"
+        "/salary",
+        { injectTopbar: false, injectSharedShell: false }
       );
     }
 
@@ -81,7 +82,8 @@ if (url.hostname === "welmoa.kr") {
       return proxyWithShell(
         request,
         "https://lottery-webapp.gubossi.workers.dev",
-        "/lottery"
+        "/lottery",
+        { injectTopbar: false, injectSharedShell: false }
       );
     }
 
@@ -289,7 +291,17 @@ function json(data, status = 200) {
   });
 }
 
-async function proxyWithShell(request, targetBase, mountPath) {
+async function proxyWithShell(
+  request,
+  targetBase,
+  mountPath,
+  options = {}
+) {
+  const {
+    injectTopbar = true,
+    injectSharedShell = true
+  } = options;
+
   const reqUrl = new URL(request.url);
 
   const upstreamPath =
@@ -308,12 +320,10 @@ async function proxyWithShell(request, targetBase, mountPath) {
 
   let response = await fetch(upstreamRequest);
 
-  // upstream redirect가 원본 도메인으로 튀지 않도록 보정
   response = rewriteRedirectLocation(response, targetBase, mountPath);
 
   const contentType = response.headers.get("content-type") || "";
 
-  // HTML이 아닌 파일(css/js/img/json 등)은 그대로 전달
   if (!contentType.includes("text/html")) {
     return response;
   }
@@ -321,21 +331,28 @@ async function proxyWithShell(request, targetBase, mountPath) {
   const rewriter = new HTMLRewriter()
     .on("head", {
       element(el) {
-        el.append(
-          `
-<base href="${mountPath}/">
+        let headHtml = `<base href="${mountPath}/">`;
+
+        if (injectSharedShell) {
+          headHtml += `
 <link rel="stylesheet" href="/_welmoa/shared.css">
 <script defer src="/_welmoa/shared.js"></script>
-`,
-          { html: true }
-        );
+`;
+        }
+
+        el.append(headHtml, { html: true });
       }
-    })
-    .on("body", {
+    });
+
+  if (injectTopbar) {
+    rewriter.on("body", {
       element(el) {
         el.prepend(proxyTopbar(), { html: true });
       }
-    })
+    });
+  }
+
+  rewriter
     .on("a", new PrefixAttributeRewriter("href", mountPath))
     .on("link", new PrefixAttributeRewriter("href", mountPath))
     .on("script", new PrefixAttributeRewriter("src", mountPath))
@@ -403,7 +420,6 @@ class PrefixAttributeRewriter {
     const value = el.getAttribute(this.attr);
     if (!value) return;
 
-    // 건드리면 안 되는 것들
     if (
       value.startsWith("http://") ||
       value.startsWith("https://") ||
@@ -417,18 +433,15 @@ class PrefixAttributeRewriter {
       return;
     }
 
-    // 이미 mountPath가 붙어 있으면 그대로 둠
     if (value === this.mountPath || value.startsWith(this.mountPath + "/")) {
       return;
     }
 
-    // 루트 기준 경로
     if (value.startsWith("/")) {
       el.setAttribute(this.attr, this.mountPath + value);
       return;
     }
 
-    // 상대 경로
     const normalized = value.replace(/^\.\//, "");
     el.setAttribute(this.attr, `${this.mountPath}/${normalized}`);
   }
