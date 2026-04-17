@@ -547,6 +547,8 @@ main > ol {
   font-size: 0.95rem;
   font-weight: 700;
 
+  margin-top: 16px;   /* 👈 여기 추가 */
+
   transition: all 0.18s ease;
 }
 
