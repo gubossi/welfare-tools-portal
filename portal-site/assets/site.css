@@ -1,167 +1,470 @@
-/* 기본 설정 */
+:root {
+  --bg: #f4f7fb;
+  --surface: #ffffff;
+  --surface-soft: #f8fafc;
+  --border: #e5eaf1;
+  --text: #1f2937;
+  --muted: #667085;
+  --primary: #2f4358;
+  --primary-strong: #24384b;
+  --link: #334155;
+  --link-hover: #1d4ed8;
+  --shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+  --radius: 18px;
+  --radius-sm: 12px;
+  --max: 1120px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
-  font-family: "Noto Sans KR", Arial, sans-serif;
   margin: 0;
-  background: #f5f6f8;
-  color: #333;
-  line-height: 1.6;
+  font-family: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", Arial, sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top, #eef4fb 0%, #f4f7fb 32%, #f4f7fb 100%);
+  line-height: 1.7;
 }
 
-/* 헤더 */
-header {
-  background: #2c3e50;
-  color: white;
-  padding: 20px 30px;
+img {
+  max-width: 100%;
+  height: auto;
 }
 
-header h1 {
-  margin: 0;
-  font-size: 28px;
-}
-
-header p {
-  margin: 5px 0 10px;
-  font-size: 14px;
-  opacity: 0.9;
-}
-
-/* 네비게이션 */
-nav {
-  margin-top: 10px;
-}
-
-nav a {
-  color: white;
-  text-decoration: none;
-  margin-right: 15px;
-  font-size: 14px;
-}
-
-nav a:hover {
-  text-decoration: underline;
-}
-
-/* 본문 영역 */
-section {
-  max-width: 900px;
-  margin: 20px auto;
-  background: white;
-  padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-}
-
-/* 제목 */
-h2 {
-  border-left: 5px solid #3498db;
-  padding-left: 10px;
-  font-size: 20px;
-}
-
-/* 카드 (도구 영역) */
-.card {
-  background: #f9fafc;
-  padding: 15px;
-  margin: 12px 0;
-  border-radius: 8px;
-  border: 1px solid #e6e8eb;
-  transition: 0.2s;
-}
-
-.card:hover {
-  background: #f1f5ff;
-}
-
-/* 링크 */
 a {
-  color: #2c3e50;
+  color: var(--link);
+  text-decoration: none;
 }
 
 a:hover {
-  color: #3498db;
+  color: var(--link-hover);
 }
 
-/* 리스트 */
-ul {
-  padding-left: 20px;
+.container {
+  width: min(var(--max), calc(100% - 32px));
+  margin: 0 auto;
 }
 
-li {
-  margin-bottom: 8px;
+/* Header */
+.site-header {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-strong) 100%);
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
 }
 
-/* 블로그 페이지 */
-.blog-list a {
-  font-weight: bold;
-  display: block;
-  margin-bottom: 5px;
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 26px 0;
+  flex-wrap: wrap;
 }
 
-.blog-list p {
-  margin-top: 0;
-  font-size: 14px;
-  color: #666;
+.brand {
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
-/* 푸터 */
-footer {
-  text-align: center;
-  padding: 30px;
-  font-size: 13px;
-  color: #777;
+.site-header nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
-footer a {
-  color: #555;
-  text-decoration: none;
-  margin: 0 5px;
+.site-header nav a {
+  color: rgba(255, 255, 255, 0.94);
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-footer a:hover {
-  text-decoration: underline;
+.site-header nav a:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
 }
 
-/* 반응형 */
-@media (max-width: 768px) {
-  section {
-    margin: 10px;
-    padding: 15px;
-  }
-
-  header {
-    padding: 15px;
-  }
+/* Main layout */
+main.container {
+  padding-top: 28px;
+  padding-bottom: 40px;
 }
-/* 블로그 리스트 */
+
+/* Hero */
+.hero {
+  margin-bottom: 24px;
+}
+
+.hero-card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(248,250,252,0.98) 100%);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+  padding: 34px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #eef4ff;
+  color: #3559a8;
+  border: 1px solid #d9e6ff;
+  border-radius: 999px;
+  padding: 7px 12px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+.hero-card h1,
+.page-card h1,
+main h1 {
+  margin: 0 0 12px;
+  font-size: clamp(2rem, 3vw, 2.7rem);
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+}
+
+.lead {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--muted);
+}
+
+/* Generic cards/sections */
+.section,
+main > section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px;
+  margin-bottom: 22px;
+}
+
+.section-title,
+main > section h2:first-child {
+  margin: 0 0 18px;
+  font-size: 1.55rem;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+}
+
+/* Main page tool cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.card,
+.tool-card {
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+}
+
+.card:hover,
+.tool-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.08);
+  background: #fbfdff;
+}
+
+.card h3,
+.tool-card h3,
+.card a,
+.tool-card a {
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.card p,
+.tool-card p {
+  margin: 10px 0 0;
+  color: var(--muted);
+}
+
+/* If main page is using a plain stack of cards */
+.section .card + .card,
+.section .tool-card + .tool-card {
+  margin-top: 14px;
+}
+
+/* Blog list */
 .post-list {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 16px;
 }
 
 .post-item {
   display: block;
-  background: #f9fafc;
-  padding: 18px;
-  border-radius: 10px;
-  border: 1px solid #e6e8eb;
-  text-decoration: none;
-  transition: all 0.2s ease;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 22px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
 }
 
 .post-item:hover {
-  background: #f1f5ff;
   transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.08);
+  border-color: #d7e3f2;
+  background: #fbfdff;
 }
 
 .post-item h3 {
-  margin: 0 0 5px;
-  font-size: 18px;
-  color: #2c3e50;
+  margin: 0 0 8px;
+  font-size: 1.2rem;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  color: var(--text);
 }
 
 .post-item p {
   margin: 0;
-  font-size: 14px;
-  color: #666;
+  color: var(--muted);
+}
+
+/* Generic article / about / privacy / terms page styling */
+.page-card,
+.page-content,
+article,
+.policy-card,
+.doc-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 30px;
+  margin-bottom: 22px;
+}
+
+.page-kicker,
+.kicker,
+.eyebrow {
+  display: inline-block;
+  margin-bottom: 10px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.meta,
+.updated-at,
+.last-updated {
+  display: inline-block;
+  margin: 4px 0 18px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+article h1,
+.page-content h1,
+.policy-card h1,
+.doc-card h1 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: clamp(2rem, 3vw, 2.5rem);
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+}
+
+article h2,
+.page-content h2,
+.policy-card h2,
+.doc-card h2 {
+  margin-top: 32px;
+  margin-bottom: 12px;
+  font-size: 1.6rem;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+}
+
+article h3,
+.page-content h3,
+.policy-card h3,
+.doc-card h3 {
+  margin-top: 24px;
+  margin-bottom: 10px;
+  font-size: 1.18rem;
+}
+
+article p,
+.page-content p,
+.policy-card p,
+.doc-card p,
+.section p {
+  margin: 0 0 14px;
+  color: var(--text);
+}
+
+article ul,
+article ol,
+.page-content ul,
+.page-content ol,
+.policy-card ul,
+.policy-card ol,
+.doc-card ul,
+.doc-card ol {
+  margin: 0 0 14px;
+  padding-left: 22px;
+}
+
+article li,
+.page-content li,
+.policy-card li,
+.doc-card li {
+  margin-bottom: 6px;
+}
+
+article hr,
+.page-content hr,
+.policy-card hr,
+.doc-card hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 24px 0;
+}
+
+/* Optional info box */
+.note,
+.info-box,
+.callout {
+  background: #f8fbff;
+  border: 1px solid #dbeafe;
+  border-radius: 14px;
+  padding: 16px 18px;
+  color: #29456b;
+}
+
+/* Footer */
+.site-footer {
+  margin-top: 10px;
+  background: #f1f5f9;
+  border-top: 1px solid var(--border);
+}
+
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  padding: 22px 0 34px;
+  flex-wrap: wrap;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.footer-links {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.footer-links a:hover {
+  color: var(--text);
+}
+
+/* Default text blocks outside components */
+main > p,
+main > ul,
+main > ol {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 22px 24px;
+  margin-bottom: 18px;
+}
+
+/* Small improvements for plain breadcrumb-like text rows */
+.breadcrumb,
+.page-path {
+  color: var(--muted);
+  font-size: 0.92rem;
+  margin-bottom: 10px;
+}
+
+/* Responsive */
+@media (max-width: 860px) {
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-card,
+  .section,
+  main > section,
+  .page-card,
+  .page-content,
+  article,
+  .policy-card,
+  .doc-card {
+    padding: 22px;
+  }
+
+  .header-inner {
+    align-items: flex-start;
+    padding: 20px 0;
+  }
+
+  .brand {
+    font-size: 1.7rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .container {
+    width: min(var(--max), calc(100% - 20px));
+  }
+
+  main.container {
+    padding-top: 16px;
+    padding-bottom: 28px;
+  }
+
+  .hero-card,
+  .section,
+  main > section,
+  .page-card,
+  .page-content,
+  article,
+  .policy-card,
+  .doc-card {
+    border-radius: 16px;
+    padding: 18px;
+  }
+
+  .site-header nav a {
+    padding: 8px 10px;
+    font-size: 0.9rem;
+  }
+
+  .post-item {
+    padding: 18px;
+  }
+
+  .footer-inner {
+    padding: 18px 0 26px;
+  }
 }
