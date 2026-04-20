@@ -22,13 +22,6 @@ export default {
     const url = new URL(request.url);
     const pathname = url.pathname;
 
-    // 루트 도메인
-    if (url.hostname === "welmoa.kr") {
-      return new Response(ROOT_HTML, {
-        headers: { "content-type": "text/html; charset=utf-8" }
-      });
-    }
-
     // 공통 리소스
     if (pathname === "/_welmoa/shared.css") {
       return new Response(sharedCss(), {
@@ -68,6 +61,13 @@ export default {
     // lottery reverse proxy
     if (pathname === "/lottery" || pathname.startsWith("/lottery/")) {
       return proxy(request, "https://lottery-webapp.gubossi.workers.dev", "/lottery");
+    }
+
+    // 루트 도메인 안내 화면은 / 일 때만 표시
+    if (url.hostname === "welmoa.kr" && pathname === "/") {
+      return new Response(ROOT_HTML, {
+        headers: { "content-type": "text/html; charset=utf-8" }
+      });
     }
 
     // 나머지 정적 파일
