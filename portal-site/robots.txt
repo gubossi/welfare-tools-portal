@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://사용할-포털-도메인/sitemap.xml
+Sitemap: https://welmoa.kr/sitemap.xml
