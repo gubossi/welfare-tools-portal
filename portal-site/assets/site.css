@@ -686,3 +686,42 @@ main > ol {
 .btn-secondary:hover {
   background: #f3f7ff;
 }
+
+.post table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 18px 0;
+  background: #fff;
+  border: 1px solid #dfe7f3;
+}
+
+.post th,
+.post td {
+  padding: 12px 14px;
+  text-align: left;
+  vertical-align: top;
+  border: 1px solid #dfe7f3;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  word-break: keep-all;
+}
+
+.post th {
+  background: #f4f8ff;
+  font-weight: 800;
+  color: #18212f;
+}
+
+.post tbody tr:nth-child(even) td {
+  background: #fbfdff;
+}
+
+@media (max-width: 720px) {
+  .post {
+    overflow-x: auto;
+  }
+
+  .post table {
+    min-width: 640px;
+  }
+}
