@@ -678,6 +678,11 @@ main > ol {
   cursor: default;
 }
 
+.tool-nav-card.is-active:hover {
+  transform: none;
+  box-shadow: none;
+}
+
 .btn-secondary:hover {
   background: #f3f7ff;
 }
