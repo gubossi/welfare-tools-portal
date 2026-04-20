@@ -3,132 +3,572 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>이용가이드 | Welmoa Tools</title>
+  <title>이용가이드 | Welmoa</title>
   <meta
     name="description"
-    content="Welmoa Tools 이용가이드입니다. 각 업무도구의 기본 사용 방법과 유의사항을 안내합니다."
+    content="Welmoa 도구 이용가이드입니다. 각 업무도구의 기본 사용 방법과 유의사항을 안내합니다."
   />
   <link rel="stylesheet" href="/assets/site.css" />
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9857158267683104"
-crossorigin="anonymous"></script>
+    crossorigin="anonymous"></script>
+
+  <style>
+    :root {
+      --tool-accent: #3559a8;
+      --tool-accent-dark: #2c4a8a;
+      --tool-accent-soft: #edf3ff;
+      --tool-surface: #ffffff;
+      --tool-surface-soft: #f8fbff;
+      --tool-border: #dfe7f3;
+      --tool-text: #18212f;
+      --tool-muted: #637287;
+      --tool-shadow-soft: 0 10px 26px rgba(15, 23, 42, 0.05);
+      --tool-radius-xl: 24px;
+      --tool-radius-lg: 18px;
+      --tool-radius-md: 14px;
+      --tool-max: 1180px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top left, rgba(53, 89, 168, 0.05), transparent 28%),
+        linear-gradient(180deg, #f7f9fc 0%, #f3f6fb 100%);
+      color: var(--tool-text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      line-height: 1.6;
+    }
+
+    .container {
+      width: min(var(--tool-max), calc(100% - 32px));
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .site-header {
+      position: relative;
+      top: auto;
+      z-index: 1;
+      background: #2c4058;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      box-shadow: none;
+    }
+
+    .header-inner {
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding-top: 10px;
+      padding-bottom: 6px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #ffffff;
+      font-weight: 900;
+      font-size: 1.35rem;
+      letter-spacing: -0.02em;
+    }
+
+    .site-header nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .site-header nav a {
+      color: rgba(255,255,255,0.92);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.97rem;
+      padding: 10px 14px;
+      border-radius: 999px;
+      transition: 0.18s ease;
+    }
+
+    .site-header nav a:hover {
+      background: rgba(255,255,255,0.12);
+      color: #ffffff;
+    }
+
+    .guide-page {
+      padding: 10px 0 56px;
+    }
+
+    .hero {
+      margin-bottom: 24px;
+    }
+
+    .hero-card {
+      position: relative;
+      overflow: hidden;
+      padding: 36px 36px 34px;
+      border-radius: 30px;
+      background: linear-gradient(135deg, rgba(53, 89, 168, 0.98), rgba(88, 125, 206, 0.94));
+      color: #fff;
+      box-shadow: 0 24px 54px rgba(53, 89, 168, 0.24);
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -80px -80px auto;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      padding: 0 12px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      margin-bottom: 14px;
+    }
+
+    .hero-card .badge {
+      background: rgba(255,255,255,0.18);
+      color: #fff;
+    }
+
+    .hero-card h1 {
+      margin: 0 0 12px;
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      line-height: 1.18;
+      letter-spacing: -0.03em;
+      color: #fff;
+    }
+
+    .hero-card .lead {
+      margin: 0;
+      max-width: 780px;
+      color: rgba(255,255,255,0.92);
+      font-size: 1.03rem;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      margin-top: 22px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .btn {
+      min-height: 50px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      font: inherit;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.18s ease;
+      box-sizing: border-box;
+    }
+
+    .btn--primary {
+      appearance: none;
+      border: none;
+      background: linear-gradient(135deg, var(--tool-accent), #4f72c8);
+      color: #fff;
+      box-shadow: 0 14px 26px rgba(53, 89, 168, 0.18);
+    }
+
+    .btn--primary:hover {
+      transform: translateY(-1px);
+      background: linear-gradient(135deg, var(--tool-accent-dark), #4567ba);
+    }
+
+    .btn--ghost {
+      appearance: none;
+      border: 1px solid #cfe0ff;
+      background: #fff;
+      color: var(--tool-accent);
+      box-shadow: none;
+    }
+
+    .btn--ghost:hover {
+      background: #f4f8ff;
+      border-color: #bdd2ff;
+      transform: translateY(-1px);
+    }
+
+    .section {
+      margin-top: 28px;
+    }
+
+    .section-title {
+      margin: 0 0 16px;
+      font-size: 1.7rem;
+      letter-spacing: -0.03em;
+      color: var(--tool-text);
+    }
+
+    .guide-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+
+    @media (min-width: 760px) {
+      .guide-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .card {
+      background: var(--tool-surface);
+      border: 1px solid var(--tool-border);
+      border-radius: var(--tool-radius-xl);
+      box-shadow: var(--tool-shadow-soft);
+      padding: 24px 26px;
+    }
+
+    .tool-title {
+      margin: 0 0 10px;
+      font-size: 1.28rem;
+      font-weight: 900;
+      line-height: 1.35;
+      letter-spacing: -0.02em;
+      color: var(--tool-text);
+    }
+
+    .tool-desc,
+    .step-text,
+    .notice,
+    .content-box p,
+    .content-box li {
+      color: var(--tool-muted);
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+
+    .step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .step-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .step-number {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: var(--tool-accent);
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 14px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .cta-box,
+    .content-actions {
+      margin-top: 18px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .content-box,
+    .notice {
+      background: var(--tool-surface);
+      border: 1px solid var(--tool-border);
+      border-radius: var(--tool-radius-xl);
+      box-shadow: var(--tool-shadow-soft);
+      padding: 24px 26px;
+    }
+
+    .content-box h2 {
+      margin: 0 0 12px;
+      font-size: 1.28rem;
+      font-weight: 900;
+      line-height: 1.35;
+      letter-spacing: -0.02em;
+      color: var(--tool-text);
+    }
+
+    .content-box ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .content-box li + li {
+      margin-top: 8px;
+    }
+
+    .site-footer {
+      margin-top: 48px;
+      border-top: 1px solid rgba(223, 231, 243, 0.9);
+      background: rgba(255, 255, 255, 0.78);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding-top: 22px;
+      padding-bottom: 18px;
+      color: var(--tool-muted);
+      font-size: 0.95rem;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-links a {
+      color: var(--tool-muted);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .footer-links a:hover {
+      color: var(--tool-accent-dark);
+    }
+
+    @media (max-width: 720px) {
+      .container {
+        width: min(var(--tool-max), calc(100% - 20px));
+      }
+
+      .header-inner,
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .header-inner {
+        padding-top: 6px;
+        padding-bottom: 6px;
+      }
+
+      .hero-card {
+        padding: 26px 20px 24px;
+        border-radius: 24px;
+      }
+
+      .card,
+      .content-box,
+      .notice {
+        padding: 20px 18px;
+      }
+
+      .site-header nav {
+        width: 100%;
+      }
+
+      .site-header nav a {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+    }
+  </style>
 </head>
 <body>
   <header class="site-header">
-    <div class="container site-header__inner">
-      <a class="site-brand" href="/">
-        <span class="site-brand__logo">W</span>
-        <span class="site-brand__text">
-          <span class="site-brand__title">Welmoa Tools</span>
-          <span class="site-brand__sub">복지 실무를 위한 간편 업무도구</span>
-        </span>
-      </a>
-
-      <nav class="site-nav" aria-label="주요 메뉴">
-        <a href="/">홈</a>
-        <a href="https://tools.welmoa.kr/tools/">도구</a>        
-        <a href="/blog/">콘텐츠</a>
-        <a href="/about/">소개</a>
-        <a href="/privacy/">개인정보처리방침</a>
-        <a href="/terms/">이용약관</a>
+    <div class="container header-inner">
+      <a class="brand" href="https://tools.welmoa.kr/">Welmoa</a>
+      <nav>
+        <a href="https://tools.welmoa.kr/">홈</a>
+        <a href="https://tools.welmoa.kr/tools/">도구</a>
+        <a href="https://tools.welmoa.kr/blog/">콘텐츠</a>
+        <a href="https://tools.welmoa.kr/about/">소개</a>
+        <a href="https://tools.welmoa.kr/privacy/">개인정보처리방침</a>
+        <a href="https://tools.welmoa.kr/terms/">이용약관</a>
       </nav>
     </div>
   </header>
 
-  <main>
-    <section class="page-title">
-      <div class="container">
-        <h1>이용가이드</h1>
-        <p>
+  <main class="container guide-page">
+    <section class="hero">
+      <div class="hero-card">
+        <div class="badge">이용 가이드</div>
+        <h1>Welmoa 도구 사용 방법</h1>
+        <p class="lead">
           Welmoa Tools의 각 기능은 웹 브라우저에서 바로 사용할 수 있으며,
           누구나 간편하게 접근할 수 있도록 구성되어 있습니다.
         </p>
+        <div class="hero-actions">
+          <a class="btn btn--primary" href="/tools/">도구 바로가기</a>
+          <a class="btn btn--ghost" href="/blog/">활용 콘텐츠 보기</a>
+        </div>
       </div>
     </section>
 
     <section class="section">
-      <div class="container">
-        <div class="content-box">
-          <h2>기본 이용 방법</h2>
-          <ul>
-            <li>홈 또는 도구 목록 페이지에서 원하는 기능을 선택합니다.</li>
-            <li>도구별 안내에 따라 필요한 정보를 입력합니다.</li>
-            <li>결과를 확인한 후 복사하거나 실무에 맞게 활용합니다.</li>
-          </ul>
+      <h2 class="section-title">기본 이용 흐름</h2>
+
+      <div class="content-box">
+        <ul>
+          <li>홈 또는 도구 목록 페이지에서 원하는 기능을 선택합니다.</li>
+          <li>도구별 안내에 따라 필요한 정보를 입력합니다.</li>
+          <li>결과를 확인한 후 복사하거나 실무에 맞게 활용합니다.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">주요 도구 안내</h2>
+
+      <div class="guide-grid">
+        <div class="card">
+          <div class="tool-title">급여조회</div>
+          <div class="step-list">
+            <div class="step-item">
+              <div class="step-number">1</div>
+              <div class="step-text">시설 유형, 직급, 호봉과 필요한 수당 항목을 입력합니다.</div>
+            </div>
+            <div class="step-item">
+              <div class="step-number">2</div>
+              <div class="step-text">공제 항목과 조건을 설정해 월·연간 급여를 확인합니다.</div>
+            </div>
+            <div class="step-item">
+              <div class="step-number">3</div>
+              <div class="step-text">결과를 참고해 급여 기준 확인이나 실무 계산에 활용합니다.</div>
+            </div>
+          </div>
+          <div class="cta-box">
+            <a class="btn btn--ghost" href="/salary">급여조회 바로가기</a>
+          </div>
         </div>
 
-        <div class="content-box">
-          <h2>주요 도구 안내</h2>
-
-          <h3>급여조회</h3>
-          <p>
-            사회복지시설 급여 및 수당 기준을 확인하고, 실무 계산에 참고할 수 있습니다.
-          </p>
-
-          <h3>신청자 추첨</h3>
-          <p>
-            프로그램 신청자 명단을 기준으로 공정한 추첨을 진행하고 결과를 정리할 수 있습니다.
-          </p>
-
-          <h3>URL 단축</h3>
-          <p>
-            긴 인터넷 주소를 짧고 공유하기 쉬운 링크로 변환하여 공지, 안내문, 홍보물 등에 활용할 수 있습니다.
-          </p>
-
-          <h3>명단정리</h3>
-          <p>
-            이름, 생년월일, 연락처 등 명단 데이터를 일정한 형식으로 정리하거나 변환하는 데 활용할 수 있습니다.
-          </p>
+        <div class="card">
+          <div class="tool-title">신청자 추첨</div>
+          <div class="step-list">
+            <div class="step-item">
+              <div class="step-number">1</div>
+              <div class="step-text">신청자 명단을 붙여넣고 선발 인원을 설정합니다.</div>
+            </div>
+            <div class="step-item">
+              <div class="step-number">2</div>
+              <div class="step-text">중복 제거 여부와 기록 여부를 확인한 뒤 추첨을 실행합니다.</div>
+            </div>
+            <div class="step-item">
+              <div class="step-number">3</div>
+              <div class="step-text">선정자·대기자 결과를 확인하고 CSV로 다운로드할 수 있습니다.</div>
+            </div>
+          </div>
+          <div class="cta-box">
+            <a class="btn btn--ghost" href="/lottery">추첨도구 바로가기</a>
+          </div>
         </div>
 
-        <div class="content-box">
-  <h2>활용 예시</h2>
-
-  <h3>급여조회 활용</h3>
-  <p>
-    시설 종사자의 급여 기준 확인, 수당 계산, 예산 검토 시 참고자료로 활용할 수 있습니다.
-  </p>
-
-  <h3>신청자 추첨 활용</h3>
-  <p>
-    프로그램 참여자 모집 시 공정한 선발을 위해 추첨 도구로 활용할 수 있습니다.
-  </p>
-
-  <h3>URL 단축 활용</h3>
-  <p>
-    긴 링크를 짧게 변환하여 문자, 안내문, 홍보물 등에 쉽게 공유할 수 있습니다.
-  </p>
-
-  <h3>명단정리 활용</h3>
-  <p>
-    이름, 생년월일, 연락처 데이터를 엑셀 입력이나 공문 작성에 맞게 정리할 수 있습니다.
-  </p>
-</div>
-
-        <div class="content-box">
-          <h2>이용 시 유의사항</h2>
-          <ul>
-            <li>각 도구의 결과는 사용 목적에 맞게 최종 확인 후 활용해 주세요.</li>
-            <li>일부 기능은 실무 편의를 위한 참고용 도구로 제공될 수 있습니다.</li>
-            <li>서비스 구성과 기능은 운영 상황에 따라 변경되거나 개선될 수 있습니다.</li>
-          </ul>
+        <div class="card">
+          <div class="tool-title">URL 단축</div>
+          <div class="step-list">
+            <div class="step-item">
+              <div class="step-number">1</div>
+              <div class="step-text">원본 URL을 입력하고 필요하면 단축코드를 직접 지정합니다.</div>
+            </div>
+            <div class="step-item">
+              <div class="step-number">2</div>
+              <div class="step-text">생성된 짧은 링크를 복사하거나 새 탭에서 바로 열 수 있습니다.</div>
+            </div>
+            <div class="step-item">
+              <div class="step-number">3</div>
+              <div class="step-text">최근 생성한 링크 목록과 클릭 현황을 함께 확인할 수 있습니다.</div>
+            </div>
+          </div>
+          <div class="cta-box">
+            <a class="btn btn--ghost" href="/shortener">URL 단축 바로가기</a>
+          </div>
         </div>
 
-        <div class="notice">
-          자세한 운영 정책은 개인정보처리방침 및 이용약관 페이지에서 확인할 수 있습니다.
+        <div class="card">
+          <div class="tool-title">명단정리</div>
+          <div class="step-list">
+            <div class="step-item">
+              <div class="step-number">1</div>
+              <div class="step-text">이름, 생년월일, 연락처가 섞인 명단을 붙여넣습니다.</div>
+            </div>
+            <div class="step-item">
+              <div class="step-number">2</div>
+              <div class="step-text">명단 정리 버튼을 눌러 표와 복사용 텍스트로 변환합니다.</div>
+            </div>
+            <div class="step-item">
+              <div class="step-number">3</div>
+              <div class="step-text">정리된 결과를 복사하거나 CSV 파일로 내려받아 활용합니다.</div>
+            </div>
+          </div>
+          <div class="cta-box">
+            <a class="btn btn--ghost" href="/formatter">명단정리 바로가기</a>
+          </div>
         </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">활용 예시</h2>
+
+      <div class="content-box">
+        <p><strong>급여조회 활용</strong><br>시설 종사자의 급여 기준 확인, 수당 계산, 예산 검토 시 참고자료로 활용할 수 있습니다.</p>
+        <p><strong>신청자 추첨 활용</strong><br>프로그램 참여자 모집 시 공정한 선발을 위해 추첨 도구로 활용할 수 있습니다.</p>
+        <p><strong>URL 단축 활용</strong><br>긴 링크를 짧게 변환하여 문자, 안내문, 홍보물 등에 쉽게 공유할 수 있습니다.</p>
+        <p><strong>명단정리 활용</strong><br>이름, 생년월일, 연락처 데이터를 엑셀 입력이나 공문 작성에 맞게 정리할 수 있습니다.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">이용 시 유의사항</h2>
+
+      <div class="content-box">
+        <ul>
+          <li>각 도구의 결과는 사용 목적에 맞게 최종 확인 후 활용해 주세요.</li>
+          <li>일부 기능은 실무 편의를 위한 참고용 도구로 제공될 수 있습니다.</li>
+          <li>서비스 구성과 기능은 운영 상황에 따라 변경되거나 개선될 수 있습니다.</li>
+        </ul>
+
+        <div class="content-actions">
+          <a class="btn btn--primary" href="/tools/">도구 전체 보기</a>
+          <a class="btn btn--ghost" href="/about/">소개 페이지 보기</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="notice">
+        자세한 운영 정책은 개인정보처리방침 및 이용약관 페이지에서 확인할 수 있습니다.
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div class="container site-footer__inner">
-<div>© 2026 Welmoa Tools. All rights reserved.</div>
-<div>문의: gubossi@gmail.com</div>
-      <div class="site-footer__nav">
-        <a href="/about">소개</a>
-        <a href="/guide">이용가이드</a>
-        <a href="/privacy">개인정보처리방침</a>
-        <a href="/terms">이용약관</a>
+    <div class="container footer-inner">
+      <div>© Welmoa. 사회복지 실무자를 위한 도구와 정보 플랫폼</div>
+      <div class="footer-links">
+        <a href="/about/">소개</a>
+        <a href="/privacy/">개인정보처리방침</a>
+        <a href="/terms/">이용약관</a>
+        <a href="/blog/">콘텐츠 모음</a>
       </div>
     </div>
   </footer>
