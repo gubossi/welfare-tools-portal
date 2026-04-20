@@ -896,23 +896,27 @@
 
         historyMore.hidden = false;
         historyMoreList.innerHTML = olderItems.map((item) => {
-          const createdAt = item.createdAt
-            ? new Date(item.createdAt).toLocaleString("ko-KR")
-            : "";
+  const createdAt = item.createdAt
+    ? new Date(item.createdAt).toLocaleString("ko-KR")
+    : "";
 
-          return `
-            <div class="history-row">
-              <div class="history-row__left">
-                <div class="history-row__title">${escapeHtml(item.shortUrl)}</div>
-                <div class="history-row__meta">생성일: ${escapeHtml(createdAt)}</div>
-              </div>
-              <div class="history-row__actions">
-                <button class="btn btn--ghost" type="button" onclick="copyText('${escapeHtml(item.shortUrl)}')">복사</button>
-                <a class="btn btn--ghost" href="${escapeHtml(item.shortUrl)}" target="_blank" rel="noopener noreferrer">열기</a>
-              </div>
-            </div>
-          `;
-        }).join("");
+  const lastClickedAt = formatDateTime(item.lastClickedAt);
+  const clicks = Number(item.clicks || 0);
+
+  return `
+    <div class="history-row">
+      <div class="history-row__left">
+        <div class="history-row__title">${escapeHtml(item.shortUrl)}</div>
+        <div class="history-row__meta">생성일: ${escapeHtml(createdAt)}</div>
+        <div class="history-row__meta">클릭수: ${escapeHtml(String(clicks))} · 마지막 클릭: ${escapeHtml(lastClickedAt)}</div>
+      </div>
+      <div class="history-row__actions">
+        <button class="btn btn--ghost" type="button" onclick="copyText('${escapeHtml(item.shortUrl)}')">복사</button>
+        <a class="btn btn--ghost" href="${escapeHtml(item.shortUrl)}" target="_blank" rel="noopener noreferrer">열기</a>
+      </div>
+    </div>
+  `;
+}).join("");
       } catch (error) {
         historyList.innerHTML = '<div class="empty-state">목록을 불러오지 못했습니다.</div>';
         historyMore.hidden = true;
