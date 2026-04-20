@@ -485,7 +485,7 @@
 .tool-nav-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 14px;
+  gap: 16px;
   margin-top: 12px;
 }
 
@@ -498,9 +498,9 @@
 .tool-nav-card {
   display: block;
   padding: 18px 16px;
-  border-radius: 18px;
+  border-radius: 20px;
   background: #fff;
-  border: 1px solid var(--tool-border, #dfe7f3);
+  border: 1px solid #dfe7f3;
   text-decoration: none;
   transition: 0.18s ease;
 }
@@ -662,14 +662,13 @@
       <div class="tool-nav-desc">링크 간편 공유</div>
     </a>
 
-    <a class="tool-nav-card" href="/formatter">
+    <div class="tool-nav-card is-active">
       <div class="tool-nav-title">명단정리 🧾</div>
       <div class="tool-nav-desc">현재 사용 중</div>
-    </a>
+    </div>
 
   </div>
 </section>
-    
   </main>
 
   <footer class="site-footer">
