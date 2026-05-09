@@ -98,6 +98,36 @@
   border-color:#2563eb;
   color:white;
 }
+
+.deadline-badge {
+  display:inline-flex;
+  align-items:center;
+  padding:5px 9px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:800;
+  margin-left:6px;
+}
+
+.deadline-normal {
+  background:#eff6ff;
+  color:#1d4ed8;
+}
+
+.deadline-soon {
+  background:#fff7ed;
+  color:#ea580c;
+}
+
+.deadline-urgent {
+  background:#fef2f2;
+  color:#dc2626;
+}
+
+.deadline-end {
+  background:#f1f5f9;
+  color:#64748b;
+}
   </style>
 </head>
 <body>
@@ -249,8 +279,8 @@ if (scoreFilter === "recommend") {
                 기관: ${escapeHtml(item.organization || "-")} ·
                 지역: ${escapeHtml(item.region || "-")} ·
                 분야: ${escapeHtml(item.category || "-")}<br>
-                신청기간: ${escapeHtml(item.apply_start || "-")} ~ ${escapeHtml(item.apply_end || "-")} 
-${getDdayLabel(item.apply_end)} ·
+                신청기간: ${escapeHtml(item.apply_start || "-")} ~ ${escapeHtml(item.apply_end || "-")}
+${renderDeadlineBadge(item.apply_end)} ·
                 출처: ${escapeHtml(item.source || "-")}
               </div>
             </div>
@@ -292,6 +322,35 @@ function getDdayLabel(dateText) {
   if (diff < 0) return "· 마감";
   if (diff === 0) return "· D-day";
   return `· D-${diff}`;
+}
+
+function renderDeadlineBadge(dateText) {
+  if (!dateText) return "";
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const end = new Date(dateText);
+
+  if (Number.isNaN(end.getTime())) return "";
+
+  end.setHours(0, 0, 0, 0);
+
+  const diff = Math.ceil((end - today) / (1000 * 60 * 60 * 24));
+
+  if (diff < 0) {
+    return `<span class="deadline-badge deadline-end">마감</span>`;
+  }
+
+  if (diff <= 3) {
+    return `<span class="deadline-badge deadline-urgent">D-${diff}</span>`;
+  }
+
+  if (diff <= 7) {
+    return `<span class="deadline-badge deadline-soon">D-${diff}</span>`;
+  }
+
+  return `<span class="deadline-badge deadline-normal">D-${diff}</span>`;
 }
     
 function sanitizeSummary(html) {
