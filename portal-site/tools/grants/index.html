@@ -87,8 +87,9 @@
       <input id="searchInput" type="search" placeholder="제목, 기관, 지역, 요약 검색" />
       <select id="scoreFilter">
         <option value="all">전체 적합도</option>
-        <option value="70">70점 이상</option>
-        <option value="50">50점 이상</option>
+<option value="recommend">우리기관 추천공고</option>
+<option value="70">70점 이상</option>
+<option value="50">50점 이상</option>
       </select>
       <select id="sortSelect">
         <option value="deadline">마감일 빠른순</option>
@@ -159,9 +160,11 @@
         });
       }
 
-      if (scoreFilter !== "all") {
-        items = items.filter(item => Number(item.fit_score || 0) >= Number(scoreFilter));
-      }
+if (scoreFilter === "recommend") {
+  items = items.filter(item => Number(item.fit_score || 0) >= 70);
+} else if (scoreFilter !== "all") {
+  items = items.filter(item => Number(item.fit_score || 0) >= Number(scoreFilter));
+}
 
       if (sortValue === "score") {
         items.sort((a, b) => Number(b.fit_score || 0) - Number(a.fit_score || 0));
@@ -187,14 +190,15 @@
                 기관: ${escapeHtml(item.organization || "-")} ·
                 지역: ${escapeHtml(item.region || "-")} ·
                 분야: ${escapeHtml(item.category || "-")}<br>
-                신청기간: ${escapeHtml(item.apply_start || "-")} ~ ${escapeHtml(item.apply_end || "-")} ·
+                신청기간: ${escapeHtml(item.apply_start || "-")} ~ ${escapeHtml(item.apply_end || "-")} 
+${getDdayLabel(item.apply_end)} ·
                 출처: ${escapeHtml(item.source || "-")}
               </div>
             </div>
             <span class="badge">적합도 ${Number(item.fit_score || 0)}점</span>
           </div>
 
-          <p class="summary-text">${sanitizeSummary(item.summary || "요약 정보가 없습니다.")}</p>
+<p class="summary-text">${escapeHtml(sanitizeSummary(item.summary || "요약 정보가 없습니다."))}</p>
 
           <div class="actions">
             <span class="score">수집일: ${escapeHtml(item.collected_at || "-")}</span>
@@ -204,6 +208,33 @@
       `).join("");
     }
 
+function sanitizeSummary(html) {
+  return String(html || "")
+    .replace(/<[^>]*>/g, " ")
+    .replaceAll("&nbsp;", " ")
+    .replaceAll("&amp;", "&")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function getDdayLabel(dateText) {
+  if (!dateText) return "";
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const end = new Date(dateText);
+  if (Number.isNaN(end.getTime())) return "";
+
+  end.setHours(0, 0, 0, 0);
+
+  const diff = Math.ceil((end - today) / (1000 * 60 * 60 * 24));
+
+  if (diff < 0) return "· 마감";
+  if (diff === 0) return "· D-day";
+  return `· D-${diff}`;
+}
+    
 function sanitizeSummary(html) {
   return String(html || "")
     .replace(/<[^>]*>/g, " ")
