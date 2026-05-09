@@ -2,6 +2,7 @@
   "name": "welfare-tools-portal",
   "main": "./worker.js",
   "compatibility_date": "2026-03-18",
+
   "assets": {
     "directory": "./portal-site",
     "binding": "ASSETS",
@@ -15,10 +16,19 @@
       "/s/*"
     ]
   },
+
   "kv_namespaces": [
     {
       "binding": "SHORT_LINKS",
       "id": "9ab06d550ace49a9a0b86fbf7a15d4f2"
+    }
+  ],
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "welmoa-grants",
+      "database_id": "0c1b0708-ca7b-4dba-9f50-1aa870f72d91"
     }
   ]
 }
