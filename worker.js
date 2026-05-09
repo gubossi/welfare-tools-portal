@@ -74,6 +74,47 @@ export default {
     total: result.count
   });
 }
+
+    if (pathname === "/api/grants/sample") {
+
+  await env.DB.prepare(`
+    INSERT INTO grants (
+      source,
+      external_id,
+      title,
+      organization,
+      category,
+      region,
+      apply_start,
+      apply_end,
+      posted_date,
+      url,
+      summary,
+      fit_score
+    )
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `)
+  .bind(
+    "test",
+    crypto.randomUUID(),
+    "2026년 장애인 디지털 프로그램 지원사업",
+    "테스트기관",
+    "복지",
+    "경기",
+    "2026-05-01",
+    "2026-05-31",
+    "2026-05-10",
+    "https://example.com",
+    "장애인 대상 디지털 콘텐츠 지원사업",
+    85
+  )
+  .run();
+
+  return Response.json({
+    success: true,
+    message: "sample inserted"
+  });
+}
     
     // 루트 도메인 안내 화면은 / 일 때만 표시
     if (url.hostname === "welmoa.kr" && pathname === "/") {
