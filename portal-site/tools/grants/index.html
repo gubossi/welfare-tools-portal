@@ -56,6 +56,24 @@
       .summary { grid-template-columns:1fr; }
       .grant-top, .actions { flex-direction:column; align-items:flex-start; }
     }
+
+    .tag-row {
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin:8px 0 10px;
+}
+
+.tag {
+  display:inline-flex;
+  align-items:center;
+  padding:5px 9px;
+  border-radius:999px;
+  background:#f1f5f9;
+  color:#334155;
+  font-size:12px;
+  font-weight:700;
+}
   </style>
 </head>
 <body>
@@ -185,8 +203,9 @@ if (scoreFilter === "recommend") {
         <article class="grant-card">
           <div class="grant-top">
             <div>
-              <h2 class="grant-title">${escapeHtml(item.title || "제목 없음")}</h2>
-              <div class="meta">
+<h2 class="grant-title">${escapeHtml(item.title || "제목 없음")}</h2>
+<div class="tag-row">${renderTags(item)}</div>
+<div class="meta">
                 기관: ${escapeHtml(item.organization || "-")} ·
                 지역: ${escapeHtml(item.region || "-")} ·
                 분야: ${escapeHtml(item.category || "-")}<br>
@@ -252,6 +271,52 @@ function sanitizeSummary(html) {
         .replaceAll("'", "&#039;");
     }
 
+function renderTags(item) {
+  const text = [
+    item.title,
+    item.organization,
+    item.category,
+    item.region,
+    item.summary
+  ].join(" ");
+
+  const tagRules = [
+    ["장애인", "장애인"],
+    ["발달장애", "발달장애"],
+    ["아동", "아동"],
+    ["청소년", "청소년"],
+    ["사회복지", "사회복지"],
+    ["복지관", "복지관"],
+    ["비영리", "비영리"],
+    ["디지털", "디지털"],
+    ["AI", "AI"],
+    ["인공지능", "AI"],
+    ["VR", "VR"],
+    ["메타버스", "메타버스"],
+    ["문화", "문화"],
+    ["체육", "체육"],
+    ["경기", "경기"],
+    ["수원", "수원"]
+  ];
+
+  const tags = [];
+
+  for (const [keyword, label] of tagRules) {
+    if (text.includes(keyword) && !tags.includes(label)) {
+      tags.push(label);
+    }
+  }
+
+  if (!tags.length) {
+    return `<span class="tag">일반공고</span>`;
+  }
+
+  return tags
+    .slice(0, 6)
+    .map(tag => `<span class="tag">${escapeHtml(tag)}</span>`)
+    .join("");
+}
+    
     function escapeAttr(value) {
       return escapeHtml(value);
     }
