@@ -115,6 +115,34 @@ export default {
     message: "sample inserted"
   });
 }
+
+if (pathname === "/api/grants/list") {
+  const rows = await env.DB.prepare(`
+    SELECT
+      id,
+      source,
+      title,
+      organization,
+      category,
+      region,
+      apply_start,
+      apply_end,
+      posted_date,
+      url,
+      summary,
+      fit_score,
+      collected_at
+    FROM grants
+    ORDER BY apply_end ASC, fit_score DESC
+    LIMIT 100
+  `).all();
+
+  return Response.json({
+    success: true,
+    count: rows.results.length,
+    items: rows.results
+  });
+}    
     
     // 루트 도메인 안내 화면은 / 일 때만 표시
     if (url.hostname === "welmoa.kr" && pathname === "/") {
