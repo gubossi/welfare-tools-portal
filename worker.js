@@ -63,6 +63,18 @@ export default {
       return proxy(request, "https://lottery-webapp.gubossi.workers.dev", "/lottery");
     }
 
+    if (url.pathname === "/api/grants/test") {
+
+  const result = await env.DB
+    .prepare("SELECT COUNT(*) as count FROM grants")
+    .first();
+
+  return Response.json({
+    success: true,
+    total: result.count
+  });
+}
+    
     // 루트 도메인 안내 화면은 / 일 때만 표시
     if (url.hostname === "welmoa.kr" && pathname === "/") {
       return new Response(ROOT_HTML, {
