@@ -74,6 +74,30 @@
   font-size:12px;
   font-weight:700;
 }
+
+.tag-filter-row {
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin:-12px 0 24px;
+}
+
+.tag-filter {
+  border:1px solid #cbd5e1;
+  background:white;
+  color:#334155;
+  padding:9px 12px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.tag-filter.active {
+  background:#2563eb;
+  border-color:#2563eb;
+  color:white;
+}
   </style>
 </head>
 <body>
@@ -116,6 +140,19 @@
       </select>
     </section>
 
+    <section class="tag-filter-row">
+  <button type="button" class="tag-filter active" data-tag="all">전체</button>
+  <button type="button" class="tag-filter" data-tag="장애인">장애인</button>
+  <button type="button" class="tag-filter" data-tag="아동">아동</button>
+  <button type="button" class="tag-filter" data-tag="청소년">청소년</button>
+  <button type="button" class="tag-filter" data-tag="사회복지">사회복지</button>
+  <button type="button" class="tag-filter" data-tag="디지털">디지털</button>
+  <button type="button" class="tag-filter" data-tag="문화">문화</button>
+  <button type="button" class="tag-filter" data-tag="체육">체육</button>
+  <button type="button" class="tag-filter" data-tag="경기">경기</button>
+  <button type="button" class="tag-filter" data-tag="수원">수원</button>
+</section>
+
     <section id="grantList" class="grant-list">
       <div class="empty">공모사업 목록을 불러오는 중입니다...</div>
     </section>
@@ -123,6 +160,7 @@
 
   <script>
     let grants = [];
+let activeTag = "all";
 
     async function loadGrants() {
       try {
@@ -163,7 +201,9 @@
       const sortValue = document.getElementById("sortSelect").value;
 
       let items = [...grants];
-
+if (activeTag !== "all") {
+  items = items.filter(item => getItemText(item).includes(activeTag));
+}
       if (keyword) {
         items = items.filter(item => {
           const text = [
@@ -271,14 +311,18 @@ function sanitizeSummary(html) {
         .replaceAll("'", "&#039;");
     }
 
-function renderTags(item) {
-  const text = [
+function getItemText(item) {
+  return [
     item.title,
     item.organization,
     item.category,
     item.region,
     item.summary
   ].join(" ");
+}
+    
+function renderTags(item) {
+const text = getItemText(item);
 
   const tagRules = [
     ["장애인", "장애인"],
@@ -325,6 +369,19 @@ function renderTags(item) {
     document.getElementById("scoreFilter").addEventListener("change", renderList);
     document.getElementById("sortSelect").addEventListener("change", renderList);
 
+    document.querySelectorAll(".tag-filter").forEach(button => {
+  button.addEventListener("click", () => {
+    activeTag = button.dataset.tag;
+
+    document.querySelectorAll(".tag-filter").forEach(btn => {
+      btn.classList.remove("active");
+    });
+
+    button.classList.add("active");
+    renderList();
+  });
+});
+    
     loadGrants();
   </script>
 </body>
