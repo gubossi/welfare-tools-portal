@@ -3,10 +3,107 @@
 <head>
   <meta charset="UTF-8">
   <title>Welmoa - 사회복지 실무 도구 & 정보 플랫폼</title>
-  <meta name="description" content="사회복지 종사자를 위한 급여 계산기, 추첨 도구, 실무 정보 및 급여 가이드 제공">
+  <meta name="description" content="사회복지 종사자를 위한 급여 계산기, 신청자 추첨, 명단 정리 도구와 급여·수당·인사노무·행정 실무 가이드를 제공하는 Welmoa 정보 플랫폼">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/assets/site.css">
   <meta name="naver-site-verification" content="24017f773f943ac7db793f279edc12af90d3fd39" />
+
+  <style>
+    .hero-highlights {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .hero-highlight {
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: 18px;
+      padding: 16px 18px;
+      color: #fff;
+    }
+
+    .hero-highlight strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 1rem;
+      font-weight: 900;
+    }
+
+    .hero-highlight span {
+      display: block;
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .section-lead {
+      max-width: 860px;
+      color: #5f6f84;
+      line-height: 1.75;
+      margin-top: -4px;
+      margin-bottom: 18px;
+    }
+
+    .post-item .tag,
+    .tool-card .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: #edf3ff;
+      color: #2c4a8a;
+      font-size: 0.78rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .trust-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .trust-card {
+      background: #fff;
+      border: 1px solid #dfe7f3;
+      border-radius: 24px;
+      padding: 26px;
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.05);
+    }
+
+    .trust-card h3 {
+      margin: 0 0 10px;
+      font-size: 1.25rem;
+      letter-spacing: -0.02em;
+    }
+
+    .trust-card p {
+      margin: 0;
+      color: #637287;
+      line-height: 1.75;
+    }
+
+    .trust-list {
+      margin: 14px 0 0;
+      padding-left: 18px;
+      color: #18212f;
+      line-height: 1.8;
+    }
+
+    .trust-list li + li {
+      margin-top: 6px;
+    }
+
+    @media (max-width: 760px) {
+      .hero-highlights,
+      .trust-panel {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -15,7 +112,7 @@
       <a class="brand" href="/">Welmoa</a>
       <nav>
         <a href="/">홈</a>
-        <a href="https://tools.welmoa.kr/tools/">도구</a>        
+        <a href="https://tools.welmoa.kr/tools/">도구</a>
         <a href="/blog/">콘텐츠</a>
         <a href="/about/">소개</a>
         <a href="/privacy/">개인정보처리방침</a>
@@ -25,103 +122,229 @@
   </header>
 
   <main class="container">
-<section class="hero">
-  <div class="hero-card">
 
-<div class="badge">사회복지 급여·실무 정보 플랫폼</div>
+    <section class="hero">
+      <div class="hero-card">
+        <div class="badge">사회복지 실무자를 위한 정보 플랫폼</div>
 
-<h1>
-  사회복지 종사자를 위한<br>
-  급여 계산 및 실무 정보 플랫폼
-</h1>
+        <h1>
+          급여 계산부터 행정 실무까지,<br>
+          사회복지 현장에 필요한 정보를 쉽게 확인하세요
+        </h1>
 
-<p class="lead">
-  Welmoa는 사회복지 종사자가 급여 구조를 쉽게 이해하고,
-  실무에 필요한 계산과 정보를 빠르게 확인할 수 있도록 돕는 서비스입니다.
-</p>
+        <p class="lead">
+          Welmoa는 사회복지시설 종사자가 자주 확인하는 급여, 수당, 4대보험, 연차,
+          보조금, 공문, 실적보고 정보를 이해하기 쉽게 정리하고 실무에 바로 활용할 수 있는 도구를 제공합니다.
+        </p>
 
-<div class="hero-actions">
-  <a class="btn-primary" href="/blog/salary-guide.html">급여 가이드 먼저 보기</a>
-  <a class="btn-secondary" href="https://tools.welmoa.kr/salary">급여 계산기 바로가기</a>
-</div>
-</section>
+        <div class="hero-actions">
+          <a class="btn-primary" href="https://tools.welmoa.kr/tools/">실무 도구 사용하기</a>
+          <a class="btn-secondary" href="/blog/">실무 가이드 보기</a>
+        </div>
 
-<section class="section">
-  <h2 class="section-title">급여·수당·공제 관련 정보</h2>
-  <p>
-    급여 계산기를 사용하기 전에 기본 구조를 이해하면 결과를 더 정확하게 해석할 수 있습니다.
-    Welmoa는 사회복지 종사자가 자주 확인하는 급여, 수당, 공제 관련 정보를 함께 제공합니다.
-  </p>
+        <div class="hero-highlights" aria-label="Welmoa 주요 제공 정보">
+          <div class="hero-highlight">
+            <strong>급여·수당 계산</strong>
+            <span>기본급, 수당, 공제, 실수령액 구조를 쉽게 확인합니다.</span>
+          </div>
+          <div class="hero-highlight">
+            <strong>행정·노무 가이드</strong>
+            <span>연차, 근로계약, 공문, 정산 등 입문자도 이해할 수 있게 정리합니다.</span>
+          </div>
+          <div class="hero-highlight">
+            <strong>실무 도구 제공</strong>
+            <span>급여 계산, 신청자 추첨, URL 단축, 명단 정리를 빠르게 처리합니다.</span>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <div class="post-list">
-    <a class="post-item" href="/blog/salary-guide.html">
-      <h3>사회복지사 급여 계산 방법 총정리</h3>
-      <p>기본급, 수당, 공제, 세금, 실수령액 흐름을 한 번에 이해할 수 있도록 정리한 글입니다.</p>
-    </a>
+    <section class="section">
+      <h2 class="section-title">처음 방문했다면 먼저 확인해 보세요</h2>
+      <p class="section-lead">
+        신입직원이나 입사예정자도 사회복지시설의 급여와 행정 흐름을 이해할 수 있도록
+        기초 개념부터 실무에서 자주 헷갈리는 부분까지 단계별로 정리했습니다.
+      </p>
 
-    <a class="post-item" href="/blog/overtime-guide.html">
-      <h3>시간외수당 계산 기준 완벽 정리</h3>
-      <p>시간외근무수당 계산 공식, 가산율, 반올림 기준까지 이해하기 쉽게 설명합니다.</p>
-    </a>
+      <div class="post-list">
+        <a class="post-item" href="/blog/new-worker-pay.html">
+          <span class="tag">신입 가이드</span>
+          <h3>초보 사회복지사를 위한 급여 이해 가이드</h3>
+          <p>신입 사회복지사가 급여명세서를 볼 때 꼭 알아두면 좋은 기본급, 수당, 공제 흐름을 정리했습니다.</p>
+        </a>
 
-    <a class="post-item" href="/blog/taxable-vs-nontaxable.html">
-      <h3>비과세 수당과 과세 수당 차이</h3>
-      <p>실수령액에 영향을 주는 비과세·과세 개념과 실무상 차이를 정리했습니다.</p>
-    </a>
+        <a class="post-item" href="/blog/social-welfare-admin-terms.html">
+          <span class="tag">행정 입문</span>
+          <h3>사회복지시설 신규직원이 가장 헷갈리는 행정용어 정리</h3>
+          <p>실인원, 연인원, 집행률, 교부금처럼 처음 들으면 어려운 행정용어를 쉽게 설명합니다.</p>
+        </a>
 
-    <a class="post-item" href="/blog/take-home-pay.html">
-      <h3>사회복지사 실수령액 계산 방법</h3>
-      <p>총지급액과 공제 항목을 기준으로 실수령액을 이해하고 확인하는 방법을 정리했습니다.</p>
-    </a>
+        <a class="post-item" href="/blog/labor-contract-checklist.html">
+          <span class="tag">인사·노무</span>
+          <h3>사회복지시설 근로계약서에서 꼭 확인해야 할 항목</h3>
+          <p>계약기간, 수습기간, 근무시간, 휴게시간 등 입사 전후로 확인해야 할 근로계약 핵심 항목을 안내합니다.</p>
+        </a>
 
-    <a class="post-item" href="/blog/family-allowance.html">
-      <h3>가족수당 지급 기준 정리</h3>
-      <p>가족수당의 개념, 지급 대상, 실무에서 확인해야 할 핵심 포인트를 안내합니다.</p>
-    </a>
-  </div>
-</section>
+        <a class="post-item" href="/blog/official-document-guide.html">
+          <span class="tag">행정 실무</span>
+          <h3>사회복지시설에서 자주 사용하는 공문 종류</h3>
+          <p>협조 요청, 결과 보고, 계획 보고 등 사회복지 현장에서 자주 쓰는 공문 유형을 정리했습니다.</p>
+        </a>
+      </div>
+    </section>
 
-<section class="section">
-  <h2 class="section-title">Welmoa 운영 목적</h2>
-  <p>
-    Welmoa는 사회복지 종사자가 급여 구조와 실무 정보를 보다 쉽게 이해할 수 있도록 돕기 위해 운영되는 사이트입니다.
-    급여 계산기와 같은 도구를 제공하는 것에 그치지 않고, 수당, 공제, 4대보험, 세금 등 실무에서 자주 확인하는 내용을 설명형 콘텐츠로 함께 제공합니다.
-  </p>
-  <p>
-    본 사이트의 콘텐츠와 계산 결과는 일반적인 이해를 돕기 위한 참고용 자료이며,
-    실제 적용 기준은 기관 내부 지침, 지자체 기준, 개인별 조건에 따라 달라질 수 있습니다.
-  </p>
-</section>
-<section class="section">
-<h2 class="section-title">실무에 바로 쓰는 도구</h2>
+    <section class="section">
+      <h2 class="section-title">급여·수당·공제 관련 정보</h2>
+      <p class="section-lead">
+        급여 계산기를 사용하기 전에 기본 구조를 이해하면 결과를 더 정확하게 해석할 수 있습니다.
+        Welmoa는 사회복지 종사자가 자주 확인하는 급여, 수당, 4대보험, 세금, 실수령액 정보를 함께 제공합니다.
+      </p>
 
-  <div class="card-grid">
+      <div class="post-list">
+        <a class="post-item" href="/blog/salary-guide.html">
+          <span class="tag">급여 기본</span>
+          <h3>사회복지사 급여 계산 방법 총정리</h3>
+          <p>기본급, 수당, 공제, 세금, 실수령액 흐름을 한 번에 이해할 수 있도록 정리한 글입니다.</p>
+        </a>
 
-    <a class="tool-card" href="https://tools.welmoa.kr/salary">
-      <h3>급여 계산기</h3>
-      <p>사회복지 종사자의 급여 및 실수령액을 계산할 수 있는 도구입니다.</p>
-    </a>
+        <a class="post-item" href="/blog/overtime-pay-guide.html">
+          <span class="tag">시간외수당</span>
+          <h3>사회복지사 시간외근무수당 계산 방법 총정리</h3>
+          <p>연장근무, 휴일근무, 야간근무, 통상시급, 보조금 기준까지 시간외수당 계산 흐름을 정리했습니다.</p>
+        </a>
 
-    <a class="tool-card" href="https://tools.welmoa.kr/lottery">
-      <h3>추첨 도구</h3>
-      <p>프로그램 참여자 선정을 위한 랜덤 추첨 도구입니다.</p>
-    </a>
+        <a class="post-item" href="/blog/payslip-guide.html">
+          <span class="tag">급여명세서</span>
+          <h3>사회복지시설 급여명세서 보는 방법</h3>
+          <p>기본급, 가족수당, 시간외수당, 처우개선비, 4대보험, 세금 공제 항목을 쉽게 설명합니다.</p>
+        </a>
 
-    <a class="tool-card" href="https://tools.welmoa.kr/shortener">
-      <h3>URL 단축</h3>
-      <p>긴 링크를 간단하게 줄여 공유할 수 있습니다.</p>
-    </a>
+        <a class="post-item" href="/blog/take-home-pay.html">
+          <span class="tag">실수령액</span>
+          <h3>사회복지사 실수령액 계산 방법</h3>
+          <p>총지급액과 공제 항목을 기준으로 실수령액을 이해하고 확인하는 방법을 정리했습니다.</p>
+        </a>
 
-    <a class="tool-card" href="https://tools.welmoa.kr/formatter">
-      <h3>텍스트 정리 도구</h3>
-      <p>명단 정리 및 텍스트 가공을 쉽게 처리할 수 있습니다.</p>
-    </a>
+        <a class="post-item" href="/blog/taxable-vs-nontaxable.html">
+          <span class="tag">과세·비과세</span>
+          <h3>비과세 수당과 과세 수당 차이</h3>
+          <p>실수령액에 영향을 주는 비과세·과세 개념과 실무상 차이를 정리했습니다.</p>
+        </a>
 
-  </div>
-</section>
+        <a class="post-item" href="/blog/family-allowance.html">
+          <span class="tag">가족수당</span>
+          <h3>가족수당 지급 기준 정리</h3>
+          <p>가족수당의 개념, 지급 대상, 실무에서 확인해야 할 핵심 포인트를 안내합니다.</p>
+        </a>
+      </div>
+    </section>
 
+    <section class="section">
+      <h2 class="section-title">인사·노무와 행정 실무 가이드</h2>
+      <p class="section-lead">
+        사회복지시설 업무는 프로그램 운영뿐 아니라 인사, 근태, 공문, 회의록, 정산, 실적보고가 함께 연결됩니다.
+        현장에서 자주 마주치는 행정 주제를 쉬운 언어로 정리했습니다.
+      </p>
 
+      <div class="post-list">
+        <a class="post-item" href="/blog/annual-leave-guide.html">
+          <span class="tag">연차</span>
+          <h3>사회복지시설 연차는 어떻게 계산될까?</h3>
+          <p>입사 첫해 연차, 1년 미만 근무자, 회계연도 기준 등 신입직원이 자주 헷갈리는 내용을 설명합니다.</p>
+        </a>
 
+        <a class="post-item" href="/blog/annual-leave-substitute-holiday.html">
+          <span class="tag">근무·휴가</span>
+          <h3>사회복지 종사자 연차와 대체휴무 기준 정리</h3>
+          <p>주말 프로그램, 행사, 캠프 운영이 많은 사회복지시설에서 연차와 대체휴무를 구분하는 방법을 정리했습니다.</p>
+        </a>
+
+        <a class="post-item" href="/blog/retirement-pay-guide.html">
+          <span class="tag">퇴직금</span>
+          <h3>사회복지사 퇴직금은 어떻게 계산될까?</h3>
+          <p>평균임금, 포함 항목, 퇴직금 계산 흐름 등 기본 구조를 입문자도 이해하기 쉽게 설명합니다.</p>
+        </a>
+
+        <a class="post-item" href="/blog/meeting-minutes-guide.html">
+          <span class="tag">회의록</span>
+          <h3>사회복지시설 회의록 작성 방법</h3>
+          <p>회의 목적, 논의 내용, 결정 사항, 후속 조치까지 회의록 작성 시 필요한 기본 구성을 안내합니다.</p>
+        </a>
+
+        <a class="post-item" href="/blog/performance-report-guide.html">
+          <span class="tag">실적보고</span>
+          <h3>사회복지시설 실적보고 작성 시 자주 하는 실수</h3>
+          <p>실인원, 연인원, 건수, 회기, 증빙자료 등 실적보고에서 자주 발생하는 오류를 정리했습니다.</p>
+        </a>
+
+        <a class="post-item" href="/blog/subsidy-settlement-guide.html">
+          <span class="tag">보조금 정산</span>
+          <h3>사회복지시설 보조금 정산 시 주의할 점</h3>
+          <p>지출 증빙, 예산 항목, 집행 기준, 정산 오류 등 보조금 정산의 핵심 체크 포인트를 설명합니다.</p>
+        </a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">실무에 바로 쓰는 도구</h2>
+      <p class="section-lead">
+        반복되는 계산과 정리 업무는 도구로 줄이고, 중요한 판단과 기록에 더 집중할 수 있도록 구성했습니다.
+      </p>
+
+      <div class="card-grid">
+        <a class="tool-card" href="https://tools.welmoa.kr/salary">
+          <span class="tag">급여</span>
+          <h3>급여 계산기</h3>
+          <p>사회복지 종사자의 급여 및 실수령액을 계산할 수 있는 도구입니다.</p>
+        </a>
+
+        <a class="tool-card" href="https://tools.welmoa.kr/lottery">
+          <span class="tag">선정</span>
+          <h3>추첨 도구</h3>
+          <p>프로그램 참여자 선정을 위한 랜덤 추첨 도구입니다.</p>
+        </a>
+
+        <a class="tool-card" href="https://tools.welmoa.kr/shortener">
+          <span class="tag">공유</span>
+          <h3>URL 단축</h3>
+          <p>긴 링크를 간단하게 줄여 안내문, 문자, 공지에 활용할 수 있습니다.</p>
+        </a>
+
+        <a class="tool-card" href="https://tools.welmoa.kr/formatter">
+          <span class="tag">명단</span>
+          <h3>텍스트 정리 도구</h3>
+          <p>명단 정리 및 텍스트 가공을 쉽게 처리할 수 있습니다.</p>
+        </a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Welmoa 운영 목적</h2>
+
+      <div class="trust-panel">
+        <div class="trust-card">
+          <h3>사회복지 현장의 반복 업무를 더 쉽게</h3>
+          <p>
+            Welmoa는 사회복지 종사자가 급여 구조와 행정 실무 정보를 보다 쉽게 이해하고,
+            반복되는 계산과 정리 업무를 효율적으로 처리할 수 있도록 돕기 위해 운영되는 사이트입니다.
+            단순히 도구만 제공하는 것이 아니라, 급여, 수당, 공제, 4대보험, 세금, 연차,
+            보조금, 실적보고처럼 현장에서 자주 확인하는 내용을 설명형 콘텐츠로 함께 제공합니다.
+          </p>
+        </div>
+
+        <div class="trust-card">
+          <h3>이용 전 확인해 주세요</h3>
+          <p>
+            본 사이트의 콘텐츠와 계산 결과는 일반적인 이해를 돕기 위한 참고용 자료입니다.
+          </p>
+          <ul class="trust-list">
+            <li>실제 적용 기준은 기관 내부 지침에 따라 달라질 수 있습니다.</li>
+            <li>지자체 기준, 보조금 지침, 개인별 조건을 함께 확인해야 합니다.</li>
+            <li>중요한 급여·노무 판단은 담당 부서 또는 전문가 검토가 필요할 수 있습니다.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
 
   </main>
 
