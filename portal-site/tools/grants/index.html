@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>공모사업 자동수집 | Welmoa</title>
+  <link rel="stylesheet" href="/assets/site.css" />
+  <style>
+    .grants-wrap { max-width: 1120px; margin: 0 auto; padding: 48px 20px; }
+    .page-kicker { color:#2563eb; font-weight:700; margin-bottom:10px; }
+    .page-title { font-size:34px; margin:0 0 10px; letter-spacing:-0.04em; }
+    .page-desc { color:#64748b; margin-bottom:28px; line-height:1.7; }
+
+    .toolbar {
+      display:flex; gap:10px; flex-wrap:wrap; margin-bottom:24px;
+      background:#f8fafc; border:1px solid #e2e8f0; border-radius:18px; padding:16px;
+    }
+    .toolbar input, .toolbar select {
+      padding:12px 14px; border:1px solid #cbd5e1; border-radius:12px;
+      font-size:15px; background:white;
+    }
+    .toolbar input { flex:1; min-width:220px; }
+
+    .summary {
+      display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; margin-bottom:24px;
+    }
+    .summary-card {
+      background:white; border:1px solid #e2e8f0; border-radius:18px; padding:18px;
+      box-shadow:0 8px 20px rgba(15,23,42,.04);
+    }
+    .summary-card strong { display:block; font-size:26px; margin-bottom:4px; }
+    .summary-card span { color:#64748b; font-size:14px; }
+
+    .grant-list { display:grid; gap:16px; }
+    .grant-card {
+      background:white; border:1px solid #e2e8f0; border-radius:20px; padding:22px;
+      box-shadow:0 10px 24px rgba(15,23,42,.05);
+    }
+    .grant-top { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }
+    .grant-title { font-size:20px; font-weight:800; margin:0 0 10px; letter-spacing:-0.03em; }
+    .badge {
+      display:inline-flex; align-items:center; padding:6px 10px; border-radius:999px;
+      background:#eff6ff; color:#1d4ed8; font-size:13px; font-weight:700; white-space:nowrap;
+    }
+    .meta { color:#64748b; font-size:14px; line-height:1.8; margin-bottom:12px; }
+    .summary-text { color:#334155; line-height:1.7; margin:0 0 16px; }
+    .actions { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+    .score { font-weight:800; color:#0f172a; }
+    .btn {
+      display:inline-flex; text-decoration:none; background:#2563eb; color:white;
+      padding:10px 14px; border-radius:12px; font-weight:700; font-size:14px;
+    }
+    .empty { padding:30px; text-align:center; color:#64748b; background:#f8fafc; border-radius:18px; }
+
+    @media (max-width: 760px) {
+      .summary { grid-template-columns:1fr; }
+      .grant-top, .actions { flex-direction:column; align-items:flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <main class="grants-wrap">
+    <div class="page-kicker">Welmoa 공모사업 수집기 v1</div>
+    <h1 class="page-title">공모사업 자동수집 목록</h1>
+    <p class="page-desc">
+      D1 데이터베이스에 저장된 공모사업을 조회합니다. 현재는 테스트 데이터 기반이며,
+      다음 단계에서 기업마당 API 자동수집을 연결합니다.
+    </p>
+
+    <section class="summary">
+      <div class="summary-card">
+        <strong id="totalCount">-</strong>
+        <span>전체 공모사업</span>
+      </div>
+      <div class="summary-card">
+        <strong id="highScoreCount">-</strong>
+        <span>적합도 70점 이상</span>
+      </div>
+      <div class="summary-card">
+        <strong id="nearDeadlineCount">-</strong>
+        <span>마감 14일 이내</span>
+      </div>
+    </section>
+
+    <section class="toolbar">
+      <input id="searchInput" type="search" placeholder="제목, 기관, 지역, 요약 검색" />
+      <select id="scoreFilter">
+        <option value="all">전체 적합도</option>
+        <option value="70">70점 이상</option>
+        <option value="50">50점 이상</option>
+      </select>
+      <select id="sortSelect">
+        <option value="deadline">마감일 빠른순</option>
+        <option value="score">적합도 높은순</option>
+        <option value="recent">수집일 최신순</option>
+      </select>
+    </section>
+
+    <section id="grantList" class="grant-list">
+      <div class="empty">공모사업 목록을 불러오는 중입니다...</div>
+    </section>
+  </main>
+
+  <script>
+    let grants = [];
+
+    async function loadGrants() {
+      try {
+        const res = await fetch("/api/grants/list");
+        const data = await res.json();
+
+        if (!data.success) {
+          throw new Error("API 응답 오류");
+        }
+
+        grants = data.items || [];
+        renderSummary();
+        renderList();
+      } catch (error) {
+        document.getElementById("grantList").innerHTML =
+          `<div class="empty">목록을 불러오지 못했습니다. /api/grants/list 연결을 확인해 주세요.</div>`;
+      }
+    }
+
+    function renderSummary() {
+      const today = new Date();
+      const nearDeadline = grants.filter(item => {
+        if (!item.apply_end) return false;
+        const end = new Date(item.apply_end);
+        const diff = (end - today) / (1000 * 60 * 60 * 24);
+        return diff >= 0 && diff <= 14;
+      });
+
+      document.getElementById("totalCount").textContent = grants.length;
+      document.getElementById("highScoreCount").textContent =
+        grants.filter(item => Number(item.fit_score || 0) >= 70).length;
+      document.getElementById("nearDeadlineCount").textContent = nearDeadline.length;
+    }
+
+    function renderList() {
+      const keyword = document.getElementById("searchInput").value.trim().toLowerCase();
+      const scoreFilter = document.getElementById("scoreFilter").value;
+      const sortValue = document.getElementById("sortSelect").value;
+
+      let items = [...grants];
+
+      if (keyword) {
+        items = items.filter(item => {
+          const text = [
+            item.title,
+            item.organization,
+            item.category,
+            item.region,
+            item.summary
+          ].join(" ").toLowerCase();
+
+          return text.includes(keyword);
+        });
+      }
+
+      if (scoreFilter !== "all") {
+        items = items.filter(item => Number(item.fit_score || 0) >= Number(scoreFilter));
+      }
+
+      if (sortValue === "score") {
+        items.sort((a, b) => Number(b.fit_score || 0) - Number(a.fit_score || 0));
+      } else if (sortValue === "recent") {
+        items.sort((a, b) => String(b.collected_at || "").localeCompare(String(a.collected_at || "")));
+      } else {
+        items.sort((a, b) => String(a.apply_end || "").localeCompare(String(b.apply_end || "")));
+      }
+
+      const list = document.getElementById("grantList");
+
+      if (!items.length) {
+        list.innerHTML = `<div class="empty">조건에 맞는 공모사업이 없습니다.</div>`;
+        return;
+      }
+
+      list.innerHTML = items.map(item => `
+        <article class="grant-card">
+          <div class="grant-top">
+            <div>
+              <h2 class="grant-title">${escapeHtml(item.title || "제목 없음")}</h2>
+              <div class="meta">
+                기관: ${escapeHtml(item.organization || "-")} ·
+                지역: ${escapeHtml(item.region || "-")} ·
+                분야: ${escapeHtml(item.category || "-")}<br>
+                신청기간: ${escapeHtml(item.apply_start || "-")} ~ ${escapeHtml(item.apply_end || "-")} ·
+                출처: ${escapeHtml(item.source || "-")}
+              </div>
+            </div>
+            <span class="badge">적합도 ${Number(item.fit_score || 0)}점</span>
+          </div>
+
+          <p class="summary-text">${escapeHtml(item.summary || "요약 정보가 없습니다.")}</p>
+
+          <div class="actions">
+            <span class="score">수집일: ${escapeHtml(item.collected_at || "-")}</span>
+            <a class="btn" href="${escapeAttr(item.url || "#")}" target="_blank" rel="noopener">원문보기</a>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function escapeAttr(value) {
+      return escapeHtml(value);
+    }
+
+    document.getElementById("searchInput").addEventListener("input", renderList);
+    document.getElementById("scoreFilter").addEventListener("change", renderList);
+    document.getElementById("sortSelect").addEventListener("change", renderList);
+
+    loadGrants();
+  </script>
+</body>
+</html>
