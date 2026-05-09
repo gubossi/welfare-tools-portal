@@ -454,11 +454,22 @@ async function handleCollectBizinfoGrants(env) {
 
   apiUrl.searchParams.set("crtfcKey", env.BIZINFO_API_KEY || "");
   apiUrl.searchParams.set("dataType", "json");
-  apiUrl.searchParams.set("searchCnt", "50");
+  apiUrl.searchParams.set("searchCnt", "5");
 
-  return json({
-    success: true,
-    debugUrl: apiUrl.toString().replace(env.BIZINFO_API_KEY || "", "API_KEY_HIDDEN")
+  const res = await fetch(apiUrl.toString(), {
+    headers: {
+      "user-agent": "Welmoa-Grants-Collector/1.0"
+    }
+  });
+
+  const text = await res.text();
+
+  return new Response(text, {
+    status: res.status,
+    headers: {
+      "content-type": "text/plain; charset=utf-8",
+      "cache-control": "no-store"
+    }
   });
 }
 
