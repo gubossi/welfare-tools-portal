@@ -456,11 +456,11 @@ async function handleCollectBizinfoGrants(env) {
   apiUrl.searchParams.set("dataType", "json");
   apiUrl.searchParams.set("searchCnt", "50");
 
-  const res = await fetch(apiUrl.toString(), {
-    headers: {
-      "user-agent": "Welmoa-Grants-Collector/1.0"
-    }
+  return json({
+    success: true,
+    debugUrl: apiUrl.toString().replace(env.BIZINFO_API_KEY || "", "API_KEY_HIDDEN")
   });
+}
 
 if (!res.ok) {
   return json({
