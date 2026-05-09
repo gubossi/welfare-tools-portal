@@ -4,88 +4,203 @@
   <!-- 메인 -->
   <url>
     <loc>https://welmoa.kr/</loc>
+    <lastmod>2026-05-09</lastmod>
     <priority>1.0</priority>
   </url>
 
   <!-- 핵심 페이지 -->
   <url>
     <loc>https://welmoa.kr/tools/</loc>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://welmoa.kr/guide/</loc>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://welmoa.kr/blog/</loc>
+    <lastmod>2026-05-09</lastmod>
     <priority>0.9</priority>
   </url>
 
-  <!-- 정책 -->
+  <url>
+    <loc>https://welmoa.kr/blog/</loc>
+    <lastmod>2026-05-09</lastmod>
+    <priority>0.9</priority>
+  </url>
+
   <url>
     <loc>https://welmoa.kr/about/</loc>
+    <lastmod>2026-05-09</lastmod>
+    <priority>0.7</priority>
   </url>
+
   <url>
     <loc>https://welmoa.kr/privacy/</loc>
+    <priority>0.5</priority>
   </url>
+
   <url>
     <loc>https://welmoa.kr/terms/</loc>
+    <priority>0.5</priority>
   </url>
 
   <!-- 도구 -->
   <url>
     <loc>https://welmoa.kr/salary</loc>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://welmoa.kr/lottery</loc>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://welmoa.kr/shortener</loc>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://welmoa.kr/formatter</loc>
+    <lastmod>2026-05-09</lastmod>
     <priority>0.9</priority>
   </url>
 
-  <!-- 블로그 글 -->
+  <url>
+    <loc>https://welmoa.kr/lottery</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://welmoa.kr/shortener</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://welmoa.kr/formatter</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 급여·수당 -->
   <url>
     <loc>https://welmoa.kr/blog/salary-guide.html</loc>
+    <lastmod>2026-05-09</lastmod>
   </url>
-  <url>
-    <loc>https://welmoa.kr/blog/insurance-guide.html</loc>
-  </url>
-  <url>
-    <loc>https://welmoa.kr/blog/take-home-pay.html</loc>
-  </url>
-  <url>
-    <loc>https://welmoa.kr/blog/taxable-vs-nontaxable.html</loc>
-  </url>
-  <url>
-    <loc>https://welmoa.kr/blog/family-allowance.html</loc>
-  </url>
-  <url>
-    <loc>https://welmoa.kr/blog/overtime-pay.html</loc>
-  </url>
-  <url>
-    <loc>https://welmoa.kr/blog/overtime-guide.html</loc>
-  </url>
-  <url>
-    <loc>https://welmoa.kr/blog/holiday-bonus.html</loc>
-  </url>
+
   <url>
     <loc>https://welmoa.kr/blog/salary-structure.html</loc>
+    <lastmod>2026-05-09</lastmod>
   </url>
+
+  <url>
+    <loc>https://welmoa.kr/blog/take-home-pay.html</loc>
+    <lastmod>2026-05-09</lastmod>
+  </url>
+
+  <url>
+    <loc>https://welmoa.kr/blog/social-worker-net-pay-2026.html</loc>
+    <lastmod>2026-05-09</lastmod>
+  </url>
+
+  <url>
+    <loc>https://welmoa.kr/blog/family-allowance.html</loc>
+    <lastmod>2026-05-09</lastmod>
+  </url>
+
+  <url>
+    <loc>https://welmoa.kr/blog/overtime-pay.html</loc>
+    <lastmod>2026-05-09</lastmod>
+  </url>
+
+  <url>
+    <loc>https://welmoa.kr/blog/overtime-guide.html</loc>
+    <lastmod>2026-05-09</lastmod>
+  </url>
+
+  <url>
+    <loc>https://welmoa.kr/blog/overtime-pay-guide.html</loc>
+    <lastmod>2026-05-09</lastmod>
+  </url>
+
+  <url>
+    <loc>https://welmoa.kr/blog/taxable-vs-nontaxable.html</loc>
+    <lastmod>2026-05-09</lastmod>
+  </url>
+
+  <url>
+    <loc>https://welmoa.kr/blog/holiday-bonus.html</loc>
+    <lastmod>2026-05-09</lastmod>
+  </url>
+
+  <url>
+    <loc>https://welmoa.kr/blog/payslip-guide.html</loc>
+    <lastmod>2026-05-09</lastmod>
+  </url>
+
+  <url>
+    <loc>https://welmoa.kr/blog/severance-pay-guide.html</loc>
+    <lastmod>2026-05-09</lastmod>
+  </url>
+
+  <!-- 인사·노무 -->
+  <url>
+    <loc>https://welmoa.kr/blog/annual-leave-guide.html</loc>
+    <lastmod>2026-05-09</lastmod>
+  </url>
+
+  <url>
+    <loc>https://welmoa.kr/blog/annual-leave-substitute-holiday.html</loc>
+    <lastmod>2026-05-09</lastmod>
+  </url>
+
+  <url>
+    <loc>https://welmoa.kr/blog/employment-contract-checklist.html</loc>
+    <lastmod>2026-05-09</lastmod>
+  </url>
+
   <url>
     <loc>https://welmoa.kr/blog/new-worker-pay.html</loc>
+    <lastmod>2026-05-09</lastmod>
   </url>
+
+  <url>
+    <loc>https://welmoa.kr/blog/new-worker-admin-terms.html</loc>
+    <lastmod>2026-05-09</lastmod>
+  </url>
+
+  <url>
+    <loc>https://welmoa.kr/blog/public-holiday-work.html</loc>
+    <lastmod>2026-05-09</lastmod>
+  </url>
+
+  <!-- 행정·운영 -->
+  <url>
+    <loc>https://welmoa.kr/blog/official-document-types.html</loc>
+    <lastmod>2026-05-09</lastmod>
+  </url>
+
+  <url>
+    <loc>https://welmoa.kr/blog/meeting-minutes-guide.html</loc>
+    <lastmod>2026-05-09</lastmod>
+  </url>
+
+  <url>
+    <loc>https://welmoa.kr/blog/performance-report-mistakes.html</loc>
+    <lastmod>2026-05-09</lastmod>
+  </url>
+
+  <url>
+    <loc>https://welmoa.kr/blog/subsidy-labor-cost-guide.html</loc>
+    <lastmod>2026-05-09</lastmod>
+  </url>
+
+  <url>
+    <loc>https://welmoa.kr/blog/subsidy-settlement-guide.html</loc>
+    <lastmod>2026-05-09</lastmod>
+  </url>
+
+  <url>
+    <loc>https://welmoa.kr/blog/instructor-fee-checklist.html</loc>
+    <lastmod>2026-05-09</lastmod>
+  </url>
+
+  <url>
+    <loc>https://welmoa.kr/blog/privacy-checklist.html</loc>
+    <lastmod>2026-05-09</lastmod>
+  </url>
+
+  <!-- 기타 -->
+  <url>
+    <loc>https://welmoa.kr/blog/insurance-guide.html</loc>
+    <lastmod>2026-05-09</lastmod>
+  </url>
+
   <url>
     <loc>https://welmoa.kr/blog/salary-mistakes.html</loc>
+    <lastmod>2026-05-09</lastmod>
   </url>
+
   <url>
     <loc>https://welmoa.kr/blog/welmoa-tool-guide.html</loc>
+    <lastmod>2026-05-09</lastmod>
   </url>
 
 </urlset>
