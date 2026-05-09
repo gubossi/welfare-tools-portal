@@ -194,7 +194,7 @@
             <span class="badge">적합도 ${Number(item.fit_score || 0)}점</span>
           </div>
 
-          <p class="summary-text">${escapeHtml(item.summary || "요약 정보가 없습니다.")}</p>
+          <p class="summary-text">${sanitizeSummary(item.summary || "요약 정보가 없습니다.")}</p>
 
           <div class="actions">
             <span class="score">수집일: ${escapeHtml(item.collected_at || "-")}</span>
@@ -204,6 +204,14 @@
       `).join("");
     }
 
+function sanitizeSummary(html) {
+  return String(html || "")
+    .replace(/<[^>]*>/g, " ")
+    .replaceAll("&nbsp;", " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+    
     function escapeHtml(value) {
       return String(value)
         .replaceAll("&", "&amp;")
