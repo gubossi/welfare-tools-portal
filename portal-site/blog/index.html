@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Welmoa 콘텐츠 모음 | 사회복지 실무 가이드</title>
-  <meta name="description" content="사회복지 실무자를 위한 급여, 수당, 4대보험, 연차, 보조금 인건비 처리 등 Welmoa 실무 가이드 콘텐츠 모음">
+  <meta name="description" content="사회복지 실무자를 위한 급여, 수당, 4대보험, 연차, 근로계약, 공문, 실적보고, 보조금 정산 등 Welmoa 실무 가이드 콘텐츠 모음">
   <link rel="stylesheet" href="/assets/site.css">
 
   <style>
@@ -94,18 +94,13 @@
       color: #ffffff;
     }
 
-    .blog-page {
-      padding: 10px 0 56px;
-    }
-
-    .hero {
-      margin-bottom: 24px;
-    }
+    .blog-page { padding: 10px 0 56px; }
+    .hero { margin-bottom: 24px; }
 
     .hero-card {
       position: relative;
       overflow: hidden;
-      padding: 36px 36px 34px;
+      padding: 38px 38px 36px;
       border-radius: 30px;
       background: linear-gradient(135deg, rgba(53, 89, 168, 0.98), rgba(88, 125, 206, 0.94));
       color: #fff;
@@ -138,7 +133,8 @@
 
     .hero-card h1 {
       margin: 0 0 12px;
-      font-size: clamp(2rem, 4vw, 2.8rem);
+      max-width: 880px;
+      font-size: clamp(2rem, 4vw, 2.85rem);
       line-height: 1.18;
       letter-spacing: -0.03em;
       color: #fff;
@@ -146,9 +142,9 @@
 
     .hero-card .lead {
       margin: 0;
-      max-width: 820px;
+      max-width: 860px;
       color: rgba(255,255,255,0.92);
-      font-size: 1.03rem;
+      font-size: 1.04rem;
       line-height: 1.7;
     }
 
@@ -183,10 +179,7 @@
       box-shadow: 0 14px 26px rgba(15, 23, 42, 0.12);
     }
 
-    .btn--primary:hover {
-      transform: translateY(-1px);
-      background: #f4f8ff;
-    }
+    .btn--primary:hover { transform: translateY(-1px); background: #f4f8ff; }
 
     .btn--ghost {
       appearance: none;
@@ -196,20 +189,17 @@
       box-shadow: none;
     }
 
-    .btn--ghost:hover {
-      background: rgba(255,255,255,0.18);
-      transform: translateY(-1px);
-    }
+    .btn--ghost:hover { background: rgba(255,255,255,0.18); transform: translateY(-1px); }
 
     .summary-box {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 14px;
       margin: 24px 0 4px;
     }
 
     .summary-item {
-      background: rgba(255,255,255,0.82);
+      background: rgba(255,255,255,0.84);
       border: 1px solid var(--tool-border);
       border-radius: var(--tool-radius-lg);
       padding: 18px 20px;
@@ -224,14 +214,30 @@
       letter-spacing: -0.02em;
     }
 
-    .summary-item span {
-      color: var(--tool-muted);
-      font-size: 0.94rem;
+    .summary-item span { color: var(--tool-muted); font-size: 0.94rem; }
+
+    .category-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
     }
 
-    .section {
-      margin-top: 34px;
+    .category-nav a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid var(--tool-border);
+      color: var(--tool-accent-dark);
+      text-decoration: none;
+      font-weight: 850;
+      box-shadow: 0 6px 14px rgba(15, 23, 42, 0.04);
     }
+
+    .section { margin-top: 38px; }
 
     .section-head {
       display: flex;
@@ -248,11 +254,7 @@
       color: var(--tool-text);
     }
 
-    .section-desc {
-      margin: 6px 0 0;
-      color: var(--tool-muted);
-      font-size: 0.98rem;
-    }
+    .section-desc { margin: 6px 0 0; color: var(--tool-muted); font-size: 0.98rem; }
 
     .post-list {
       display: grid;
@@ -261,9 +263,8 @@
     }
 
     @media (min-width: 760px) {
-      .post-list {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
+      .post-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .post-list.post-list--featured { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
 
     .post-item {
@@ -299,19 +300,14 @@
 
     .post-item h3 {
       margin: 0 0 10px;
-      font-size: 1.2rem;
+      font-size: 1.18rem;
       font-weight: 900;
       line-height: 1.4;
       letter-spacing: -0.02em;
       color: var(--tool-text);
     }
 
-    .post-item p {
-      margin: 0;
-      color: var(--tool-muted);
-      line-height: 1.7;
-      font-size: 0.95rem;
-    }
+    .post-item p { margin: 0; color: var(--tool-muted); line-height: 1.7; font-size: 0.95rem; }
 
     .guide-panel {
       margin-top: 38px;
@@ -322,22 +318,10 @@
       box-shadow: var(--tool-shadow-soft);
     }
 
-    .guide-panel h2 {
-      margin: 0 0 10px;
-      font-size: 1.45rem;
-      letter-spacing: -0.03em;
-    }
+    .guide-panel h2 { margin: 0 0 10px; font-size: 1.45rem; letter-spacing: -0.03em; }
+    .guide-panel p { margin: 0 0 14px; color: var(--tool-muted); }
 
-    .guide-panel p {
-      margin: 0 0 14px;
-      color: var(--tool-muted);
-    }
-
-    .guide-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
+    .guide-links { display: flex; flex-wrap: wrap; gap: 10px; }
 
     .guide-links a {
       display: inline-flex;
@@ -368,64 +352,22 @@
       font-size: 0.95rem;
     }
 
-    .footer-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 12px; }
+    .footer-links a { color: var(--tool-muted); text-decoration: none; font-weight: 700; }
+    .footer-links a:hover { color: var(--tool-accent-dark); }
 
-    .footer-links a {
-      color: var(--tool-muted);
-      text-decoration: none;
-      font-weight: 700;
-    }
-
-    .footer-links a:hover {
-      color: var(--tool-accent-dark);
-    }
+    @media (max-width: 920px) { .summary-box { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
     @media (max-width: 720px) {
-      .container {
-        width: min(var(--tool-max), calc(100% - 20px));
-      }
-
-      .header-inner,
-      .footer-inner,
-      .section-head {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .header-inner {
-        padding-top: 6px;
-        padding-bottom: 6px;
-      }
-
-      .hero-card {
-        padding: 26px 20px 24px;
-        border-radius: 24px;
-      }
-
-      .summary-box {
-        grid-template-columns: 1fr;
-      }
-
-      .post-item {
-        padding: 20px 18px;
-      }
-
-      .guide-panel {
-        padding: 22px 18px;
-      }
-
-      .site-header nav {
-        width: 100%;
-      }
-
-      .site-header nav a {
-        padding-left: 10px;
-        padding-right: 10px;
-      }
+      .container { width: min(var(--tool-max), calc(100% - 20px)); }
+      .header-inner, .footer-inner, .section-head { flex-direction: column; align-items: flex-start; }
+      .header-inner { padding-top: 6px; padding-bottom: 6px; }
+      .hero-card { padding: 26px 20px 24px; border-radius: 24px; }
+      .summary-box { grid-template-columns: 1fr; }
+      .post-item { padding: 20px 18px; }
+      .guide-panel { padding: 22px 18px; }
+      .site-header nav { width: 100%; }
+      .site-header nav a { padding-left: 10px; padding-right: 10px; }
     }
   </style>
 </head>
@@ -448,45 +390,63 @@
     <section class="hero">
       <div class="hero-card">
         <div class="badge">사회복지 실무 가이드</div>
-        <h1>사회복지 급여·수당·행정 실무를 쉽게 정리했습니다</h1>
+        <h1>사회복지 신입직원도 이해하기 쉬운 급여·노무·행정 실무 가이드</h1>
         <p class="lead">
-          Welmoa 콘텐츠는 사회복지시설 종사자가 급여명세서, 수당, 4대보험, 연차, 보조금 인건비 등 현장에서 자주 확인하는 주제를 이해하기 쉽게 정리한 실무형 정보 모음입니다.
+          Welmoa 콘텐츠는 사회복지시설에서 처음 일하는 분들도 급여명세서, 연차, 근로계약, 공문, 실적보고, 보조금 정산처럼 자주 만나는 실무 주제를 쉽게 이해할 수 있도록 정리한 정보 모음입니다.
         </p>
         <div class="hero-actions">
-          <a class="btn btn--primary" href="/tools/">실무 도구 보러가기</a>
-          <a class="btn btn--ghost" href="/guide/">이용가이드 보기</a>
+          <a class="btn btn--primary" href="#beginner-posts">신입 추천 글 보기</a>
+          <a class="btn btn--ghost" href="/tools/">실무 도구 보러가기</a>
         </div>
       </div>
     </section>
 
     <div class="summary-box" aria-label="콘텐츠 주제 요약">
       <div class="summary-item">
-        <strong>급여와 실수령액</strong>
+        <strong>신입 입문</strong>
+        <span>입사 전후 꼭 알아야 할 기본 용어와 문서 흐름을 정리합니다.</span>
+      </div>
+      <div class="summary-item">
+        <strong>인사·노무</strong>
+        <span>연차, 근로계약, 퇴직금, 공휴일 근무 기준을 쉽게 설명합니다.</span>
+      </div>
+      <div class="summary-item">
+        <strong>급여·수당</strong>
         <span>기본급, 수당, 공제항목, 실수령액 구조를 정리합니다.</span>
       </div>
       <div class="summary-item">
-        <strong>근무와 휴가 기준</strong>
-        <span>시간외근무, 연차, 대체휴무 등 자주 헷갈리는 기준을 다룹니다.</span>
-      </div>
-      <div class="summary-item">
-        <strong>보조금·행정 실무</strong>
-        <span>인건비, 기관부담금, 정산 확인 포인트를 실무 관점에서 설명합니다.</span>
+        <strong>행정·정산</strong>
+        <span>공문, 회의록, 실적보고, 보조금 정산의 체크포인트를 다룹니다.</span>
       </div>
     </div>
 
-    <section class="section" aria-labelledby="featured-posts">
+    <nav class="category-nav" aria-label="콘텐츠 카테고리 바로가기">
+      <a href="#beginner-posts">신입 추천</a>
+      <a href="#hr-posts">인사·노무</a>
+      <a href="#admin-posts">행정·운영</a>
+      <a href="#pay-posts">급여·수당</a>
+      <a href="#tool-guide">도구 연결</a>
+    </nav>
+
+    <section class="section" id="beginner-posts" aria-labelledby="beginner-posts-title">
       <div class="section-head">
         <div>
-          <h2 class="section-title" id="featured-posts">새로 추가한 실무 가이드</h2>
-          <p class="section-desc">애드센스 승인 보완을 위해 정보성과 체류 시간을 고려해 확장한 콘텐츠입니다.</p>
+          <h2 class="section-title" id="beginner-posts-title">신입직원·입사예정자 추천 글</h2>
+          <p class="section-desc">처음 사회복지시설에 입사하면 가장 먼저 마주치는 용어, 계약, 급여명세서, 문서 작성 흐름부터 읽어보세요.</p>
         </div>
       </div>
 
-      <div class="post-list">
-        <a class="post-item" href="/blog/overtime-pay-guide.html">
-          <span class="tag">급여·수당</span>
-          <h3>사회복지사 시간외근무수당 계산 방법 총정리</h3>
-          <p>연장근무, 휴일근무, 야간근무, 통상시급, 지자체 보조금 기준까지 시간외근무수당 계산 흐름을 실무 관점에서 정리했습니다.</p>
+      <div class="post-list post-list--featured">
+        <a class="post-item" href="/blog/new-worker-admin-terms.html">
+          <span class="tag">신입 입문</span>
+          <h3>사회복지시설 신규직원이 가장 헷갈리는 행정용어 정리</h3>
+          <p>실인원, 연인원, 집행률, 교부금, 정산 등 입사 후 자주 듣게 되는 사회복지 행정용어를 쉽게 정리했습니다.</p>
+        </a>
+
+        <a class="post-item" href="/blog/employment-contract-checklist.html">
+          <span class="tag">입사 전 확인</span>
+          <h3>사회복지시설 근로계약서에서 꼭 확인해야 할 항목</h3>
+          <p>계약기간, 근무시간, 휴게시간, 수당 항목처럼 입사예정자와 신입 직원이 놓치기 쉬운 내용을 설명합니다.</p>
         </a>
 
         <a class="post-item" href="/blog/payslip-guide.html">
@@ -495,31 +455,137 @@
           <p>기본급, 가족수당, 시간외수당, 처우개선비, 4대보험, 세금 공제 등 급여명세서의 주요 항목을 쉽게 설명합니다.</p>
         </a>
 
-        <a class="post-item" href="/blog/social-worker-net-pay-2026.html">
-          <span class="tag">실수령액</span>
-          <h3>2026년 사회복지사 실수령액 예시 정리</h3>
-          <p>호봉, 수당, 공제항목에 따라 실제 월급이 어떻게 달라지는지 1호봉, 5호봉, 10호봉 예시로 정리했습니다.</p>
+        <a class="post-item" href="/blog/official-document-types.html">
+          <span class="tag">공문 기초</span>
+          <h3>사회복지시설에서 자주 사용하는 공문 종류</h3>
+          <p>협조공문, 계획보고, 결과보고처럼 신입 직원이 처음 접하는 공문 종류와 작성 목적을 정리했습니다.</p>
         </a>
 
-        <a class="post-item" href="/blog/annual-leave-substitute-holiday.html">
-          <span class="tag">근무·휴가</span>
-          <h3>사회복지 종사자 연차와 대체휴무 기준 정리</h3>
-          <p>주말 프로그램, 행사, 캠프 운영이 많은 사회복지시설에서 연차와 대체휴무를 구분해 확인하는 방법을 정리했습니다.</p>
+        <a class="post-item" href="/blog/annual-leave-guide.html">
+          <span class="tag">연차 기초</span>
+          <h3>사회복지시설 연차는 어떻게 계산될까?</h3>
+          <p>연차 발생 기준, 입사 첫해 휴가, 대체휴무와의 차이를 신입 사회복지사도 이해하기 쉽게 정리했습니다.</p>
         </a>
 
-        <a class="post-item" href="/blog/subsidy-labor-cost-guide.html">
-          <span class="tag">보조금 실무</span>
-          <h3>보조금 인건비와 기관부담금 처리 실무 정리</h3>
-          <p>외부지원사업, 공모사업, 보조금 사업에서 인건비와 4대보험 기관부담금을 검토할 때 필요한 실무 포인트를 안내합니다.</p>
+        <a class="post-item" href="/blog/performance-report-mistakes.html">
+          <span class="tag">실적보고</span>
+          <h3>사회복지시설 실적보고 작성 시 자주 하는 실수</h3>
+          <p>실인원, 연인원, 건수, 회기, 증빙자료처럼 실적보고에서 자주 헷갈리는 부분을 쉽게 설명합니다.</p>
         </a>
       </div>
     </section>
 
-    <section class="section" aria-labelledby="all-posts">
+    <section class="section" id="hr-posts" aria-labelledby="hr-posts-title">
       <div class="section-head">
         <div>
-          <h2 class="section-title" id="all-posts">전체 글</h2>
-          <p class="section-desc">사회복지 현장에서 자주 확인하는 급여, 수당, 공제, 실무 도구 활용 정보를 모았습니다.</p>
+          <h2 class="section-title" id="hr-posts-title">인사·노무 가이드</h2>
+          <p class="section-desc">근무조건, 휴가, 퇴직금, 공휴일 근무처럼 사회복지시설 종사자가 기본적으로 알아두면 좋은 내용을 모았습니다.</p>
+        </div>
+      </div>
+
+      <div class="post-list">
+        <a class="post-item" href="/blog/employment-contract-checklist.html">
+          <span class="tag">근로계약</span>
+          <h3>사회복지시설 근로계약서에서 꼭 확인해야 할 항목</h3>
+          <p>계약기간, 수습기간, 근무시간, 휴게시간, 시간외근무, 수당 항목을 입사 전 확인 관점에서 정리했습니다.</p>
+        </a>
+
+        <a class="post-item" href="/blog/annual-leave-guide.html">
+          <span class="tag">연차</span>
+          <h3>사회복지시설 연차는 어떻게 계산될까?</h3>
+          <p>1년 미만 직원의 휴가, 회계연도 기준, 연차 사용 시 확인할 점을 쉽게 설명합니다.</p>
+        </a>
+
+        <a class="post-item" href="/blog/public-holiday-work.html">
+          <span class="tag">공휴일 근무</span>
+          <h3>사회복지시설 공휴일 근무와 대체휴무 이해하기</h3>
+          <p>주말·공휴일 근무, 대체휴무, 시간외수당의 차이를 사회복지시설 운영 상황에 맞춰 정리했습니다.</p>
+        </a>
+
+        <a class="post-item" href="/blog/severance-pay-guide.html">
+          <span class="tag">퇴직금</span>
+          <h3>사회복지사 퇴직금은 어떻게 계산될까?</h3>
+          <p>퇴직금의 기본 개념, 평균임금, 포함 항목, 확인 포인트를 신입 직원도 이해하기 쉽게 설명합니다.</p>
+        </a>
+
+        <a class="post-item" href="/blog/annual-leave-substitute-holiday.html">
+          <span class="tag">연차·대체휴무</span>
+          <h3>사회복지 종사자 연차와 대체휴무 기준 정리</h3>
+          <p>행사와 주말 프로그램이 많은 사회복지시설에서 연차와 대체휴무를 구분하는 방법을 정리했습니다.</p>
+        </a>
+
+        <a class="post-item" href="/blog/overtime-pay-guide.html">
+          <span class="tag">시간외근무</span>
+          <h3>사회복지사 시간외근무수당 계산 방법 총정리</h3>
+          <p>연장근무, 휴일근무, 야간근무, 통상시급, 지자체 보조금 기준까지 시간외수당 계산 흐름을 다룹니다.</p>
+        </a>
+      </div>
+    </section>
+
+    <section class="section" id="admin-posts" aria-labelledby="admin-posts-title">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title" id="admin-posts-title">행정·운영 실무 가이드</h2>
+          <p class="section-desc">공문, 회의록, 실적보고, 개인정보, 보조금 정산처럼 행정업무를 처음 맡을 때 필요한 내용을 정리했습니다.</p>
+        </div>
+      </div>
+
+      <div class="post-list">
+        <a class="post-item" href="/blog/official-document-types.html">
+          <span class="tag">공문</span>
+          <h3>사회복지시설에서 자주 사용하는 공문 종류</h3>
+          <p>협조 요청, 결과 보고, 계획 보고 등 사회복지시설에서 자주 사용하는 공문의 목적과 차이를 설명합니다.</p>
+        </a>
+
+        <a class="post-item" href="/blog/meeting-minutes-guide.html">
+          <span class="tag">회의록</span>
+          <h3>사회복지시설 회의록 작성 방법</h3>
+          <p>회의록 작성 목적, 기본 구성, 결정사항과 논의사항 구분법을 신입 직원도 따라올 수 있게 정리했습니다.</p>
+        </a>
+
+        <a class="post-item" href="/blog/performance-report-mistakes.html">
+          <span class="tag">실적보고</span>
+          <h3>사회복지시설 실적보고 작성 시 자주 하는 실수</h3>
+          <p>실적보고를 작성할 때 자주 틀리는 실인원, 연인원, 건수, 회기, 증빙자료 기준을 안내합니다.</p>
+        </a>
+
+        <a class="post-item" href="/blog/subsidy-settlement-guide.html">
+          <span class="tag">보조금 정산</span>
+          <h3>사회복지시설 보조금 정산 시 주의할 점</h3>
+          <p>예산집행, 증빙자료, 집행잔액, 정산 오류를 처음 정산을 맡은 실무자도 이해할 수 있게 정리했습니다.</p>
+        </a>
+
+        <a class="post-item" href="/blog/instructor-fee-checklist.html">
+          <span class="tag">강사비</span>
+          <h3>사회복지시설 프로그램 강사비 지급 시 체크사항</h3>
+          <p>강사비, 자문비, 원천징수, 지급 증빙자료처럼 프로그램 운영자가 확인해야 할 항목을 정리했습니다.</p>
+        </a>
+
+        <a class="post-item" href="/blog/privacy-checklist.html">
+          <span class="tag">개인정보</span>
+          <h3>사회복지시설 개인정보 관리 체크리스트</h3>
+          <p>이용자 개인정보, 사진 활용, 파일 보관, 외부 공유 시 주의사항을 신입 직원 눈높이로 정리했습니다.</p>
+        </a>
+
+        <a class="post-item" href="/blog/new-worker-admin-terms.html">
+          <span class="tag">행정용어</span>
+          <h3>사회복지시설 신규직원이 가장 헷갈리는 행정용어 정리</h3>
+          <p>실인원, 연인원, 집행률, 교부금, 정산 등 현장에서 자주 듣는 용어를 쉽게 풀어 설명합니다.</p>
+        </a>
+
+        <a class="post-item" href="/blog/subsidy-labor-cost-guide.html">
+          <span class="tag">보조금 인건비</span>
+          <h3>보조금 인건비와 기관부담금 처리 실무 정리</h3>
+          <p>외부지원사업, 공모사업, 보조금 사업에서 인건비와 4대보험 기관부담금을 검토할 때 필요한 포인트를 안내합니다.</p>
+        </a>
+      </div>
+    </section>
+
+    <section class="section" id="pay-posts" aria-labelledby="pay-posts-title">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title" id="pay-posts-title">급여·수당·공제 가이드</h2>
+          <p class="section-desc">급여명세서, 실수령액, 수당, 4대보험, 과세·비과세처럼 급여를 이해하는 데 필요한 글을 모았습니다.</p>
         </div>
       </div>
 
@@ -527,83 +593,97 @@
         <a class="post-item" href="/blog/salary-guide.html">
           <span class="tag">급여 기본</span>
           <h3>사회복지 종사자 급여 계산 방법 총정리</h3>
-          <p>사회복지 종사자 급여 계산의 기본 구조, 수당, 공제 항목, 실무 확인 포인트를 정리한 안내 글</p>
+          <p>사회복지 종사자 급여 계산의 기본 구조, 수당, 공제 항목, 실무 확인 포인트를 정리한 안내 글입니다.</p>
         </a>
 
-        <a class="post-item" href="/blog/insurance-guide.html">
-          <span class="tag">4대보험</span>
-          <h3>4대보험 계산 쉽게 이해하기</h3>
-          <p>사회복지 현장에서 자주 확인하는 4대보험의 개념, 공제 흐름, 실무 체크 포인트를 쉽게 설명한 글</p>
+        <a class="post-item" href="/blog/payslip-guide.html">
+          <span class="tag">급여명세서</span>
+          <h3>사회복지시설 급여명세서 보는 방법</h3>
+          <p>기본급, 가족수당, 시간외수당, 처우개선비, 4대보험, 세금 공제 등 주요 항목을 쉽게 설명합니다.</p>
+        </a>
+
+        <a class="post-item" href="/blog/social-worker-net-pay-2026.html">
+          <span class="tag">실수령액</span>
+          <h3>2026년 사회복지사 실수령액 예시 정리</h3>
+          <p>호봉, 수당, 공제항목에 따라 실제 월급이 어떻게 달라지는지 1호봉, 5호봉, 10호봉 예시로 정리했습니다.</p>
         </a>
 
         <a class="post-item" href="/blog/take-home-pay.html">
           <span class="tag">실수령액</span>
           <h3>사회복지사 실수령액 계산 예시와 확인 방법</h3>
-          <p>총지급액과 실수령액의 차이, 공제 흐름, 확인 포인트를 정리한 사회복지사 급여 가이드</p>
+          <p>총지급액과 실수령액의 차이, 공제 흐름, 확인 포인트를 정리한 사회복지사 급여 가이드입니다.</p>
+        </a>
+
+        <a class="post-item" href="/blog/insurance-guide.html">
+          <span class="tag">4대보험</span>
+          <h3>4대보험 계산 쉽게 이해하기</h3>
+          <p>국민연금, 건강보험, 고용보험 등 4대보험의 개념과 공제 흐름을 쉽게 설명합니다.</p>
         </a>
 
         <a class="post-item" href="/blog/taxable-vs-nontaxable.html">
           <span class="tag">과세·비과세</span>
           <h3>비과세 수당과 과세 수당 차이</h3>
-          <p>왜 같은 금액인데 실수령액이 다르지? 그 차이를 만드는 핵심, 비과세와 과세에 대한 구분을 정리한 글</p>
+          <p>같은 금액이어도 실수령액이 달라지는 이유인 비과세와 과세 수당의 차이를 정리했습니다.</p>
         </a>
 
         <a class="post-item" href="/blog/family-allowance.html">
           <span class="tag">가족수당</span>
           <h3>가족수당 지급 기준 정리</h3>
-          <p>사회복지시설 실무에서 자주 확인하는 가족수당의 개념, 지급 대상, 점검 포인트를 정리한 글</p>
+          <p>사회복지시설 실무에서 자주 확인하는 가족수당의 개념, 지급 대상, 점검 포인트를 정리했습니다.</p>
         </a>
 
         <a class="post-item" href="/blog/overtime-pay.html">
           <span class="tag">시간외수당</span>
           <h3>시간외근무수당 계산법과 실무 체크 포인트</h3>
-          <p>사회복지 현장에서 자주 발생하는 초과근무 수당의 개념, 기록 관리, 계산 확인 포인트를 설명한 글</p>
+          <p>사회복지 현장에서 자주 발생하는 초과근무수당의 개념, 기록 관리, 계산 확인 포인트를 설명합니다.</p>
         </a>
 
         <a class="post-item" href="/blog/overtime-guide.html">
           <span class="tag">계산 기준</span>
           <h3>시간외수당 계산 기준 완벽 정리</h3>
-          <p>초과근무 수당의 정확한 이해와 시급, 가산율, 반올림 기준을 정리한 안내 글</p>
+          <p>초과근무 수당의 정확한 이해와 시급, 가산율, 반올림 기준을 정리한 안내 글입니다.</p>
         </a>
 
         <a class="post-item" href="/blog/holiday-bonus.html">
           <span class="tag">명절휴가비</span>
           <h3>명절휴가비 기준과 확인 방법</h3>
-          <p>명절 관련 지급 항목을 확인할 때 알아두면 좋은 구조와 실무상 점검 포인트를 정리한 글</p>
+          <p>명절 관련 지급 항목을 확인할 때 알아두면 좋은 구조와 실무상 점검 포인트를 정리했습니다.</p>
         </a>
 
         <a class="post-item" href="/blog/salary-structure.html">
           <span class="tag">급여 구조</span>
           <h3>사회복지시설 급여 구조 이해하기</h3>
-          <p>기본급, 수당, 공제, 실수령액으로 이어지는 사회복지시설 급여 구조를 쉽게 풀어쓴 글</p>
+          <p>기본급, 수당, 공제, 실수령액으로 이어지는 사회복지시설 급여 구조를 쉽게 풀어쓴 글입니다.</p>
         </a>
 
         <a class="post-item" href="/blog/new-worker-pay.html">
-          <span class="tag">신입 가이드</span>
+          <span class="tag">신입 급여</span>
           <h3>초보 사회복지사를 위한 급여 이해 가이드</h3>
-          <p>신입 사회복지사가 꼭 알아두면 좋은 급여 명세서 읽는 방법과 확인 포인트를 정리한 입문 글</p>
+          <p>신입 사회복지사가 꼭 알아두면 좋은 급여명세서 읽는 방법과 확인 포인트를 정리했습니다.</p>
         </a>
 
         <a class="post-item" href="/blog/salary-mistakes.html">
           <span class="tag">실무 오류</span>
           <h3>급여 계산에서 자주 발생하는 실수 TOP 5</h3>
-          <p>사회복지시설 급여 업무에서 반복적으로 나타나는 대표 오류와 예방 방법을 정리한 글</p>
+          <p>사회복지시설 급여 업무에서 반복적으로 나타나는 대표 오류와 예방 방법을 정리한 글입니다.</p>
         </a>
 
         <a class="post-item" href="/blog/welmoa-tool-guide.html">
           <span class="tag">도구 활용</span>
           <h3>급여 계산기 활용 방법과 검산 요령</h3>
-          <p>급여 계산 도구를 더 정확하게 쓰기 위한 입력 확인법과 검산 요령을 소개하는 글</p>
+          <p>급여 계산 도구를 더 정확하게 쓰기 위한 입력 확인법과 검산 요령을 소개합니다.</p>
         </a>
       </div>
     </section>
 
     <section class="guide-panel" aria-labelledby="tool-guide">
       <h2 id="tool-guide">콘텐츠와 함께 활용하면 좋은 Welmoa 도구</h2>
-      <p>급여와 수당 구조를 이해한 뒤 실제 금액을 확인할 때는 Welmoa 실무 도구를 함께 활용해 보세요. 계산 결과는 기관별 기준과 지자체 지침에 따라 달라질 수 있으므로 내부 기준 확인용 보조 자료로 활용하는 것이 좋습니다.</p>
+      <p>사회복지 실무 글을 읽은 뒤 실제 급여 계산, 신청자 추첨, 링크 공유, 명단 정리가 필요할 때는 Welmoa 실무 도구를 함께 활용해 보세요. 도구 결과는 기관 기준과 지자체 지침에 따라 달라질 수 있으므로 내부 확인용 보조 자료로 활용하는 것이 좋습니다.</p>
       <div class="guide-links">
         <a href="https://tools.welmoa.kr/salary">급여 계산기</a>
         <a href="https://tools.welmoa.kr/lottery">신청자 추첨 도구</a>
+        <a href="https://tools.welmoa.kr/shortener/">URL 단축 도구</a>
+        <a href="https://tools.welmoa.kr/formatter/">명단 정리 도구</a>
         <a href="https://tools.welmoa.kr/tools/">전체 도구 보기</a>
       </div>
     </section>
