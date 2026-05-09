@@ -142,7 +142,11 @@ if (pathname === "/api/grants/list") {
     count: rows.results.length,
     items: rows.results
   });
-}    
+}   
+
+if (pathname === "/api/grants/collect") {
+  return handleCollectBizinfoGrants(env);
+}
     
     // 루트 도메인 안내 화면은 / 일 때만 표시
     if (url.hostname === "welmoa.kr" && pathname === "/") {
@@ -443,6 +447,220 @@ async function generateUniqueSlug(env) {
   }
 
   throw new Error("slug generation failed");
+}
+
+async function handleCollectBizinfoGrants(env) {
+  const apiUrl = new URL("https://www.bizinfo.go.kr/uss/rss/bizinfoApi.do");
+
+  apiUrl.searchParams.set("crtfcKey", env.BIZINFO_API_KEY || "");
+  apiUrl.searchParams.set("dataType", "json");
+  apiUrl.searchParams.set("searchCnt", "50");
+
+  const res = await fetch(apiUrl.toString(), {
+    headers: {
+      "user-agent": "Welmoa-Grants-Collector/1.0"
+    }
+  });
+
+  if (!res.ok) {
+    return json({
+      success: false,
+      message: "기업마당 API 호출 실패",
+      status: res.status
+    }, 502);
+  }
+
+  const data = await res.json();
+  const items = normalizeBizinfoItems(data);
+
+  let inserted = 0;
+  let skipped = 0;
+
+  for (const item of items) {
+    const externalId = item.external_id || makeExternalId(item);
+
+    try {
+      await env.DB.prepare(`
+        INSERT INTO grants (
+          source,
+          external_id,
+          title,
+          organization,
+          category,
+          region,
+          apply_start,
+          apply_end,
+          posted_date,
+          url,
+          summary,
+          fit_score
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `)
+      .bind(
+        "bizinfo",
+        externalId,
+        item.title,
+        item.organization,
+        item.category,
+        item.region,
+        item.apply_start,
+        item.apply_end,
+        item.posted_date,
+        item.url,
+        item.summary,
+        calculateFitScore(item)
+      )
+      .run();
+
+      inserted++;
+    } catch (error) {
+      skipped++;
+    }
+  }
+
+  return json({
+    success: true,
+    source: "bizinfo",
+    fetched: items.length,
+    inserted,
+    skipped
+  });
+}
+
+function normalizeBizinfoItems(data) {
+  const rawItems =
+    data?.jsonArray ||
+    data?.items ||
+    data?.item ||
+    data?.response?.body?.items?.item ||
+    data?.rss?.channel?.item ||
+    [];
+
+  const list = Array.isArray(rawItems) ? rawItems : [rawItems];
+
+  return list
+    .filter(Boolean)
+    .map((raw) => {
+      const title =
+        pick(raw, ["pblancNm", "title", "사업명", "pblancTitle"]) || "제목 없음";
+
+      const url =
+        pick(raw, ["pblancUrl", "link", "url"]) || "";
+
+      const summary =
+        pick(raw, ["bsnsSumryCn", "description", "사업개요", "summary"]) || "";
+
+      const applyPeriod =
+        pick(raw, ["reqstBeginEndDe", "reqstPd", "신청기간"]) || "";
+
+      const dates = parseDateRange(applyPeriod);
+
+      return {
+        external_id:
+          pick(raw, ["pblancId", "id", "pblancNo"]) || makeExternalId({ title, url }),
+        title,
+        organization:
+          pick(raw, ["jrsdInsttNm", "excInsttNm", "organization", "기관명"]) || "",
+        category:
+          pick(raw, ["pldirSportRealmLclasCodeNm", "hashtags", "category", "분야"]) || "",
+        region:
+          pick(raw, ["areaNm", "region", "지역"]) || "",
+        apply_start:
+          dates.start || normalizeDate(pick(raw, ["reqstBeginDe", "apply_start"])),
+        apply_end:
+          dates.end || normalizeDate(pick(raw, ["reqstEndDe", "apply_end"])),
+        posted_date:
+          normalizeDate(pick(raw, ["creatPnttm", "registDt", "posted_date", "pubDate"])),
+        url,
+        summary
+      };
+    })
+    .filter((item) => item.title && item.title !== "제목 없음");
+}
+
+function pick(obj, keys) {
+  for (const key of keys) {
+    if (obj && obj[key] !== undefined && obj[key] !== null && String(obj[key]).trim() !== "") {
+      return String(obj[key]).trim();
+    }
+  }
+  return "";
+}
+
+function parseDateRange(value) {
+  const text = String(value || "");
+  const matches = text.match(/\d{4}[-./]\d{1,2}[-./]\d{1,2}/g) || [];
+
+  return {
+    start: normalizeDate(matches[0]),
+    end: normalizeDate(matches[1])
+  };
+}
+
+function normalizeDate(value) {
+  if (!value) return "";
+
+  const text = String(value).trim();
+  const match = text.match(/(\d{4})[-./]?(\d{1,2})[-./]?(\d{1,2})/);
+
+  if (!match) return "";
+
+  const y = match[1];
+  const m = match[2].padStart(2, "0");
+  const d = match[3].padStart(2, "0");
+
+  return `${y}-${m}-${d}`;
+}
+
+function makeExternalId(item) {
+  const base = `${item.title || ""}|${item.url || ""}`;
+  let hash = 0;
+
+  for (let i = 0; i < base.length; i++) {
+    hash = Math.imul(31, hash) + base.charCodeAt(i) | 0;
+  }
+
+  return `auto_${Math.abs(hash)}`;
+}
+
+function calculateFitScore(item) {
+  const text = [
+    item.title,
+    item.organization,
+    item.category,
+    item.region,
+    item.summary
+  ].join(" ");
+
+  const keywords = {
+    "장애인": 30,
+    "발달장애": 30,
+    "아동": 20,
+    "청소년": 20,
+    "복지관": 25,
+    "사회복지": 25,
+    "비영리": 15,
+    "디지털": 10,
+    "AI": 10,
+    "인공지능": 10,
+    "VR": 10,
+    "메타버스": 10,
+    "문화": 10,
+    "체육": 10,
+    "경기": 10,
+    "수원": 15
+  };
+
+  let score = 0;
+
+  for (const [keyword, point] of Object.entries(keywords)) {
+    if (text.includes(keyword)) {
+      score += point;
+    }
+  }
+
+  return Math.min(score, 100);
 }
 
 function json(data, status = 200) {
