@@ -462,13 +462,13 @@ async function handleCollectBizinfoGrants(env) {
     }
   });
 
-  if (!res.ok) {
-    return json({
-      success: false,
-      message: "기업마당 API 호출 실패",
-      status: res.status
-    }, 502);
-  }
+const text = await res.text();
+
+return json({
+  success: false,
+  status: res.status,
+  response: text
+});
 
   const data = await res.json();
   const items = normalizeBizinfoItems(data);
