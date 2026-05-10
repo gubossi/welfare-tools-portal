@@ -186,7 +186,24 @@
 
 @media (max-width: 560px) {
   .featured-list { grid-template-columns: 1fr; }
-}    
+}
+
+.action-buttons {
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.btn-favorite {
+  border:0;
+  background:#fef3c7;
+  color:#92400e;
+  cursor:pointer;
+}
+
+.btn-favorite:hover {
+  background:#fde68a;
+}
   </style>
 </head>
 <body>
@@ -216,12 +233,13 @@
 
     <section class="toolbar">
       <input id="searchInput" type="search" placeholder="제목, 기관, 지역, 요약 검색" />
-      <select id="scoreFilter">
-        <option value="all">전체 적합도</option>
-<option value="recommend">우리기관 추천공고</option>
-<option value="70">70점 이상</option>
-<option value="50">50점 이상</option>
-      </select>
+<select id="scoreFilter">
+  <option value="all">전체 적합도</option>
+  <option value="favorite">즐겨찾기</option>
+  <option value="recommend">주목할 공고</option>
+  <option value="70">70점 이상</option>
+  <option value="50">50점 이상</option>
+</select>
       <select id="sortSelect">
         <option value="deadline">마감일 빠른순</option>
         <option value="score">적합도 높은순</option>
@@ -359,7 +377,9 @@ if (activeTag !== "all") {
         });
       }
 
-if (scoreFilter === "recommend") {
+if (scoreFilter === "favorite") {
+  items = items.filter(item => isFavorite(item.id));
+} else if (scoreFilter === "recommend") {
   items = items.filter(item => Number(item.fit_score || 0) >= 70);
 } else if (scoreFilter !== "all") {
   items = items.filter(item => Number(item.fit_score || 0) >= Number(scoreFilter));
@@ -400,10 +420,23 @@ ${renderDeadlineBadge(item.apply_end)} ·
 
 <p class="summary-text">${escapeHtml(sanitizeSummary(item.summary || "요약 정보가 없습니다."))}</p>
 
-          <div class="actions">
-            <span class="score">수집일: ${escapeHtml(item.collected_at || "-")}</span>
-            <a class="btn" href="${escapeAttr(item.url || "#")}" target="_blank" rel="noopener">원문보기</a>
-          </div>
+<div class="actions">
+  <span class="score">수집일: ${escapeHtml(item.collected_at || "-")}</span>
+
+  <div class="action-buttons">
+    <button class="btn btn-favorite" type="button" onclick="toggleFavorite('${item.id}')">
+      ${isFavorite(item.id) ? "★ 즐겨찾기 해제" : "☆ 즐겨찾기"}
+    </button>
+
+    <a class="btn" href="/tools/grants/detail.html?id=${item.id}">
+      상세보기
+    </a>
+
+    <a class="btn" href="${escapeAttr(item.url || "#")}" target="_blank" rel="noopener">
+      원문보기
+    </a>
+  </div>
+</div>
         </article>
       `).join("");
     }
@@ -480,6 +513,36 @@ function sanitizeSummary(html) {
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
     }
+
+function getFavorites() {
+  try {
+    return JSON.parse(localStorage.getItem("welmoa_grant_favorites") || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function setFavorites(ids) {
+  localStorage.setItem("welmoa_grant_favorites", JSON.stringify(ids));
+}
+
+function isFavorite(id) {
+  return getFavorites().includes(String(id));
+}
+
+function toggleFavorite(id) {
+  const targetId = String(id);
+  let favorites = getFavorites();
+
+  if (favorites.includes(targetId)) {
+    favorites = favorites.filter(item => item !== targetId);
+  } else {
+    favorites.push(targetId);
+  }
+
+  setFavorites(favorites);
+  renderList();
+}
 
 function getItemText(item) {
   return [
