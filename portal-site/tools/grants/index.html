@@ -249,6 +249,13 @@
   <option value="all">전체 출처</option>
   <option value="bizinfo">기업마당</option>
 </select>
+<select id="deadlineFilter">
+  <option value="all">전체 마감일</option>
+  <option value="3">D-3 이하</option>
+  <option value="7">이번주 마감</option>
+  <option value="30">이번달 마감</option>
+  <option value="closed">마감 공고</option>
+</select>
     </section>
 
     <section class="tag-filter-row">
@@ -363,6 +370,7 @@ function renderFeatured() {
       const scoreFilter = document.getElementById("scoreFilter").value;
       const sortValue = document.getElementById("sortSelect").value;
       const sourceFilter = document.getElementById("sourceFilter").value;
+      const deadlineFilter = document.getElementById("deadlineFilter").value;
 
       let items = [...grants];
 if (activeTag !== "all") {
@@ -371,6 +379,30 @@ if (activeTag !== "all") {
 if (sourceFilter !== "all") {
   items = items.filter(item => item.source === sourceFilter);
 }
+if (deadlineFilter !== "all") {
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  items = items.filter(item => {
+
+    if (!item.apply_end) return false;
+
+    const end = new Date(item.apply_end);
+
+    if (Number.isNaN(end.getTime())) return false;
+
+    end.setHours(0, 0, 0, 0);
+
+    const diff = Math.ceil((end - today) / (1000 * 60 * 60 * 24));
+
+    if (deadlineFilter === "closed") {
+      return diff < 0;
+    }
+
+    return diff >= 0 && diff <= Number(deadlineFilter);
+  });
+}      
       if (keyword) {
         items = items.filter(item => {
           const text = [
@@ -609,6 +641,7 @@ const text = getItemText(item);
 document.getElementById("searchInput").addEventListener("input", renderList);
 document.getElementById("scoreFilter").addEventListener("change", renderList);
 document.getElementById("sourceFilter").addEventListener("change", renderList);
+document.getElementById("deadlineFilter").addEventListener("change", renderList);
 document.getElementById("sortSelect").addEventListener("change", renderList);
 
     document.querySelectorAll(".tag-filter").forEach(button => {
