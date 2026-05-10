@@ -245,6 +245,10 @@
         <option value="score">적합도 높은순</option>
         <option value="recent">수집일 최신순</option>
       </select>
+      <select id="sourceFilter">
+  <option value="all">전체 출처</option>
+  <option value="bizinfo">기업마당</option>
+</select>
     </section>
 
     <section class="tag-filter-row">
@@ -358,10 +362,14 @@ function renderFeatured() {
       const keyword = document.getElementById("searchInput").value.trim().toLowerCase();
       const scoreFilter = document.getElementById("scoreFilter").value;
       const sortValue = document.getElementById("sortSelect").value;
+      const sourceFilter = document.getElementById("sourceFilter").value;
 
       let items = [...grants];
 if (activeTag !== "all") {
   items = items.filter(item => getItemText(item).includes(activeTag));
+}
+if (sourceFilter !== "all") {
+  items = items.filter(item => item.source === sourceFilter);
 }
       if (keyword) {
         items = items.filter(item => {
@@ -598,9 +606,10 @@ const text = getItemText(item);
       return escapeHtml(value);
     }
 
-    document.getElementById("searchInput").addEventListener("input", renderList);
-    document.getElementById("scoreFilter").addEventListener("change", renderList);
-    document.getElementById("sortSelect").addEventListener("change", renderList);
+document.getElementById("searchInput").addEventListener("input", renderList);
+document.getElementById("scoreFilter").addEventListener("change", renderList);
+document.getElementById("sourceFilter").addEventListener("change", renderList);
+document.getElementById("sortSelect").addEventListener("change", renderList);
 
     document.querySelectorAll(".tag-filter").forEach(button => {
   button.addEventListener("click", () => {
