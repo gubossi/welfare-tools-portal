@@ -27,6 +27,9 @@ jobs:
         run: node scripts/collect-chest.js >> grants.sql
         continue-on-error: true
 
+      - name: Generate GGCSW SQL
+        run: node scripts/collect-ggcsw.js >> grants.sql
+
       - name: Install Wrangler
         run: npm install -g wrangler
 
