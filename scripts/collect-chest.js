@@ -1,42 +1,39 @@
 const LIST_URL = "https://proposal.chest.or.kr/mobile/mobileMainBsnsList.do";
 
+const REGIONS = "중앙|서울|부산|대구|인천|광주|대전|울산|세종|경기|강원|충북|충남|전북|전남|경북|경남|제주";
+
 function q(value) {
   return String(value || "").replaceAll("'", "''");
 }
 
 function stripTags(html) {
   return String(html || "")
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
     .replace(/<[^>]*>/g, " ")
     .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
     .replace(/\s+/g, " ")
     .trim();
 }
 
 function normalizeDate(value) {
-  const text = String(value || "");
-  const match = text.match(/(\d{4})[.-](\d{1,2})[.-](\d{1,2})/);
+  const match = String(value || "").match(/(\d{4})[.-](\d{1,2})[.-](\d{1,2})/);
   if (!match) return "";
-
   return `${match[1]}-${match[2].padStart(2, "0")}-${match[3].padStart(2, "0")}`;
 }
 
 function makeExternalId(item) {
   const base = `${item.region}|${item.title}|${item.apply_end}`;
   let hash = 0;
-
   for (let i = 0; i < base.length; i++) {
     hash = (Math.imul(31, hash) + base.charCodeAt(i)) | 0;
   }
-
   return `chest_${Math.abs(hash)}`;
 }
 
 function calculateFitScore(item) {
-  const text = [
-    item.title,
-    item.region,
-    item.summary
-  ].join(" ");
+  const text = [item.title, item.region, item.summary].join(" ");
 
   const keywords = {
     "장애인": 30,
@@ -57,7 +54,6 @@ function calculateFitScore(item) {
   };
 
   let score = 0;
-
   for (const [keyword, point] of Object.entries(keywords)) {
     if (text.includes(keyword)) score += point;
   }
@@ -77,40 +73,28 @@ async function main() {
   }
 
   const html = await res.text();
+  const text = stripTags(html);
 
-  const cardRegex = /<div[^>]*class=["'][^"']*business_list[^"']*["'][\s\S]*?<\/div>/gi;
-  let cards = html.match(cardRegex) || [];
+  console.error(`Fetched HTML length: ${html.length}`);
+  console.error(`Extracted text length: ${text.length}`);
 
-  if (!cards.length) {
-    // fallback: 화면 구조가 조금 달라도 제목/마감일 패턴으로 최대한 추출
-    cards = html.split(/<li|<div/gi).filter(part => part.includes("마감일시") && part.includes("2026"));
-  }
+  const regex = new RegExp(
+    `(${REGIONS})\\s+(.+?)\\s+마감일시\\s*\\(18시\\)\\s*[:：]?\\s*(\\d{4}[.-]\\d{1,2}[.-]\\d{1,2})`,
+    "g"
+  );
 
   const sqls = [];
+  let match;
 
-  for (const card of cards) {
-    const text = stripTags(card);
+  while ((match = regex.exec(text)) !== null) {
+    const region = match[1];
+    const title = match[2].trim().replace(/\s+/g, " ");
+    const applyEnd = normalizeDate(match[3]);
 
-    const dateMatch = text.match(/마감일시\s*\(18시\)\s*[:：]?\s*(\d{4}[.-]\d{1,2}[.-]\d{1,2})/);
-    const applyEnd = normalizeDate(dateMatch?.[1] || "");
-
-    if (!applyEnd) continue;
-
-    const regionMatch = text.match(/^(중앙|서울|부산|대구|인천|광주|대전|울산|세종|경기|강원|충북|충남|전북|전남|경북|경남|제주)/);
-    const region = regionMatch?.[1] || "";
-
-    let title = text
-      .replace(region, "")
-      .replace(/마감일시[\s\S]*$/g, "")
-      .trim();
-
-    title = title.replace(/\s+/g, " ");
-
-    if (!title || title.length < 5) continue;
+    if (!title || !applyEnd) continue;
 
     const item = {
       source: "chest",
-      external_id: "",
       title,
       organization: "사회복지공동모금회",
       category: "배분공고",
@@ -122,7 +106,7 @@ async function main() {
       summary: `${region} 사랑의열매 온라인배분신청 공모사업`
     };
 
-    item.external_id = makeExternalId(item);
+    const externalId = makeExternalId(item);
 
     sqls.push(`
 INSERT OR IGNORE INTO grants (
@@ -140,7 +124,7 @@ INSERT OR IGNORE INTO grants (
   fit_score
 ) VALUES (
   '${q(item.source)}',
-  '${q(item.external_id)}',
+  '${q(externalId)}',
   '${q(item.title)}',
   '${q(item.organization)}',
   '${q(item.category)}',
@@ -152,6 +136,13 @@ INSERT OR IGNORE INTO grants (
   '${q(item.summary)}',
   ${calculateFitScore(item)}
 );`);
+  }
+
+  console.error(`Chest items extracted: ${sqls.length}`);
+
+  if (!sqls.length) {
+    console.log("-- no chest items extracted");
+    return;
   }
 
   console.log(sqls.join("\n"));
