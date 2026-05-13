@@ -23,6 +23,9 @@ jobs:
         env:
           BIZINFO_API_KEY: ${{ secrets.BIZINFO_API_KEY }}
 
+      - name: Generate Chest SQL
+        run: node scripts/collect-chest.js >> grants.sql
+
       - name: Install Wrangler
         run: npm install -g wrangler
 
