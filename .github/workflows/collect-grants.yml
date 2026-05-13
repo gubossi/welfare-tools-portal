@@ -25,6 +25,7 @@ jobs:
 
       - name: Generate Chest SQL
         run: node scripts/collect-chest.js >> grants.sql
+        continue-on-error: true
 
       - name: Install Wrangler
         run: npm install -g wrangler
