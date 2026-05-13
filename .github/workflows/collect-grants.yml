@@ -18,10 +18,15 @@ jobs:
         with:
           node-version: 20
 
-      - name: Generate SQL
+      - name: Generate Bizinfo SQL
         run: node scripts/collect-bizinfo.js > grants.sql
         env:
           BIZINFO_API_KEY: ${{ secrets.BIZINFO_API_KEY }}
+
+      - name: Generate data.go.kr SQL
+        run: node scripts/collect-data-go-kr.js >> grants.sql
+        env:
+           DATA_GO_KR_API_KEY: ${{ secrets.DATA_GO_KR_API_KEY }}
 
       - name: Install Wrangler
         run: npm install -g wrangler
