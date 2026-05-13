@@ -29,6 +29,7 @@ jobs:
 
       - name: Generate GGCSW SQL
         run: node scripts/collect-ggcsw.js >> grants.sql
+        continue-on-error: true
 
       - name: Install Wrangler
         run: npm install -g wrangler
