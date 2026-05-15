@@ -17,6 +17,56 @@ const ROOT_HTML = `
 </html>
 `;
 
+const ANALYTICS_SCRIPT = `
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4TNGJX9WB9"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-4TNGJX9WB9');
+</script>
+
+<!-- Naver Analytics -->
+<script type="text/javascript" src="https://wcs.pstatic.net/wcslog.js"></script>
+<script type="text/javascript">
+if(!wcs_add) var wcs_add = {};
+wcs_add["wa"] = "c4e4f76e4b7f40";
+if(window.wcs) {
+  wcs_do();
+}
+</script>
+`;
+
+async function injectAnalytics(response) {
+  const contentType = response.headers.get("content-type") || "";
+
+  if (!contentType.includes("text/html")) {
+    return response;
+  }
+
+  let html = await response.text();
+
+  if (
+    html.includes("G-4TNGJX9WB9") ||
+    html.includes("wcs.pstatic.net/wcslog.js")
+  ) {
+    return new Response(html, response);
+  }
+
+  html = html.replace(
+    "</head>",
+    `${ANALYTICS_SCRIPT}\n</head>`
+  );
+
+  return new Response(html, {
+    status: response.status,
+    statusText: response.statusText,
+    headers: response.headers
+  });
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -150,13 +200,14 @@ if (pathname === "/api/grants/collect") {
     
     // 루트 도메인 안내 화면은 / 일 때만 표시
     if (url.hostname === "welmoa.kr" && pathname === "/") {
-      return new Response(ROOT_HTML, {
-        headers: { "content-type": "text/html; charset=utf-8" }
-      });
+      return injectAnalytics(new Response(ROOT_HTML, {
+  headers: { "content-type": "text/html; charset=utf-8" }
+}));
     }
 
     // 나머지 정적 파일
-    return env.ASSETS.fetch(request);
+    const assetResponse = await env.ASSETS.fetch(request);
+return injectAnalytics(assetResponse);
   }
 };
 
@@ -202,7 +253,12 @@ async function proxy(request, targetBase, mountPath) {
     .on("img", new PrefixRewriter("src", mountPath))
     .on("form", new PrefixRewriter("action", mountPath));
 
-  return new Response(rewriter.transform(response).body, response);
+  const rewrittenResponse = new Response(
+  rewriter.transform(response).body,
+  response
+);
+
+return injectAnalytics(rewrittenResponse);
 }
 
 //////////////////////////////////////////////////////
