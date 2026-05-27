@@ -75,11 +75,6 @@ export default {
 if (request.url.includes("/blog")) {
   return new Response("BLOG REDIRECT WORKING");
 }
-  let newPath = pathname.replace(/\.html$/, "");
-
-  if (!newPath.endsWith("/")) {
-    newPath += "/";
-  }
 
   return Response.redirect(
     `https://blog.welmoa.kr${newPath}`,
