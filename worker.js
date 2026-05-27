@@ -72,14 +72,12 @@ export default {
     const url = new URL(request.url);
     const pathname = url.pathname;
 
-    if (pathname === "/__blog-test") {
-  return new Response("blog redirect test ok", {
-    headers: { "content-type": "text/plain; charset=utf-8" }
-  });
-}
-
 if (pathname.startsWith("/blog")) {
-  const newPath = pathname.replace(/\.html$/, "");
+  let newPath = pathname.replace(/\.html$/, "");
+
+  if (!newPath.endsWith("/")) {
+    newPath += "/";
+  }
 
   return Response.redirect(
     `https://blog.welmoa.kr${newPath}`,
