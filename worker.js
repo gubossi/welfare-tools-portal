@@ -72,15 +72,20 @@ export default {
     const url = new URL(request.url);
     const pathname = url.pathname;
 
-    // blog redirect
-    if (pathname.startsWith("/blog")) {
-      const newPath = pathname.replace(/\.html$/, "");
+    if (pathname === "/__blog-test") {
+  return new Response("blog redirect test ok", {
+    headers: { "content-type": "text/plain; charset=utf-8" }
+  });
+}
 
-      return Response.redirect(
-        `https://blog.welmoa.kr${newPath}`,
-        301
-      );
-    }
+if (pathname.startsWith("/blog")) {
+  const newPath = pathname.replace(/\.html$/, "");
+
+  return Response.redirect(
+    `https://blog.welmoa.kr${newPath}`,
+    301
+  );
+}
     
     // 공통 리소스
     if (pathname === "/_welmoa/shared.css") {
