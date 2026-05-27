@@ -72,14 +72,14 @@ export default {
     const url = new URL(request.url);
     const pathname = url.pathname;
 
-if (request.url.includes("/blog")) {
-  return new Response("BLOG REDIRECT WORKING");
-}
+if (pathname.startsWith("/blog")) {
+  let newPath = pathname.replace(/\.html$/, "");
 
-  return Response.redirect(
-    `https://blog.welmoa.kr${newPath}`,
-    301
-  );
+  if (!newPath.endsWith("/")) {
+    newPath += "/";
+  }
+
+  return Response.redirect(`https://blog.welmoa.kr${newPath}`, 301);
 }
     
     // 공통 리소스
