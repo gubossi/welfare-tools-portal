@@ -113,6 +113,20 @@ export default {
       return proxy(request, "https://lottery-webapp.gubossi.workers.dev", "/lottery");
     }
 
+    // blog redirect
+if (pathname === "/blog" || pathname === "/blog/") {
+  return Response.redirect("https://blog.welmoa.kr/blog/", 301);
+}
+
+if (pathname.startsWith("/blog/")) {
+  let newPath = pathname.replace(/\.html$/, "");
+
+  return Response.redirect(
+    `https://blog.welmoa.kr${newPath}`,
+    301
+  );
+}
+    
     if (url.pathname === "/api/grants/test") {
 
   const result = await env.DB
