@@ -72,6 +72,16 @@ export default {
     const url = new URL(request.url);
     const pathname = url.pathname;
 
+    // blog redirect
+    if (pathname.startsWith("/blog")) {
+      const newPath = pathname.replace(/\.html$/, "");
+
+      return Response.redirect(
+        `https://blog.welmoa.kr${newPath}`,
+        301
+      );
+    }
+    
     // 공통 리소스
     if (pathname === "/_welmoa/shared.css") {
       return new Response(sharedCss(), {
@@ -112,20 +122,6 @@ export default {
     if (pathname === "/lottery" || pathname.startsWith("/lottery/")) {
       return proxy(request, "https://lottery-webapp.gubossi.workers.dev", "/lottery");
     }
-
-    // blog redirect
-if (pathname === "/blog" || pathname === "/blog/") {
-  return Response.redirect("https://blog.welmoa.kr/blog/", 301);
-}
-
-if (pathname.startsWith("/blog/")) {
-  let newPath = pathname.replace(/\.html$/, "");
-
-  return Response.redirect(
-    `https://blog.welmoa.kr${newPath}`,
-    301
-  );
-}
     
     if (url.pathname === "/api/grants/test") {
 
