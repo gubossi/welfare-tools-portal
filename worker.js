@@ -72,7 +72,9 @@ export default {
     const url = new URL(request.url);
     const pathname = url.pathname;
 
-if (pathname.startsWith("/blog")) {
+if (request.url.includes("/blog")) {
+  return new Response("BLOG REDIRECT WORKING");
+}
   let newPath = pathname.replace(/\.html$/, "");
 
   if (!newPath.endsWith("/")) {
