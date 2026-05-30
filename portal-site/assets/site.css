@@ -1273,3 +1273,20 @@ main > section h2:first-child {
   border-radius: 0 !important;
   box-shadow: none !important;
 }
+
+/* Home/tools hero full-width fix */
+.platform-hero {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 92px 0 76px !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.platform-hero .container {
+  width: min(1120px, calc(100% - 40px)) !important;
+  max-width: 1120px !important;
+  margin: 0 auto !important;
+}
