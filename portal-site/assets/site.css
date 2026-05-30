@@ -67,47 +67,30 @@ main.container { padding-top: 36px; padding-bottom: 56px; }
 
 /* Platform hero: home + tools home */
 .platform-hero {
-  padding: 82px 0 68px;
-  background:
-    radial-gradient(circle at top left, rgba(37, 99, 235, 0.12), transparent 32%),
-    linear-gradient(135deg, #eff6ff 0%, #ffffff 60%, #f8fafc 100%);
+  padding: 78px 0 56px;
+  background: linear-gradient(135deg, #eff6ff 0%, #ffffff 62%, #f8fafc 100%);
   border-bottom: 1px solid var(--border);
 }
+
 .platform-hero h1 {
-  margin: 20px 0 20px;
-  max-width: 880px;
-  font-size: clamp(2.7rem, 5vw, 4.4rem);
-  line-height: 1.1;
-  letter-spacing: -0.055em;
+  margin-top: 18px;
+  margin-bottom: 0;
+  max-width: 920px;
+  font-size: clamp(2.4rem, 5vw, 4.2rem);
+  line-height: 1.16;
+  letter-spacing: -0.05em;
   color: var(--text);
   word-break: keep-all;
 }
+
 .platform-hero p {
+  margin-top: 22px;
   max-width: 760px;
   color: var(--muted);
-  font-size: 1.1rem;
-  line-height: 1.85;
+  font-size: 1.15rem;
+  line-height: 1.8;
   word-break: keep-all;
 }
-.platform-hero .hero-actions {
-  display: flex;
-  gap: 14px;
-  flex-wrap: wrap;
-  align-items: center;
-  margin-top: 30px;
-}
-.platform-hero .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 52px;
-  padding: 0 22px;
-  border-radius: 999px;
-  font-size: 1rem;
-  font-weight: 900;
-}
-.platform-hero .btn.primary { background: var(--primary); color: #fff; box-shadow: 0 14px 28px rgba(37, 99, 235, 0.2); }
-.platform-hero .btn.secondary { background: #fff; color: #1d4ed8; border: 1px solid #bfdbfe; }
 
 /* Default hero for tool subpages and guide pages */
 .hero { margin-bottom: 32px; }
