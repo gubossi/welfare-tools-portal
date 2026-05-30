@@ -1160,11 +1160,11 @@ main > section h2:first-child {
 
 /* Tool subpage hero compact fix */
 .tool-subpage .hero {
-  padding: 42px 0 28px;
+  padding: 16px 0 8px;
 }
 
 .tool-subpage .hero-card {
-  padding: 34px 36px;
+  padding: 24px 30px;
   border-radius: 28px;
   min-height: auto;
 }
@@ -1178,4 +1178,8 @@ main > section h2:first-child {
   max-width: 760px;
   font-size: 1rem;
   line-height: 1.75;
+}
+
+.tool-subpage .hero-inner {
+  display: block;
 }
