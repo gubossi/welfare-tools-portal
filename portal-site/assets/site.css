@@ -1189,3 +1189,77 @@ main > section h2:first-child {
 .tool-subpage .hero-actions {
   margin-top: 22px;
 }
+
+/* Platform hero: home + tools home */
+.platform-hero {
+  padding: 92px 0 76px;
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.14), transparent 34%),
+    linear-gradient(135deg, #eff6ff 0%, #ffffff 58%, #f8fafc 100%);
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.platform-hero .container {
+  max-width: 1120px;
+}
+
+.platform-hero h1 {
+  margin: 22px 0 22px;
+  max-width: 920px;
+  font-size: clamp(3rem, 5.6vw, 5rem);
+  line-height: 1.08;
+  letter-spacing: -0.06em;
+  color: #0f172a;
+  word-break: keep-all;
+}
+
+.platform-hero p {
+  max-width: 780px;
+  color: #475569;
+  font-size: 1.15rem;
+  line-height: 1.9;
+  word-break: keep-all;
+}
+
+.platform-hero .hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 34px;
+  align-items: center;
+}
+
+.platform-hero .btn {
+  min-height: 52px;
+  padding: 0 22px;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: 1rem;
+}
+
+.platform-hero .btn.primary {
+  background: #2563eb;
+  color: #fff;
+  box-shadow: 0 14px 28px rgba(37, 99, 235, 0.22);
+}
+
+.platform-hero .btn.secondary {
+  background: #fff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+
+@media (max-width: 720px) {
+  .platform-hero {
+    padding: 72px 0 56px;
+  }
+
+  .platform-hero h1 {
+    font-size: clamp(2.25rem, 10vw, 3.4rem);
+    line-height: 1.14;
+  }
+
+  .platform-hero p {
+    font-size: 1.02rem;
+  }
+}
