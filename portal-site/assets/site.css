@@ -1008,7 +1008,7 @@ main > section h2:first-child {
 
 /* Hero redesign */
 .hero {
-  padding: 20px 0 20px;
+  padding: 64px 0 44px;
   background:
     radial-gradient(circle at top left, rgba(37, 99, 235, 0.14), transparent 32%),
     linear-gradient(135deg, #eff6ff 0%, #ffffff 58%, #f8fafc 100%);
