@@ -1263,3 +1263,13 @@ main > section h2:first-child {
     font-size: 1.02rem;
   }
 }
+
+.platform-hero {
+  padding: 92px 0 76px !important;
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.14), transparent 34%),
+    linear-gradient(135deg, #eff6ff 0%, #ffffff 58%, #f8fafc 100%) !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
