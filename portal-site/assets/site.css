@@ -1008,7 +1008,7 @@ main > section h2:first-child {
 
 /* Hero redesign */
 .hero {
-  padding: 90px 0 72px;
+  padding: 64px 0 44px;
   background:
     radial-gradient(circle at top left, rgba(37, 99, 235, 0.14), transparent 32%),
     linear-gradient(135deg, #eff6ff 0%, #ffffff 58%, #f8fafc 100%);
@@ -1020,6 +1020,7 @@ main > section h2:first-child {
 
 .hero-copy {
   max-width: 920px;
+  padding-bottom: 8px;
 }
 
 .hero-copy h1 {
@@ -1047,6 +1048,7 @@ main > section h2:first-child {
   gap: 14px;
   margin-top: 34px;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .hero-grid {
@@ -1060,7 +1062,7 @@ main > section h2:first-child {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 170px;
+  min-height: 145px;
   padding: 28px;
   border-radius: 28px;
   border: 1px solid #e2e8f0;
@@ -1124,6 +1126,9 @@ main > section h2:first-child {
 /* Hero CTA emphasis */
 .hero-actions .btn,
 .hero-actions a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-height: 50px;
   padding: 0 22px;
   border-radius: 999px;
