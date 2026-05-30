@@ -1274,19 +1274,17 @@ main > section h2:first-child {
   box-shadow: none !important;
 }
 
-/* Home/tools hero full-width fix */
+/* Platform hero safe fix */
 .platform-hero {
-  width: 100% !important;
-  max-width: none !important;
-  margin: 0 !important;
-  padding: 92px 0 76px !important;
-  border: none !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.13), transparent 32%),
+    linear-gradient(135deg, #eff6ff 0%, #ffffff 62%, #f8fafc 100%);
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
 }
 
-.platform-hero .container {
-  width: min(1120px, calc(100% - 40px)) !important;
-  max-width: 1120px !important;
-  margin: 0 auto !important;
+.platform-hero > .container {
+  padding-top: 82px;
+  padding-bottom: 70px;
 }
