@@ -1120,3 +1120,35 @@ main > section h2:first-child {
     min-height: auto;
   }
 }
+
+/* Hero CTA emphasis */
+.hero-actions .btn,
+.hero-actions a {
+  min-height: 50px;
+  padding: 0 22px;
+  border-radius: 999px;
+  font-weight: 900;
+  font-size: 1rem;
+  text-decoration: none;
+}
+
+.hero-actions .primary,
+.hero-actions a:first-child {
+  background: #2563eb;
+  color: #ffffff;
+  box-shadow: 0 14px 28px rgba(37, 99, 235, 0.22);
+}
+
+.hero-actions .secondary,
+.hero-actions a:last-child {
+  background: #ffffff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+
+/* Hero mini cards title size */
+.hero-mini-card strong {
+  font-size: 1.45rem;
+  line-height: 1.35;
+  font-weight: 900;
+}
