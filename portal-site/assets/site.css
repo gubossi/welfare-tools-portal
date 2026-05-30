@@ -1157,3 +1157,25 @@ main > section h2:first-child {
   line-height: 1.35;
   font-weight: 900;
 }
+
+/* Tool subpage hero compact fix */
+.tool-subpage .hero {
+  padding: 42px 0 28px;
+}
+
+.tool-subpage .hero-card {
+  padding: 34px 36px;
+  border-radius: 28px;
+  min-height: auto;
+}
+
+.tool-subpage .hero-card h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.2;
+}
+
+.tool-subpage .hero-card p {
+  max-width: 760px;
+  font-size: 1rem;
+  line-height: 1.75;
+}
