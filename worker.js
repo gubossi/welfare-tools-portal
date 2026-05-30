@@ -79,7 +79,7 @@ if (pathname.startsWith("/blog")) {
     newPath += "/";
   }
 
-  return Response.redirect(`https://blog.welmoa.kr/blog/${newPath}`, 301);
+  return Response.redirect(`https://blog.welmoa.kr${newPath}`, 301);
 }
     
     // 공통 리소스
