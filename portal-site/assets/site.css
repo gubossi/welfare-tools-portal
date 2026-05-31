@@ -319,3 +319,21 @@ main > p, main > ul, main > ol {
   .post-item, .tool-card { padding: 18px; }
   .footer-inner { padding: 18px 0 26px; }
 }
+
+/* Unified hero circle decoration */
+.tool-subpage .hero-card::after {
+  content: "";
+  position: absolute;
+  right: -48px;
+  bottom: -54px;
+  width: 190px;
+  height: 190px;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.08);
+  pointer-events: none;
+}
+
+.tool-subpage .hero-card {
+  position: relative;
+  overflow: hidden;
+}
