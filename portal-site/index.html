@@ -168,6 +168,22 @@ if(window.wcs) {
 </section>
 
   <main class="container">
+<section class="section latest-content-section">
+  <div class="section-head">
+    <div>
+      <h2>최신 실무 콘텐츠</h2>
+      <p>사회복지 현장에서 자주 고민하는 주제를 실무자 관점에서 정리했습니다.</p>
+    </div>
+
+    <a class="btn secondary" href="https://blog.welmoa.kr/blog/">
+      콘텐츠 전체보기
+    </a>
+  </div>
+
+  <div id="latest-posts" class="latest-posts-grid">
+    <p class="loading-text">최신 콘텐츠를 불러오는 중입니다.</p>
+  </div>
+</section>
     <section class="section">
       <h2 class="section-title">처음 방문했다면 먼저 확인해 보세요</h2>
       <p class="section-lead">
@@ -372,5 +388,40 @@ if(window.wcs) {
     </div>
   </footer>
 
+  <script>
+  async function loadLatestPosts() {
+    const container = document.querySelector('#latest-posts');
+    if (!container) return;
+
+    try {
+      const response = await fetch('https://blog.welmoa.kr/latest-posts.json');
+      const posts = await response.json();
+
+      container.innerHTML = posts.map((post) => {
+        const date = new Date(post.pubDate).toLocaleDateString('ko-KR');
+
+        return `
+          <article class="latest-post-card">
+            <span class="post-category">${post.category}</span>
+            <h3>
+              <a href="${post.url}">${post.title}</a>
+            </h3>
+            <p>${post.description}</p>
+            <span class="post-date">${date}</span>
+          </article>
+        `;
+      }).join('');
+    } catch (error) {
+      container.innerHTML = `
+        <p class="loading-text">
+          최신 콘텐츠를 불러오지 못했습니다.
+          <a href="https://blog.welmoa.kr/blog/">콘텐츠 보러가기</a>
+        </p>
+      `;
+    }
+  }
+
+  loadLatestPosts();
+</script>
 </body>
 </html>
