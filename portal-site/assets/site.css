@@ -403,3 +403,9 @@ main > p, main > ul, main > ol {
     grid-template-columns: 1fr;
   }
 }
+
+.latest-more {
+  display: flex;
+  justify-content: center;
+  margin-top: 28px;
+}
