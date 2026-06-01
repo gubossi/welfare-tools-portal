@@ -276,16 +276,29 @@ if(window.wcs) {
       container.innerHTML = posts.map((post) => {
         const date = new Date(post.pubDate).toLocaleDateString('ko-KR');
 
-        return `
-          <article class="latest-post-card">
-            <span class="post-category">${post.category}</span>
-            <h3>
-              <a href="${post.url}">${post.title}</a>
-            </h3>
-            <p>${post.description}</p>
-            <span class="post-date">${date}</span>
-          </article>
-        `;
+return `
+  <article class="latest-post-card">
+
+    <a class="post-thumb" href="${post.url}">
+      <img src="https://blog.welmoa.kr${post.thumbnail}" alt="${post.title}">
+    </a>
+
+    <div class="post-body">
+      <span class="post-category">${post.category}</span>
+
+      <h3>
+        <a href="${post.url}">
+          ${post.title}
+        </a>
+      </h3>
+
+      <p>${post.description}</p>
+
+      <span class="post-date">${date}</span>
+    </div>
+
+  </article>
+`;
       }).join('');
     } catch (error) {
       container.innerHTML = `
