@@ -398,7 +398,13 @@ main > p, main > ul, main > ol {
   color: var(--muted);
 }
 
-@media (max-width: 860px) {
+@media (max-width: 980px) {
+  .latest-posts-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 720px) {
   .latest-posts-grid {
     grid-template-columns: 1fr;
   }
