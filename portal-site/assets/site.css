@@ -464,6 +464,13 @@ main > p, main > ul, main > ol {
   }
 }
 
+.post-thumb {
+  display: block;
+  aspect-ratio: 16 / 6;
+  overflow: hidden;
+  background: #e2e8f0;
+}
+
 .post-thumb img {
   width: 100%;
   height: 100%;
