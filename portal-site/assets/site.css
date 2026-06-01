@@ -482,3 +482,11 @@ main > p, main > ul, main > ol {
   flex: 1;
   padding: 24px;
 }
+
+.post-hero-image {
+  width: 100%;
+  display: block;
+  margin: 28px 0 32px;
+  border-radius: 24px;
+  object-fit: cover;
+}
