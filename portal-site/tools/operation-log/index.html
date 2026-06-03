@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Welmoa 운영일지 v34</title>
+<title>Welmoa 운영일지 v35</title>
 <style>
 :root{
   --blue:#2563eb;
@@ -633,12 +633,104 @@ th{background:#eff6ff;text-align:left}
   }
 }
 
+
+.setup-guide{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:18px;
+  background:#f8fbff;
+  border:1px solid #dbeafe;
+  border-radius:18px;
+  padding:18px 20px;
+  margin-bottom:18px;
+}
+
+.setup-guide strong{
+  display:block;
+  color:#1e3a8a;
+  font-size:16px;
+  margin-bottom:6px;
+}
+
+.setup-guide p{
+  margin:0;
+  color:#475569;
+  line-height:1.55;
+  font-size:14px;
+}
+
+.setup-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+.button-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:10px 14px;
+  border-radius:10px;
+  background:#2563eb;
+  color:white;
+  font-weight:800;
+  text-decoration:none;
+  font-size:14px;
+}
+
+.snapshot-panel{
+  grid-column:1/-1;
+  border:1px solid #e2e8f0;
+  border-radius:14px;
+  padding:14px;
+  background:#f8fafc;
+}
+
+.snapshot-list{
+  margin-top:12px;
+}
+
+.snapshot-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  border:1px solid #e2e8f0;
+  border-radius:12px;
+  padding:10px 12px;
+  background:white;
+  margin-top:8px;
+}
+
+.snapshot-row small{
+  color:#64748b;
+}
+
+@media(max-width:768px){
+  .setup-guide{
+    align-items:stretch;
+    flex-direction:column;
+    padding:14px;
+  }
+
+  .setup-actions{
+    justify-content:flex-start;
+  }
+
+  .snapshot-row{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+}
+
 </style>
 </head>
 <body>
 <header>
-  <h1>Welmoa 운영일지 v34</h1>
-  <p>Google Sheet 탭별 데이터 저장 / 구조화 저장</p>
+  <h1>Welmoa 운영일지 v35</h1>
+  <p>초기설정 UX / 스냅샷 복구 / 배포 가이드</p>
 </header>
 
 <div class="container">
@@ -688,6 +780,22 @@ th{background:#eff6ff;text-align:left}
     <div class="summary-box">
       <div class="summary-title">평균 달성률</div>
       <div class="summary-value" id="avgRate">0%</div>
+    </div>
+  </div>
+
+
+  <div class="setup-guide no-print" id="setupGuide">
+    <div>
+      <strong>처음 사용하시나요?</strong>
+      <p>
+        Google Sheet를 연결하면 다른 PC와 스마트폰에서도 같은 운영일지를 사용할 수 있습니다.
+        웰모아 서버에는 운영일지 데이터가 저장되지 않습니다.
+      </p>
+    </div>
+    <div class="setup-actions">
+      <a class="button-link" href="https://docs.google.com/spreadsheets/d/템플릿ID/copy" target="_blank" rel="noopener">템플릿 사본 만들기</a>
+      <button class="light" onclick="showTab('programManage', document.querySelector('.tab'))">연동 설정하기</button>
+      <button class="gray" onclick="dismissSetupGuide()">닫기</button>
     </div>
   </div>
 
@@ -809,6 +917,15 @@ th{background:#eff6ff;text-align:left}
         <p class="small" style="margin-top:6px">
           구조 초기화 후 저장하면 staff, programs, works, operations, notes, adjustments 시트에도 데이터가 나누어 저장됩니다.
         </p>
+
+        <div class="snapshot-panel">
+          <div class="button-row">
+            <button class="gray" onclick="loadSnapshotList()">스냅샷 목록 조회</button>
+          </div>
+          <div id="snapshotList" class="snapshot-list">
+            <p class="small">스냅샷 목록을 조회하면 저장 시점별 복구 지점을 확인할 수 있습니다.</p>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1571,6 +1688,7 @@ toggleApprovalSettingFields();
 loadGoogleSettings();
 applyFeatureVisibility();
 renderStaffSelects();
+applySetupGuideVisibility();
 initialGoogleSync();
   renderStaffList();
   renderAll();
@@ -3165,6 +3283,98 @@ async function initialGoogleSync(){
     }
   }catch(error){
     console.error(error);
+  }
+}
+
+
+function dismissSetupGuide(){
+  localStorage.setItem('welmoaSetupGuideDismissed', 'Y');
+  const el = document.getElementById('setupGuide');
+  if(el) el.style.display = 'none';
+}
+
+function applySetupGuideVisibility(){
+  const dismissed = localStorage.getItem('welmoaSetupGuideDismissed') === 'Y';
+  const el = document.getElementById('setupGuide');
+  if(el) el.style.display = dismissed ? 'none' : '';
+}
+
+async function loadSnapshotList(){
+  const settings = googleSettings();
+
+  if(!settings.url){
+    setGoogleStatus('Apps Script 웹앱 URL을 입력해 주세요.', 'error');
+    return;
+  }
+
+  const area = document.getElementById('snapshotList');
+  if(area) area.innerHTML = '<p class="small">스냅샷 목록을 불러오는 중입니다...</p>';
+
+  try{
+    const response = await fetch(settings.url + '?action=listSnapshots');
+    const json = await response.json();
+
+    if(!json || !json.ok){
+      if(area) area.innerHTML = '<p class="small">스냅샷 목록을 불러오지 못했습니다.</p>';
+      return;
+    }
+
+    const list = json.snapshots || [];
+
+    if(!list.length){
+      if(area) area.innerHTML = '<p class="small">저장된 스냅샷이 없습니다.</p>';
+      return;
+    }
+
+    area.innerHTML = list.map(item => `
+      <div class="snapshot-row">
+        <div>
+          <strong>${escapeHtml(item.createdAt || '-')}</strong><br>
+          <small>행번호 ${item.row} · ${escapeHtml(item.type || '')} · 기준일 ${escapeHtml(item.date || '')}</small>
+        </div>
+        <button class="light" onclick="restoreSnapshot(${item.row})">이 시점으로 복구</button>
+      </div>
+    `).join('');
+
+  }catch(error){
+    console.error(error);
+    if(area) area.innerHTML = '<p class="small">스냅샷 목록 조회 중 오류가 발생했습니다.</p>';
+  }
+}
+
+async function restoreSnapshot(row){
+  const settings = googleSettings();
+
+  if(!settings.url){
+    setGoogleStatus('Apps Script 웹앱 URL을 입력해 주세요.', 'error');
+    return;
+  }
+
+  if(!confirm('선택한 스냅샷으로 현재 브라우저 데이터를 교체합니다. 계속할까요?')){
+    return;
+  }
+
+  try{
+    const response = await fetch(settings.url + '?action=loadSnapshot&row=' + encodeURIComponent(row));
+    const json = await response.json();
+
+    if(!json || !json.ok || !json.payload){
+      setGoogleStatus('스냅샷 데이터를 불러오지 못했습니다.', 'error');
+      return;
+    }
+
+    localStorage.setItem('welmoaLogV4', JSON.stringify(json.payload));
+    setLastSyncTime(new Date().toISOString());
+
+    setGoogleStatus('선택한 스냅샷으로 복구했습니다. 화면을 새로고침합니다.', 'ok');
+
+    setTimeout(() => {
+      location.reload();
+    }, 600);
+
+  }catch(error){
+    console.error(error);
+    setGoogleStatus('스냅샷 복구 중 오류가 발생했습니다.', 'error');
   }
 }
 
