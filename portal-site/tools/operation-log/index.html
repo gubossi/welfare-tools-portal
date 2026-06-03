@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Welmoa 운영일지 v28</title>
+<title>Welmoa 운영일지 v29</title>
 <style>
 :root{
   --blue:#2563eb;
@@ -562,12 +562,28 @@ th{background:#eff6ff;text-align:left}
 
 }
 
+
+.google-sync-ok{
+  color:#166534;
+  font-weight:700;
+}
+
+.google-sync-warn{
+  color:#92400e;
+  font-weight:700;
+}
+
+.google-sync-error{
+  color:#b91c1c;
+  font-weight:700;
+}
+
 </style>
 </head>
 <body>
 <header>
-  <h1>Welmoa 운영일지 v28</h1>
-  <p>모바일 3열 compact UI 개선</p>
+  <h1>Welmoa 운영일지 v29</h1>
+  <p>Google Sheet 연동 설정 / 구글시트 백업 저장</p>
 </header>
 
 <div class="container">
@@ -694,6 +710,42 @@ th{background:#eff6ff;text-align:left}
       <div id="approvalNamesWrap" style="grid-column:1/-1">
         <label>결재칸 명칭</label>
         <div id="approvalNameInputs" class="approval-name-grid"></div>
+      </div>
+    </div>
+
+    <h2>Google Sheet 연동</h2>
+
+    <div class="grid" style="margin-bottom:24px">
+      <div style="grid-column:1/-1">
+        <label>Apps Script 웹앱 URL</label>
+        <input id="googleScriptUrl" placeholder="https://script.google.com/macros/s/.../exec">
+      </div>
+
+      <div>
+        <label>구글시트 백업 사용</label>
+        <select id="googleSyncUse">
+          <option value="N">미사용</option>
+          <option value="Y">사용</option>
+        </select>
+      </div>
+
+      <div>
+        <label>저장 방식</label>
+        <select id="googleSyncMode">
+          <option value="manual">수동 백업</option>
+          <option value="auto">자동 백업</option>
+        </select>
+      </div>
+
+      <div style="grid-column:1/-1">
+        <div class="button-row">
+          <button class="light" onclick="saveGoogleSettings()">연동 설정 저장</button>
+          <button class="gray" onclick="testGoogleConnection()">연결 테스트</button>
+          <button class="green" onclick="backupToGoogleSheet()">현재 데이터 구글시트 저장</button>
+        </div>
+        <p class="small" id="googleSyncStatus" style="margin-top:10px">
+          구글시트 연동은 현재 브라우저 데이터 전체를 백업 저장하는 방식입니다.
+        </p>
       </div>
     </div>
 
@@ -1039,6 +1091,9 @@ function getData(){
 
 function setData(data){
   localStorage.setItem('welmoaLogV4', JSON.stringify(data));
+  if(typeof scheduleGoogleAutoSync === 'function'){
+    scheduleGoogleAutoSync();
+  }
 }
 
 function currentDate(){
@@ -1450,6 +1505,7 @@ document.getElementById('approvalUse').value = feature.approvalUse || 'Y';
 document.getElementById('approvalCount').value = feature.approvalCount || '3';
 renderApprovalNameInputs();
 toggleApprovalSettingFields();
+loadGoogleSettings();
 applyFeatureVisibility();
 renderStaffSelects();
   renderStaffList();
@@ -2756,6 +2812,151 @@ function approvalTableHtml(){
       </tbody>
     </table>
   `;
+}
+
+
+let googleSyncTimer = null;
+
+function googleSettings(){
+  const data = getData();
+  const defaults = {
+    use: 'N',
+    mode: 'manual',
+    url: ''
+  };
+
+  return {
+    ...defaults,
+    ...(data.googleSettings || {})
+  };
+}
+
+function loadGoogleSettings(){
+  const settings = googleSettings();
+
+  const url = document.getElementById('googleScriptUrl');
+  const use = document.getElementById('googleSyncUse');
+  const mode = document.getElementById('googleSyncMode');
+
+  if(url) url.value = settings.url || '';
+  if(use) use.value = settings.use || 'N';
+  if(mode) mode.value = settings.mode || 'manual';
+}
+
+function saveGoogleSettings(){
+  const data = getData();
+
+  data.googleSettings = {
+    url: document.getElementById('googleScriptUrl').value.trim(),
+    use: document.getElementById('googleSyncUse').value,
+    mode: document.getElementById('googleSyncMode').value
+  };
+
+  localStorage.setItem('welmoaLogV4', JSON.stringify(data));
+  setGoogleStatus('Google Sheet 연동 설정이 저장되었습니다.', 'ok');
+}
+
+function setGoogleStatus(message, type = 'ok'){
+  const el = document.getElementById('googleSyncStatus');
+  if(!el) return;
+
+  el.innerText = message;
+  el.classList.remove('google-sync-ok', 'google-sync-warn', 'google-sync-error');
+
+  if(type === 'ok') el.classList.add('google-sync-ok');
+  if(type === 'warn') el.classList.add('google-sync-warn');
+  if(type === 'error') el.classList.add('google-sync-error');
+}
+
+function googlePayload(type = 'snapshot'){
+  const data = getData();
+
+  return {
+    type,
+    date: currentDate(),
+    payload: {
+      version: 'v29',
+      savedFrom: location.href,
+      savedAt: new Date().toISOString(),
+      data
+    }
+  };
+}
+
+async function sendToGoogleSheet(type = 'snapshot'){
+  const settings = googleSettings();
+
+  if(settings.use !== 'Y'){
+    setGoogleStatus('구글시트 백업 사용이 미사용 상태입니다.', 'warn');
+    return false;
+  }
+
+  if(!settings.url){
+    setGoogleStatus('Apps Script 웹앱 URL을 입력해 주세요.', 'error');
+    return false;
+  }
+
+  try{
+    await fetch(settings.url, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8'
+      },
+      body: JSON.stringify(googlePayload(type))
+    });
+
+    setGoogleStatus('구글시트 저장 요청을 보냈습니다. 시트의 logs 탭을 확인해 주세요.', 'ok');
+    return true;
+  }catch(error){
+    console.error(error);
+    setGoogleStatus('구글시트 저장 요청 중 오류가 발생했습니다.', 'error');
+    return false;
+  }
+}
+
+function backupToGoogleSheet(){
+  saveGoogleSettings();
+  sendToGoogleSheet('manual-backup');
+}
+
+async function testGoogleConnection(){
+  saveGoogleSettings();
+
+  const settings = googleSettings();
+
+  if(!settings.url){
+    setGoogleStatus('Apps Script 웹앱 URL을 입력해 주세요.', 'error');
+    return;
+  }
+
+  try{
+    await fetch(settings.url, {
+      method: 'GET',
+      mode: 'no-cors'
+    });
+
+    setGoogleStatus('연결 테스트 요청을 보냈습니다. 새 탭에서 URL을 열어 ok:true가 보이면 정상입니다.', 'ok');
+
+    if(confirm('웹앱 URL을 새 탭에서 열어 확인할까요?')){
+      window.open(settings.url, '_blank');
+    }
+  }catch(error){
+    console.error(error);
+    setGoogleStatus('연결 테스트 중 오류가 발생했습니다.', 'error');
+  }
+}
+
+function scheduleGoogleAutoSync(){
+  const settings = googleSettings();
+
+  if(settings.use !== 'Y' || settings.mode !== 'auto' || !settings.url) return;
+
+  clearTimeout(googleSyncTimer);
+
+  googleSyncTimer = setTimeout(() => {
+    sendToGoogleSheet('auto-backup');
+  }, 1200);
 }
 
 function renderAll(){
