@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<title>총괄운영일지 업데이트 내역 - Welmoa</title>
+<meta name="description" content="Welmoa 총괄운영일지 업데이트 내역입니다.">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  body{background:#f6f9fd;color:#0f172a;}
+  .op-wrap{max-width:1120px;margin:0 auto;padding:42px 20px 80px;}
+  .op-hero{
+    display:grid;
+    grid-template-columns:1.2fr .8fr;
+    gap:28px;
+    align-items:center;
+    background:linear-gradient(135deg,#eff6ff,#ffffff);
+    border:1px solid #dbeafe;
+    border-radius:30px;
+    padding:42px;
+    box-shadow:0 20px 50px rgba(15,23,42,.06);
+  }
+  .op-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:7px 12px;
+    border-radius:999px;
+    background:#dbeafe;
+    color:#1d4ed8;
+    font-size:13px;
+    font-weight:900;
+    margin-bottom:18px;
+  }
+  .op-hero h1{
+    margin:0 0 16px;
+    font-size:42px;
+    line-height:1.18;
+    letter-spacing:-.055em;
+  }
+  .op-hero p{
+    margin:0;
+    color:#475569;
+    line-height:1.8;
+    font-size:17px;
+  }
+  .op-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px;}
+  .op-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:14px;
+    padding:13px 18px;
+    text-decoration:none;
+    font-weight:900;
+    border:1px solid #bfdbfe;
+    background:#fff;
+    color:#2563eb;
+  }
+  .op-btn.primary{
+    background:#2563eb;
+    color:#fff;
+    box-shadow:0 12px 22px rgba(37,99,235,.22);
+  }
+  .op-visual{
+    min-height:260px;
+    border-radius:26px;
+    background:
+      radial-gradient(circle at 72% 20%,rgba(37,99,235,.14),transparent 30%),
+      radial-gradient(circle at 20% 76%,rgba(59,130,246,.10),transparent 28%),
+      #fff;
+    border:1px solid #e2e8f0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:94px;
+  }
+  .op-section{margin-top:28px;background:#fff;border:1px solid #e2e8f0;border-radius:26px;padding:30px;box-shadow:0 10px 28px rgba(15,23,42,.04);}
+  .op-section h2{margin:0 0 18px;font-size:26px;letter-spacing:-.04em;}
+  .op-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;}
+  .op-card{border:1px solid #e2e8f0;border-radius:20px;padding:22px;background:#fff;}
+  .op-card strong{display:block;font-size:18px;margin-bottom:8px;}
+  .op-card p{margin:0;color:#64748b;line-height:1.7;font-size:14px;}
+  .op-note{background:#eff6ff;border:1px solid #bfdbfe;color:#1e3a8a;border-radius:18px;padding:18px;line-height:1.7;}
+  .op-steps{counter-reset:step;display:grid;gap:14px;}
+  .op-step{position:relative;border:1px solid #e2e8f0;border-radius:18px;padding:20px 20px 20px 68px;background:#fff;}
+  .op-step:before{counter-increment:step;content:counter(step);position:absolute;left:20px;top:20px;width:34px;height:34px;border-radius:50%;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;}
+  .op-step h3{margin:0 0 8px;font-size:18px;}
+  .op-step p,.op-step li{color:#475569;line-height:1.7;margin:0;}
+  .op-table{width:100%;border-collapse:collapse;background:#fff;border-radius:18px;overflow:hidden;}
+  .op-table th,.op-table td{border:1px solid #e2e8f0;padding:14px;text-align:left;vertical-align:top;}
+  .op-table th{background:#eff6ff;}
+  code{background:#f1f5f9;border-radius:6px;padding:3px 6px;}
+  @media(max-width:860px){
+    .op-hero{grid-template-columns:1fr;padding:28px;}
+    .op-hero h1{font-size:32px;}
+    .op-grid{grid-template-columns:1fr;}
+    .op-visual{min-height:180px;font-size:72px;}
+  }
+</style>
+
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/">Welmoa</a>
+    <nav>
+      <a href="/">홈</a>
+      <a href="/tools/">도구</a>
+      <a href="https://blog.welmoa.kr/blog/">콘텐츠</a>
+      <a href="/about/">소개</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+    </nav>
+  </div>
+</header>
+
+
+<main class="op-wrap">
+  <section class="op-hero">
+    <div>
+      <span class="op-badge">Changelog</span>
+      <h1>총괄운영일지<br>업데이트 내역</h1>
+      <p>운영일지 기능 개선과 구조 변경 내용을 기록합니다.</p>
+      <div class="op-actions">
+        <a class="op-btn primary" href="/tools/operation-log/app/">운영일지 열기</a>
+        <a class="op-btn" href="/tools/operation-log/guide/">설치 가이드</a>
+      </div>
+    </div>
+    <div class="op-visual">🧾</div>
+  </section>
+
+  <section class="op-section">
+    <h2>주요 업데이트</h2>
+    <table class="op-table">
+      <thead>
+        <tr><th>버전</th><th>내용</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>v37</td><td>소개 랜딩, 실제 앱, 설치 가이드, 업데이트 내역으로 서비스형 구조 분리</td></tr>
+        <tr><td>v36</td><td>Google Sheet 연결 설정 화면을 단계형 UI로 정리</td></tr>
+        <tr><td>v35</td><td>초기설정 안내, 스냅샷 목록 조회 및 복구 기능 추가</td></tr>
+        <tr><td>v34</td><td>Google Sheet 탭별 구조화 저장 기능 추가</td></tr>
+        <tr><td>v31</td><td>자동 동기화 및 최근 동기화 시각 표시</td></tr>
+        <tr><td>v29</td><td>Google Sheet 연동 설정 및 수동 백업 기능 추가</td></tr>
+      </tbody>
+    </table>
+  </section>
+</main>
+
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>© Welmoa. 사회복지 실무자를 위한 도구와 정보 플랫폼</div>
+    <div class="footer-links">
+      <a href="/about/">소개</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+      <a href="https://blog.welmoa.kr/blog/">콘텐츠</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
