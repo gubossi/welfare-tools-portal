@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>총괄운영일지 초기 설정 | Welmoa</title>
+  <meta name="description" content="Welmoa 총괄운영일지 사용을 위한 Google Sheet 템플릿 복사 및 초기 설정 안내입니다." />
+
+  <link rel="stylesheet" href="/assets/css/site.css" />
+
+  <style>
+    .oplog-page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 64px 24px 80px;
+    }
+
+    .oplog-hero {
+      text-align: center;
+      margin-bottom: 48px;
+      background: linear-gradient(135deg, #f8fbff 0%, #eef5ff 100%);
+      border: 1px solid #dbeafe;
+      border-radius: 28px;
+      padding: 52px 28px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.1);
+      color: #2563eb;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    .oplog-hero h1 {
+      font-size: 42px;
+      line-height: 1.25;
+      letter-spacing: -0.04em;
+      margin: 0 0 18px;
+      color: #0f172a;
+    }
+
+    .hero-description {
+      max-width: 720px;
+      margin: 0 auto;
+      color: #475569;
+      line-height: 1.8;
+      font-size: 17px;
+    }
+
+    .setup-steps {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .setup-card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .setup-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 36px rgba(15, 23, 42, 0.08);
+    }
+
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #2563eb;
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 800;
+      margin-bottom: 20px;
+    }
+
+    .setup-card h2 {
+      font-size: 22px;
+      letter-spacing: -0.03em;
+      margin: 0 0 14px;
+      color: #0f172a;
+    }
+
+    .setup-card p {
+      color: #64748b;
+      line-height: 1.75;
+      margin: 0 0 24px;
+      word-break: keep-all;
+    }
+
+    .primary-button,
+    .secondary-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 22px;
+      border-radius: 14px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .primary-button {
+      background: #2563eb;
+      color: #ffffff;
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.22);
+    }
+
+    .secondary-button {
+      background: #ffffff;
+      color: #2563eb;
+      border: 1px solid #bfdbfe;
+    }
+
+    .primary-button:hover,
+    .secondary-button:hover {
+      opacity: 0.92;
+      transform: translateY(-1px);
+    }
+
+    .notice-box {
+      margin-top: 28px;
+      padding: 22px 24px;
+      border-radius: 20px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1e3a8a;
+      line-height: 1.75;
+      word-break: keep-all;
+    }
+
+    .setup-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    @media (max-width: 900px) {
+      .setup-steps {
+        grid-template-columns: 1fr;
+      }
+
+      .oplog-hero h1 {
+        font-size: 34px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .oplog-page {
+        padding: 42px 18px 60px;
+      }
+
+      .oplog-hero {
+        padding: 38px 22px;
+      }
+
+      .oplog-hero h1 {
+        font-size: 30px;
+      }
+
+      .hero-description {
+        font-size: 15px;
+      }
+
+      .primary-button,
+      .secondary-button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <a href="/" class="site-logo">Welmoa</a>
+    <nav class="site-nav" aria-label="주요 메뉴">
+      <a href="/">홈</a>
+      <a href="/tools/">도구</a>
+      <a href="/blog/">콘텐츠</a>
+      <a href="/about/">소개</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+    </nav>
+  </header>
+
+  <main class="oplog-page">
+    <section class="oplog-hero">
+      <p class="eyebrow">총괄운영일지 Beta</p>
+      <h1>총괄운영일지 초기 설정</h1>
+      <p class="hero-description">
+        총괄운영일지는 Google Sheet 템플릿을 기반으로 작동합니다.
+        아래 순서대로 준비하면 운영기록 입력과 출력 기능을 바로 사용할 수 있습니다.
+      </p>
+    </section>
+
+    <section class="setup-steps" aria-label="총괄운영일지 초기 설정 단계">
+      <article class="setup-card">
+        <span class="step-number">01</span>
+        <h2>운영일지 템플릿 복사</h2>
+        <p>
+          기관용 Google Sheet 템플릿을 내 Google Drive로 복사합니다.
+          복사된 파일이 실제 운영일지 데이터 저장 공간이 됩니다.
+        </p>
+        <a
+          href="여기에_템플릿_복사_URL"
+          target="_blank"
+          rel="noopener"
+          class="primary-button"
+        >
+          템플릿 복사하기
+        </a>
+      </article>
+
+      <article class="setup-card">
+        <span class="step-number">02</span>
+        <h2>기본 정보 확인</h2>
+        <p>
+          복사한 템플릿에서 기관명, 사업명, 직원명, 결재라인 등
+          운영에 필요한 기본 정보를 확인합니다.
+        </p>
+        <a href="/tools/operation-log/" class="secondary-button">
+          소개 페이지로 돌아가기
+        </a>
+      </article>
+
+      <article class="setup-card">
+        <span class="step-number">03</span>
+        <h2>운영일지 실행</h2>
+        <p>
+          템플릿 준비가 끝났다면 운영일지 웹앱을 실행합니다.
+          이후 화면 안내에 따라 Google Sheet 연결을 진행합니다.
+        </p>
+        <a
+          href="여기에_Apps_Script_웹앱_URL"
+          target="_blank"
+          rel="noopener"
+          class="primary-button"
+        >
+          운영일지 실행하기
+        </a>
+      </article>
+    </section>
+
+    <div class="notice-box">
+      <strong>안내</strong><br />
+      입력한 운영일지 데이터는 Welmoa 서버에 저장되지 않습니다.
+      사용자가 복사한 Google Sheet 또는 현재 브라우저에 저장되며,
+      Google Sheet 연동 시 다른 PC와 스마트폰에서도 같은 데이터를 사용할 수 있습니다.
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>© Welmoa. 사회복지 실무자를 위한 도구와 정보 플랫폼</p>
+    <nav aria-label="하단 메뉴">
+      <a href="/about/">소개</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+      <a href="/blog/">콘텐츠</a>
+    </nav>
+  </footer>
+</body>
+</html>
