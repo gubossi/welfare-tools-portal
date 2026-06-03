@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Welmoa 운영일지 v31</title>
+<title>Welmoa 운영일지 v32</title>
 <style>
 :root{
   --blue:#2563eb;
@@ -578,12 +578,67 @@ th{background:#eff6ff;text-align:left}
   font-weight:700;
 }
 
+
+.feature-hidden{
+  display:none !important;
+}
+
+@media print{
+  header,
+  .topbar,
+  .datebar,
+  .summary,
+  .no-print,
+  .button-row,
+  #programManageTab,
+  #staffManageTab,
+  #workTab,
+  #operationTab,
+  #performanceTab,
+  #monthlyTab{
+    display:none !important;
+  }
+
+  #reportTab{
+    display:block !important;
+    box-shadow:none !important;
+    border:none !important;
+    padding:0 !important;
+    margin:0 !important;
+  }
+
+  #reportArea{
+    display:block !important;
+  }
+
+  body{
+    background:#fff !important;
+  }
+
+  .container{
+    max-width:100% !important;
+    margin:0 !important;
+    padding:0 !important;
+  }
+
+  .card{
+    box-shadow:none !important;
+    border:none !important;
+  }
+}
+
+@media(max-width:768px){
+  .feature-hidden{
+    display:none !important;
+  }
+}
+
 </style>
 </head>
 <body>
 <header>
-  <h1>Welmoa 운영일지 v31</h1>
-  <p>Google Sheet 자동 저장 안정화 / 최근 동기화 표시</p>
+  <h1>Welmoa 운영일지 v32</h1>
+  <p>모바일 탭 숨김 수정 / PDF 출력 UI 제거</p>
 </header>
 
 <div class="container">
@@ -2749,10 +2804,12 @@ function applyFeatureVisibility(){
 
   if(workTabButton){
     workTabButton.style.display = useWork ? '' : 'none';
+    workTabButton.classList.toggle('feature-hidden', !useWork);
   }
 
   if(workTab){
     workTab.style.display = useWork ? '' : 'none';
+    workTab.classList.toggle('feature-hidden', !useWork);
   }
 
   const currentActive = document.querySelector('.tab.active');
@@ -3078,6 +3135,7 @@ async function initialGoogleSync(){
 }
 
 function renderAll(){
+  if(typeof applyFeatureVisibility === 'function') applyFeatureVisibility();
   renderWorks();
   renderOperations();
   renderPerfInputs();
