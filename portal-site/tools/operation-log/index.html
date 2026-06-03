@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Welmoa 운영일지 v26</title>
+<title>Welmoa 운영일지 v27</title>
 <style>
 :root{
   --blue:#2563eb;
@@ -421,12 +421,81 @@ th{background:#eff6ff;text-align:left}
 
 }
 
+
+@media(max-width:768px){
+
+  .topbar{
+    display:grid !important;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px !important;
+    margin-bottom:14px !important;
+  }
+
+  .tab{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:flex-start !important;
+    padding:9px 10px !important;
+    min-height:40px !important;
+    border-radius:10px !important;
+  }
+
+  .tab-title{
+    font-size:13px !important;
+    line-height:1.2 !important;
+    margin:0 !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+  }
+
+  .tab-desc{
+    display:none !important;
+  }
+
+  .summary{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:8px !important;
+    margin-bottom:14px !important;
+  }
+
+  .summary-box{
+    padding:12px 14px !important;
+    min-height:82px !important;
+    border-radius:12px !important;
+  }
+
+  .summary-title{
+    font-size:13px !important;
+    margin-bottom:8px !important;
+  }
+
+  .summary-value{
+    font-size:24px !important;
+    line-height:1.1 !important;
+  }
+
+  .card{
+    padding:18px !important;
+    border-radius:14px !important;
+  }
+
+  header{
+    padding:18px 20px !important;
+  }
+
+  header h1{
+    font-size:22px !important;
+  }
+
+}
+
 </style>
 </head>
 <body>
 <header>
-  <h1>Welmoa 운영일지 v26</h1>
-  <p>모바일 탭 UI 최적화</p>
+  <h1>Welmoa 운영일지 v27</h1>
+  <p>모바일 탭 compact UI 개선</p>
 </header>
 
 <div class="container">
