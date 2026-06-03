@@ -430,6 +430,90 @@
         padding-right: 10px;
       }
     }
+  
+
+    /* Welmoa unified theme override v1 */
+    :root {
+      --tool-accent: #2563eb;
+      --tool-accent-dark: #1d4ed8;
+      --tool-accent-soft: #dbeafe;
+      --tool-surface: #ffffff;
+      --tool-surface-soft: #f8fafc;
+      --tool-border: #e2e8f0;
+      --tool-text: #0f172a;
+      --tool-muted: #64748b;
+      --tool-shadow-soft: 0 16px 42px rgba(15, 23, 42, 0.07);
+      --tool-radius-xl: 28px;
+      --tool-radius-lg: 22px;
+      --tool-radius-md: 18px;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, 0.10), transparent 32%),
+        linear-gradient(180deg, #f8fafc 0%, #ffffff 42%, #f8fafc 100%);
+      color: var(--tool-text);
+    }
+
+    .site-header {
+      background: rgba(255,255,255,0.94);
+      color: var(--tool-text);
+      border-bottom: 1px solid var(--tool-border);
+      box-shadow: none;
+      backdrop-filter: blur(14px);
+    }
+
+    .brand { color: var(--tool-accent); }
+    .site-header nav a { color: #334155; }
+    .site-header nav a:hover { background: #eff6ff; color: var(--tool-accent); }
+
+    .hero-card {
+      background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, 0.12), transparent 34%),
+        linear-gradient(135deg, #eff6ff 0%, #ffffff 58%, #f8fafc 100%);
+      color: var(--tool-text);
+      border: 1px solid var(--tool-border);
+      box-shadow: var(--tool-shadow-soft);
+    }
+
+    .hero-card::after { display: none; }
+    .hero-card h1 { color: var(--tool-text); }
+    .hero-card .lead { color: var(--tool-muted); line-height: 1.85; }
+    .hero-card .badge { background: #dbeafe; color: #1d4ed8; border: 1px solid #bfdbfe; }
+
+    .card,
+    .notice,
+    .content-box {
+      border: 1px solid var(--tool-border);
+      border-radius: var(--tool-radius-xl);
+      background: #ffffff;
+      box-shadow: var(--tool-shadow-soft);
+    }
+
+    .card__title,
+    .content-box h2,
+    .section-title { color: #172554; }
+    .card__text,
+    .content-box p,
+    .notice { color: var(--tool-muted); }
+
+    .btn--primary {
+      background: var(--tool-accent);
+      border: 1px solid var(--tool-accent);
+      color: #fff;
+      box-shadow: 0 12px 26px rgba(37, 99, 235, 0.22);
+    }
+
+    .btn--primary:hover { background: var(--tool-accent-dark); color: #fff; }
+
+    .btn--ghost {
+      background: #fff;
+      color: var(--tool-accent);
+      border: 1px solid #bfdbfe;
+    }
+
+    .btn--ghost:hover { background: #eff6ff; color: var(--tool-accent); }
+
   </style>
 </head>
 <body>
@@ -447,22 +531,28 @@
     </div>
   </header>
 
-  <main class="container tools-page">
-    <section class="hero">
-      <div class="hero-card">
-        <div class="badge">업무도구 모음</div>
-        <h1>업무도구 목록</h1>
-        <p class="lead">
-          Welmoa에서 현재 제공 중인 주요 기능입니다.
-          실제 업무에 바로 활용할 수 있는 도구를 한 곳에서 이용할 수 있습니다.
-        </p>
-        <div class="hero-actions">
-          <a class="btn btn--primary" href="#tool-list">도구 둘러보기</a>
-          <a class="btn btn--ghost" href="/guide">이용가이드 보기</a>
-        </div>
-      </div>
-    </section>
+<section class="platform-hero">
+  <div class="container">
+    <span class="badge">Welmoa Tools</span>
 
+    <h1>
+      실무에 바로 쓰는<br>
+      사회복지 업무 도구
+    </h1>
+
+    <p>
+      급여 계산, 신청자 추첨, URL 단축, 명단 정리 등 사회복지 현장에서 반복되는
+      행정 업무를 더 빠르고 정확하게 처리할 수 있도록 돕습니다.
+    </p>
+
+    <div class="hero-actions">
+      <a class="btn primary" href="#tool-list">도구 둘러보기</a>
+      <a class="btn secondary" href="/guide">이용가이드 보기</a>
+    </div>
+  </div>
+</section>
+  
+  <main class="container tools-page">
     <section class="section" id="tool-list">
       <h2 class="section-title">제공 중인 도구</h2>
 
@@ -522,6 +612,21 @@
             <a class="btn btn--ghost" href="/formatter">명단정리 바로가기</a>
           </div>
         </article>
+
+<article class="card card--tool">
+  <h2 class="card__title">총괄운영일지 🗂️</h2>
+  <p class="card__text">
+    개인업무, 프로그램 운영, 실적 집계, 운영일지 출력까지 한 번에 관리할 수 있는 온라인 운영일지 도구입니다.
+  </p>
+  <div class="card__meta">
+    <span class="badge badge--blue">운영일지</span>
+    <span class="badge">실적관리</span>
+  </div>
+  <div>
+    <a class="btn btn--ghost" href="/tools/operation-log/">총괄운영일지 바로가기</a>
+  </div>
+</article>
+        
       </div>
 
       <div class="notice">
