@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Welmoa 운영일지 v29</title>
+<title>Welmoa 운영일지 v30</title>
 <style>
 :root{
   --blue:#2563eb;
@@ -582,8 +582,8 @@ th{background:#eff6ff;text-align:left}
 </head>
 <body>
 <header>
-  <h1>Welmoa 운영일지 v29</h1>
-  <p>Google Sheet 연동 설정 / 구글시트 백업 저장</p>
+  <h1>Welmoa 운영일지 v30</h1>
+  <p>Google Sheet 자동 불러오기 / 자동 동기화 기반</p>
 </header>
 
 <div class="container">
@@ -742,9 +742,10 @@ th{background:#eff6ff;text-align:left}
           <button class="light" onclick="saveGoogleSettings()">연동 설정 저장</button>
           <button class="gray" onclick="testGoogleConnection()">연결 테스트</button>
           <button class="green" onclick="backupToGoogleSheet()">현재 데이터 구글시트 저장</button>
+          <button class="light" onclick="loadFromGoogleSheet()">구글시트 데이터 불러오기</button>
         </div>
         <p class="small" id="googleSyncStatus" style="margin-top:10px">
-          구글시트 연동은 현재 브라우저 데이터 전체를 백업 저장하는 방식입니다.
+          구글시트 연동은 현재 브라우저 데이터 전체를 저장/불러오기 하는 방식입니다.
         </p>
       </div>
     </div>
@@ -1508,6 +1509,7 @@ toggleApprovalSettingFields();
 loadGoogleSettings();
 applyFeatureVisibility();
 renderStaffSelects();
+initialGoogleSync();
   renderStaffList();
   renderAll();
 }
@@ -2957,6 +2959,75 @@ function scheduleGoogleAutoSync(){
   googleSyncTimer = setTimeout(() => {
     sendToGoogleSheet('auto-backup');
   }, 1200);
+}
+
+
+
+async function loadFromGoogleSheet(){
+  const settings = googleSettings();
+
+  if(!settings.url){
+    setGoogleStatus('Apps Script 웹앱 URL을 입력해 주세요.', 'error');
+    return;
+  }
+
+  try{
+    const url = settings.url + '?action=load';
+
+    const response = await fetch(url);
+    const json = await response.json();
+
+    if(!json || !json.ok){
+      setGoogleStatus('구글시트 데이터를 불러오지 못했습니다.', 'error');
+      return;
+    }
+
+    if(!json.payload){
+      setGoogleStatus('구글시트에 저장된 데이터가 없습니다.', 'warn');
+      return;
+    }
+
+    localStorage.setItem('welmoaLogV4', JSON.stringify(json.payload));
+
+    setGoogleStatus('구글시트 데이터를 불러왔습니다. 화면을 다시 렌더링합니다.', 'ok');
+
+    setTimeout(() => {
+      location.reload();
+    }, 600);
+
+  }catch(error){
+    console.error(error);
+    setGoogleStatus('구글시트 데이터 불러오기 중 오류가 발생했습니다.', 'error');
+  }
+}
+
+async function initialGoogleSync(){
+  const settings = googleSettings();
+
+  if(settings.use !== 'Y') return;
+  if(!settings.url) return;
+
+  const initialized = localStorage.getItem('welmoaGoogleInitialized');
+
+  if(initialized === 'Y') return;
+
+  try{
+    const response = await fetch(settings.url + '?action=load');
+    const json = await response.json();
+
+    if(json && json.ok && json.payload){
+      localStorage.setItem('welmoaLogV4', JSON.stringify(json.payload));
+      localStorage.setItem('welmoaGoogleInitialized', 'Y');
+
+      setGoogleStatus('구글시트 데이터를 자동 불러왔습니다.', 'ok');
+
+      setTimeout(() => {
+        location.reload();
+      }, 500);
+    }
+  }catch(error){
+    console.error(error);
+  }
 }
 
 function renderAll(){
