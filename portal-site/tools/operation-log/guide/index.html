@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<title>총괄운영일지 설치 가이드 - Welmoa</title>
-<meta name="description" content="Welmoa 총괄운영일지를 Google Sheet와 연결하는 설치 가이드입니다.">
+<title>총괄운영일지 초기 설정 가이드 - Welmoa</title>
+<meta name="description" content="Welmoa 총괄운영일지 사용을 위한 Google Sheet 템플릿 복사, Apps Script 웹앱 배포, 운영일지 연결 방법을 안내합니다.">
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -78,24 +78,18 @@
   }
   .op-section{margin-top:28px;background:#fff;border:1px solid #e2e8f0;border-radius:26px;padding:30px;box-shadow:0 10px 28px rgba(15,23,42,.04);}
   .op-section h2{margin:0 0 18px;font-size:26px;letter-spacing:-.04em;}
-  .op-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;}
-  .op-card{border:1px solid #e2e8f0;border-radius:20px;padding:22px;background:#fff;}
-  .op-card strong{display:block;font-size:18px;margin-bottom:8px;}
-  .op-card p{margin:0;color:#64748b;line-height:1.7;font-size:14px;}
   .op-note{background:#eff6ff;border:1px solid #bfdbfe;color:#1e3a8a;border-radius:18px;padding:18px;line-height:1.7;}
+  .op-note strong{display:block;margin-bottom:6px;}
   .op-steps{counter-reset:step;display:grid;gap:14px;}
   .op-step{position:relative;border:1px solid #e2e8f0;border-radius:18px;padding:20px 20px 20px 68px;background:#fff;}
   .op-step:before{counter-increment:step;content:counter(step);position:absolute;left:20px;top:20px;width:34px;height:34px;border-radius:50%;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;}
   .op-step h3{margin:0 0 8px;font-size:18px;}
   .op-step p,.op-step li{color:#475569;line-height:1.7;margin:0;}
-  .op-table{width:100%;border-collapse:collapse;background:#fff;border-radius:18px;overflow:hidden;}
-  .op-table th,.op-table td{border:1px solid #e2e8f0;padding:14px;text-align:left;vertical-align:top;}
-  .op-table th{background:#eff6ff;}
+  .op-step ul{margin:8px 0 0;padding-left:18px;}
   code{background:#f1f5f9;border-radius:6px;padding:3px 6px;}
   @media(max-width:860px){
     .op-hero{grid-template-columns:1fr;padding:28px;}
     .op-hero h1{font-size:32px;}
-    .op-grid{grid-template-columns:1fr;}
     .op-visual{min-height:180px;font-size:72px;}
   }
 </style>
@@ -121,37 +115,67 @@
 <main class="op-wrap">
   <section class="op-hero">
     <div>
-      <span class="op-badge">설치 가이드</span>
-      <h1>Google Sheet 연동을<br>설정하는 방법</h1>
+      <span class="op-badge">초기 설정 가이드</span>
+      <h1>총괄운영일지<br>시작하기</h1>
       <p>
-        기관별 Google Sheet를 저장소로 사용하기 위한 설정 절차입니다.
-        설정 후에는 다른 기기에서도 같은 운영일지를 사용할 수 있습니다.
+        총괄운영일지는 사용자가 복사한 Google Sheet를 저장소로 사용합니다.
+        아래 순서대로 템플릿을 복사하고 웹앱 URL을 연결하면 운영일지를 사용할 수 있습니다.
       </p>
       <div class="op-actions">
         <a class="op-btn primary" href="https://docs.google.com/spreadsheets/d/1PNnGCWKzMFzcRUW1Ewi46_E5IuQZvgtezx6zhoYcSF0/copy" target="_blank" rel="noopener">템플릿 사본 만들기</a>
         <a class="op-btn" href="/tools/operation-log/app/" target="_blank">운영일지 열기</a>
       </div>
     </div>
-    <div class="op-visual">🔗</div>
+    <div class="op-visual">📋</div>
   </section>
 
   <section class="op-section">
-    <h2>설치 순서</h2>
+    <h2>설정 순서</h2>
     <div class="op-steps">
-      <div class="op-step"><h3>Google Sheet 템플릿 사본 만들기</h3><p>템플릿 사본을 만든 뒤 기관명에 맞게 파일명을 변경합니다.</p></div>
-      <div class="op-step"><h3>Apps Script 열기</h3><p>상단 메뉴에서 <code>확장 프로그램 → Apps Script</code>를 클릭합니다.</p></div>
-      <div class="op-step"><h3>Code.gs 교체</h3><p>웰모아에서 제공하는 Apps Script 코드를 <code>Code.gs</code>에 전체 붙여넣고 저장합니다.</p></div>
-      <div class="op-step"><h3>웹앱 배포</h3><p><code>배포 → 새 배포 → 웹 앱</code>을 선택하고, 실행 사용자: 나, 액세스 권한: 모든 사용자로 배포합니다.</p></div>
-      <div class="op-step"><h3>웹앱 URL 연결</h3><p>발급된 웹앱 URL을 운영일지의 Google Sheet 연동 화면에 입력합니다.</p></div>
-      <div class="op-step"><h3>시트 구조 초기화</h3><p>운영일지에서 시트 구조 초기화 버튼을 눌러 필요한 탭을 생성합니다.</p></div>
+      <div class="op-step">
+        <h3>Google Sheet 템플릿 사본 만들기</h3>
+        <p>
+          템플릿 사본을 만든 뒤, 기관이나 담당자가 알아보기 쉬운 이름으로 파일명을 변경합니다.
+          사본으로 만든 Google Sheet가 운영일지 데이터 저장 공간이 됩니다.
+        </p>
+      </div>
+
+      <div class="op-step">
+        <h3>Apps Script 웹앱 배포하기</h3>
+        <p>
+          복사한 Google Sheet에서 <code>확장 프로그램 → Apps Script</code>를 열고
+          <code>배포 → 새 배포 → 웹 앱</code>을 선택합니다.
+        </p>
+        <ul>
+          <li>실행 사용자: <code>나</code></li>
+          <li>액세스 권한: <code>모든 사용자</code> 또는 <code>링크가 있는 모든 사용자</code></li>
+        </ul>
+      </div>
+
+      <div class="op-step">
+        <h3>웹앱 URL 복사하기</h3>
+        <p>
+          배포가 완료되면 발급되는 웹앱 URL을 복사합니다.
+          이 URL은 운영일지와 Google Sheet를 연결하는 주소입니다.
+        </p>
+      </div>
+
+      <div class="op-step">
+        <h3>운영일지에서 URL 연결하기</h3>
+        <p>
+          운영일지를 열고 Google Sheet 연동 화면에 복사한 웹앱 URL을 입력합니다.
+          연결 후 테스트 기록을 입력해 사본 Google Sheet에 저장되는지 확인합니다.
+        </p>
+      </div>
     </div>
   </section>
 
   <section class="op-section">
     <h2>안내사항</h2>
     <div class="op-note">
-      Apps Script 권한 승인 과정에서 보안 경고가 표시될 수 있습니다.
-      기관별로 직접 사본을 만들고 직접 배포하는 방식이므로, 해당 Google 계정의 소유자가 직접 승인해야 합니다.
+      <strong>운영일지 데이터는 Welmoa 서버에 저장되지 않습니다.</strong>
+      입력한 데이터는 사용자가 복사한 Google Sheet 또는 현재 브라우저에 저장됩니다.
+      Google Sheet를 삭제하면 운영기록과 설정 데이터도 함께 삭제될 수 있으니 주의해 주세요.
     </div>
   </section>
 </main>
