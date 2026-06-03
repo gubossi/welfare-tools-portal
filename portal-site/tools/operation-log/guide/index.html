@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>총괄운영일지 설치 가이드 - Welmoa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/assets/site.css">
+  <style>
+    .guide-wrap{max-width:920px;margin:0 auto;padding:48px 20px 80px}
+    .guide-hero{background:#f8fbff;border:1px solid #dbeafe;border-radius:24px;padding:34px;margin-bottom:26px}
+    .guide-hero h1{margin:0 0 10px;font-size:2rem;letter-spacing:-.04em}
+    .guide-hero p{margin:0;color:#64748b;line-height:1.8}
+    .step-card{background:white;border:1px solid #e2e8f0;border-radius:20px;padding:24px;margin-top:16px}
+    .step-card h2{margin:0 0 10px;font-size:1.25rem}
+    .step-card p,.step-card li{color:#475569;line-height:1.75}
+    code{background:#f1f5f9;padding:3px 6px;border-radius:6px}
+    .notice{background:#fff7ed;border:1px solid #fed7aa;border-radius:16px;padding:16px;color:#9a3412}
+  </style>
+</head>
+<body>
+  <main class="guide-wrap">
+    <section class="guide-hero">
+      <h1>총괄운영일지 설치 가이드</h1>
+      <p>
+        총괄운영일지는 웰모아 서버에 데이터를 저장하지 않고, 사용자가 연결한 Google Sheet에 운영일지 데이터를 저장합니다.
+      </p>
+    </section>
+
+    <div class="notice">
+      기관 운영 데이터와 개인정보가 포함될 수 있으므로, 기관 공식 Google 계정 또는 담당자 계정으로 설정하는 것을 권장합니다.
+    </div>
+
+    <section class="step-card">
+      <h2>1단계. Google Sheet 템플릿 사본 만들기</h2>
+      <p>운영일지용 Google Sheet 템플릿을 사본으로 만든 뒤 기관명에 맞게 파일명을 변경합니다.</p>
+      <p><a class="btn primary" href="https://docs.google.com/spreadsheets/d/템플릿ID/copy" target="_blank" rel="noopener">Google Sheet 템플릿 사본 만들기</a></p>
+    </section>
+
+    <section class="step-card">
+      <h2>2단계. Apps Script 열기</h2>
+      <p>Google Sheet 상단 메뉴에서 <code>확장 프로그램 → Apps Script</code>를 클릭합니다.</p>
+    </section>
+
+    <section class="step-card">
+      <h2>3단계. Code.gs 붙여넣기</h2>
+      <p>웰모아에서 제공하는 Apps Script 코드를 <code>Code.gs</code>에 전체 붙여넣고 저장합니다.</p>
+    </section>
+
+    <section class="step-card">
+      <h2>4단계. 웹앱 배포</h2>
+      <ol>
+        <li><code>배포 → 새 배포</code> 클릭</li>
+        <li>유형 선택: <code>웹 앱</code></li>
+        <li>실행 사용자: <code>나</code></li>
+        <li>액세스 권한: <code>모든 사용자</code></li>
+        <li>배포 후 웹앱 URL 복사</li>
+      </ol>
+    </section>
+
+    <section class="step-card">
+      <h2>5단계. 운영일지에 웹앱 URL 입력</h2>
+      <p>총괄운영일지의 <code>사업관리 → Google Sheet 연동</code> 영역에 웹앱 URL을 붙여넣고 저장합니다.</p>
+    </section>
+
+    <section class="step-card">
+      <h2>6단계. 시트 구조 초기화 및 테스트</h2>
+      <p><code>시트 구조 초기화</code> 버튼을 누른 뒤, 저장 테스트를 진행합니다.</p>
+    </section>
+  </main>
+</body>
+</html>
