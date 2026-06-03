@@ -872,20 +872,29 @@ th{background:#eff6ff;text-align:left}
 }
 
 .app-top-links{
-  margin-top:12px;
+  margin-top:18px;
 }
 
 .app-top-links a{
-  color:#dbeafe;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 16px;
+  border-radius:12px;
+  background:rgba(255,255,255,.14);
+  border:1px solid rgba(255,255,255,.22);
+  color:#ffffff;
   text-decoration:none;
-  font-size:14px;
-  opacity:.92;
+  font-size:15px;
+  font-weight:700;
+  transition:.2s ease;
+  backdrop-filter:blur(4px);
 }
 
 .app-top-links a:hover{
-  opacity:1;
-  text-decoration:underline;
-} 
+  background:rgba(255,255,255,.22);
+  transform:translateY(-1px);
+}
   
 </style>
 </head>
