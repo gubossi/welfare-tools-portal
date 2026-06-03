@@ -1,71 +1,173 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>총괄운영일지 설치 가이드 - Welmoa</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="/assets/site.css">
-  <style>
-    .guide-wrap{max-width:920px;margin:0 auto;padding:48px 20px 80px}
-    .guide-hero{background:#f8fbff;border:1px solid #dbeafe;border-radius:24px;padding:34px;margin-bottom:26px}
-    .guide-hero h1{margin:0 0 10px;font-size:2rem;letter-spacing:-.04em}
-    .guide-hero p{margin:0;color:#64748b;line-height:1.8}
-    .step-card{background:white;border:1px solid #e2e8f0;border-radius:20px;padding:24px;margin-top:16px}
-    .step-card h2{margin:0 0 10px;font-size:1.25rem}
-    .step-card p,.step-card li{color:#475569;line-height:1.75}
-    code{background:#f1f5f9;padding:3px 6px;border-radius:6px}
-    .notice{background:#fff7ed;border:1px solid #fed7aa;border-radius:16px;padding:16px;color:#9a3412}
-  </style>
+<title>총괄운영일지 설치 가이드 - Welmoa</title>
+<meta name="description" content="Welmoa 총괄운영일지를 Google Sheet와 연결하는 설치 가이드입니다.">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  body{background:#f6f9fd;color:#0f172a;}
+  .op-wrap{max-width:1120px;margin:0 auto;padding:42px 20px 80px;}
+  .op-hero{
+    display:grid;
+    grid-template-columns:1.2fr .8fr;
+    gap:28px;
+    align-items:center;
+    background:linear-gradient(135deg,#eff6ff,#ffffff);
+    border:1px solid #dbeafe;
+    border-radius:30px;
+    padding:42px;
+    box-shadow:0 20px 50px rgba(15,23,42,.06);
+  }
+  .op-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:7px 12px;
+    border-radius:999px;
+    background:#dbeafe;
+    color:#1d4ed8;
+    font-size:13px;
+    font-weight:900;
+    margin-bottom:18px;
+  }
+  .op-hero h1{
+    margin:0 0 16px;
+    font-size:42px;
+    line-height:1.18;
+    letter-spacing:-.055em;
+  }
+  .op-hero p{
+    margin:0;
+    color:#475569;
+    line-height:1.8;
+    font-size:17px;
+  }
+  .op-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px;}
+  .op-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:14px;
+    padding:13px 18px;
+    text-decoration:none;
+    font-weight:900;
+    border:1px solid #bfdbfe;
+    background:#fff;
+    color:#2563eb;
+  }
+  .op-btn.primary{
+    background:#2563eb;
+    color:#fff;
+    box-shadow:0 12px 22px rgba(37,99,235,.22);
+  }
+  .op-visual{
+    min-height:260px;
+    border-radius:26px;
+    background:
+      radial-gradient(circle at 72% 20%,rgba(37,99,235,.14),transparent 30%),
+      radial-gradient(circle at 20% 76%,rgba(59,130,246,.10),transparent 28%),
+      #fff;
+    border:1px solid #e2e8f0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:94px;
+  }
+  .op-section{margin-top:28px;background:#fff;border:1px solid #e2e8f0;border-radius:26px;padding:30px;box-shadow:0 10px 28px rgba(15,23,42,.04);}
+  .op-section h2{margin:0 0 18px;font-size:26px;letter-spacing:-.04em;}
+  .op-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;}
+  .op-card{border:1px solid #e2e8f0;border-radius:20px;padding:22px;background:#fff;}
+  .op-card strong{display:block;font-size:18px;margin-bottom:8px;}
+  .op-card p{margin:0;color:#64748b;line-height:1.7;font-size:14px;}
+  .op-note{background:#eff6ff;border:1px solid #bfdbfe;color:#1e3a8a;border-radius:18px;padding:18px;line-height:1.7;}
+  .op-steps{counter-reset:step;display:grid;gap:14px;}
+  .op-step{position:relative;border:1px solid #e2e8f0;border-radius:18px;padding:20px 20px 20px 68px;background:#fff;}
+  .op-step:before{counter-increment:step;content:counter(step);position:absolute;left:20px;top:20px;width:34px;height:34px;border-radius:50%;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;}
+  .op-step h3{margin:0 0 8px;font-size:18px;}
+  .op-step p,.op-step li{color:#475569;line-height:1.7;margin:0;}
+  .op-table{width:100%;border-collapse:collapse;background:#fff;border-radius:18px;overflow:hidden;}
+  .op-table th,.op-table td{border:1px solid #e2e8f0;padding:14px;text-align:left;vertical-align:top;}
+  .op-table th{background:#eff6ff;}
+  code{background:#f1f5f9;border-radius:6px;padding:3px 6px;}
+  @media(max-width:860px){
+    .op-hero{grid-template-columns:1fr;padding:28px;}
+    .op-hero h1{font-size:32px;}
+    .op-grid{grid-template-columns:1fr;}
+    .op-visual{min-height:180px;font-size:72px;}
+  }
+</style>
+
 </head>
 <body>
-  <main class="guide-wrap">
-    <section class="guide-hero">
-      <h1>총괄운영일지 설치 가이드</h1>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/">Welmoa</a>
+    <nav>
+      <a href="/">홈</a>
+      <a href="/tools/">도구</a>
+      <a href="https://blog.welmoa.kr/blog/">콘텐츠</a>
+      <a href="/about/">소개</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+    </nav>
+  </div>
+</header>
+
+
+<main class="op-wrap">
+  <section class="op-hero">
+    <div>
+      <span class="op-badge">설치 가이드</span>
+      <h1>Google Sheet 연동을<br>설정하는 방법</h1>
       <p>
-        총괄운영일지는 웰모아 서버에 데이터를 저장하지 않고, 사용자가 연결한 Google Sheet에 운영일지 데이터를 저장합니다.
+        기관별 Google Sheet를 저장소로 사용하기 위한 설정 절차입니다.
+        설정 후에는 다른 기기에서도 같은 운영일지를 사용할 수 있습니다.
       </p>
-    </section>
-
-    <div class="notice">
-      기관 운영 데이터와 개인정보가 포함될 수 있으므로, 기관 공식 Google 계정 또는 담당자 계정으로 설정하는 것을 권장합니다.
+      <div class="op-actions">
+        <a class="op-btn primary" href="https://docs.google.com/spreadsheets/d/템플릿ID/copy" target="_blank" rel="noopener">템플릿 사본 만들기</a>
+        <a class="op-btn" href="/tools/operation-log/app/">운영일지 열기</a>
+      </div>
     </div>
+    <div class="op-visual">🔗</div>
+  </section>
 
-    <section class="step-card">
-      <h2>1단계. Google Sheet 템플릿 사본 만들기</h2>
-      <p>운영일지용 Google Sheet 템플릿을 사본으로 만든 뒤 기관명에 맞게 파일명을 변경합니다.</p>
-      <p><a class="btn primary" href="https://docs.google.com/spreadsheets/d/템플릿ID/copy" target="_blank" rel="noopener">Google Sheet 템플릿 사본 만들기</a></p>
-    </section>
+  <section class="op-section">
+    <h2>설치 순서</h2>
+    <div class="op-steps">
+      <div class="op-step"><h3>Google Sheet 템플릿 사본 만들기</h3><p>템플릿 사본을 만든 뒤 기관명에 맞게 파일명을 변경합니다.</p></div>
+      <div class="op-step"><h3>Apps Script 열기</h3><p>상단 메뉴에서 <code>확장 프로그램 → Apps Script</code>를 클릭합니다.</p></div>
+      <div class="op-step"><h3>Code.gs 교체</h3><p>웰모아에서 제공하는 Apps Script 코드를 <code>Code.gs</code>에 전체 붙여넣고 저장합니다.</p></div>
+      <div class="op-step"><h3>웹앱 배포</h3><p><code>배포 → 새 배포 → 웹 앱</code>을 선택하고, 실행 사용자: 나, 액세스 권한: 모든 사용자로 배포합니다.</p></div>
+      <div class="op-step"><h3>웹앱 URL 연결</h3><p>발급된 웹앱 URL을 운영일지의 Google Sheet 연동 화면에 입력합니다.</p></div>
+      <div class="op-step"><h3>시트 구조 초기화</h3><p>운영일지에서 시트 구조 초기화 버튼을 눌러 필요한 탭을 생성합니다.</p></div>
+    </div>
+  </section>
 
-    <section class="step-card">
-      <h2>2단계. Apps Script 열기</h2>
-      <p>Google Sheet 상단 메뉴에서 <code>확장 프로그램 → Apps Script</code>를 클릭합니다.</p>
-    </section>
+  <section class="op-section">
+    <h2>안내사항</h2>
+    <div class="op-note">
+      Apps Script 권한 승인 과정에서 보안 경고가 표시될 수 있습니다.
+      기관별로 직접 사본을 만들고 직접 배포하는 방식이므로, 해당 Google 계정의 소유자가 직접 승인해야 합니다.
+    </div>
+  </section>
+</main>
 
-    <section class="step-card">
-      <h2>3단계. Code.gs 붙여넣기</h2>
-      <p>웰모아에서 제공하는 Apps Script 코드를 <code>Code.gs</code>에 전체 붙여넣고 저장합니다.</p>
-    </section>
 
-    <section class="step-card">
-      <h2>4단계. 웹앱 배포</h2>
-      <ol>
-        <li><code>배포 → 새 배포</code> 클릭</li>
-        <li>유형 선택: <code>웹 앱</code></li>
-        <li>실행 사용자: <code>나</code></li>
-        <li>액세스 권한: <code>모든 사용자</code></li>
-        <li>배포 후 웹앱 URL 복사</li>
-      </ol>
-    </section>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>© Welmoa. 사회복지 실무자를 위한 도구와 정보 플랫폼</div>
+    <div class="footer-links">
+      <a href="/about/">소개</a>
+      <a href="/privacy/">개인정보처리방침</a>
+      <a href="/terms/">이용약관</a>
+      <a href="https://blog.welmoa.kr/blog/">콘텐츠</a>
+    </div>
+  </div>
+</footer>
 
-    <section class="step-card">
-      <h2>5단계. 운영일지에 웹앱 URL 입력</h2>
-      <p>총괄운영일지의 <code>사업관리 → Google Sheet 연동</code> 영역에 웹앱 URL을 붙여넣고 저장합니다.</p>
-    </section>
-
-    <section class="step-card">
-      <h2>6단계. 시트 구조 초기화 및 테스트</h2>
-      <p><code>시트 구조 초기화</code> 버튼을 누른 뒤, 저장 테스트를 진행합니다.</p>
-    </section>
-  </main>
 </body>
 </html>
