@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Welmoa 운영일지 v30</title>
+<title>Welmoa 운영일지 v31</title>
 <style>
 :root{
   --blue:#2563eb;
@@ -582,8 +582,8 @@ th{background:#eff6ff;text-align:left}
 </head>
 <body>
 <header>
-  <h1>Welmoa 운영일지 v30</h1>
-  <p>Google Sheet 자동 불러오기 / 자동 동기화 기반</p>
+  <h1>Welmoa 운영일지 v31</h1>
+  <p>Google Sheet 자동 저장 안정화 / 최근 동기화 표시</p>
 </header>
 
 <div class="container">
@@ -746,6 +746,9 @@ th{background:#eff6ff;text-align:left}
         </div>
         <p class="small" id="googleSyncStatus" style="margin-top:10px">
           구글시트 연동은 현재 브라우저 데이터 전체를 저장/불러오기 하는 방식입니다.
+        </p>
+        <p class="small" id="googleLastSyncStatus" style="margin-top:6px">
+          최근 동기화: -
         </p>
       </div>
     </div>
@@ -2843,16 +2846,24 @@ function loadGoogleSettings(){
   if(url) url.value = settings.url || '';
   if(use) use.value = settings.use || 'N';
   if(mode) mode.value = settings.mode || 'manual';
+  renderLastSyncTime();
 }
 
 function saveGoogleSettings(){
   const data = getData();
 
+  const previousUrl = data.googleSettings?.url || '';
+  const nextUrl = document.getElementById('googleScriptUrl').value.trim();
+
   data.googleSettings = {
-    url: document.getElementById('googleScriptUrl').value.trim(),
+    url: nextUrl,
     use: document.getElementById('googleSyncUse').value,
     mode: document.getElementById('googleSyncMode').value
   };
+
+  if(previousUrl !== nextUrl){
+    localStorage.removeItem('welmoaGoogleInitialized');
+  }
 
   localStorage.setItem('welmoaLogV4', JSON.stringify(data));
   setGoogleStatus('Google Sheet 연동 설정이 저장되었습니다.', 'ok');
@@ -2868,6 +2879,35 @@ function setGoogleStatus(message, type = 'ok'){
   if(type === 'ok') el.classList.add('google-sync-ok');
   if(type === 'warn') el.classList.add('google-sync-warn');
   if(type === 'error') el.classList.add('google-sync-error');
+}
+
+
+function formatDateTime(value){
+  if(!value) return '-';
+
+  const d = new Date(value);
+  if(Number.isNaN(d.getTime())) return '-';
+
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  const hh = String(d.getHours()).padStart(2, '0');
+  const mi = String(d.getMinutes()).padStart(2, '0');
+
+  return `${yyyy}-${mm}-${dd} ${hh}:${mi}`;
+}
+
+function setLastSyncTime(value){
+  localStorage.setItem('welmoaGoogleLastSync', value || new Date().toISOString());
+  renderLastSyncTime();
+}
+
+function renderLastSyncTime(){
+  const el = document.getElementById('googleLastSyncStatus');
+  if(!el) return;
+
+  const last = localStorage.getItem('welmoaGoogleLastSync');
+  el.innerText = `최근 동기화: ${formatDateTime(last)}`;
 }
 
 function googlePayload(type = 'snapshot'){
@@ -2908,6 +2948,7 @@ async function sendToGoogleSheet(type = 'snapshot'){
       body: JSON.stringify(googlePayload(type))
     });
 
+    setLastSyncTime(new Date().toISOString());
     setGoogleStatus('구글시트 저장 요청을 보냈습니다. 시트의 logs 탭을 확인해 주세요.', 'ok');
     return true;
   }catch(error){
@@ -2955,6 +2996,7 @@ function scheduleGoogleAutoSync(){
   if(settings.use !== 'Y' || settings.mode !== 'auto' || !settings.url) return;
 
   clearTimeout(googleSyncTimer);
+  setGoogleStatus('변경사항을 구글시트에 자동 저장 준비 중입니다...', 'warn');
 
   googleSyncTimer = setTimeout(() => {
     sendToGoogleSheet('auto-backup');
@@ -2965,6 +3007,9 @@ function scheduleGoogleAutoSync(){
 
 async function loadFromGoogleSheet(){
   const settings = googleSettings();
+
+  const confirmLoad = confirm('구글시트 데이터를 불러오면 현재 브라우저의 임시 데이터가 구글시트 데이터로 교체됩니다. 계속할까요?');
+  if(!confirmLoad) return;
 
   if(!settings.url){
     setGoogleStatus('Apps Script 웹앱 URL을 입력해 주세요.', 'error');
@@ -2988,6 +3033,7 @@ async function loadFromGoogleSheet(){
     }
 
     localStorage.setItem('welmoaLogV4', JSON.stringify(json.payload));
+    setLastSyncTime(new Date().toISOString());
 
     setGoogleStatus('구글시트 데이터를 불러왔습니다. 화면을 다시 렌더링합니다.', 'ok');
 
@@ -3018,6 +3064,7 @@ async function initialGoogleSync(){
     if(json && json.ok && json.payload){
       localStorage.setItem('welmoaLogV4', JSON.stringify(json.payload));
       localStorage.setItem('welmoaGoogleInitialized', 'Y');
+      setLastSyncTime(new Date().toISOString());
 
       setGoogleStatus('구글시트 데이터를 자동 불러왔습니다.', 'ok');
 
