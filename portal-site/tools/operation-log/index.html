@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Welmoa 운영일지 v35</title>
+<title>Welmoa 운영일지 v36</title>
 <style>
 :root{
   --blue:#2563eb;
@@ -725,12 +725,158 @@ th{background:#eff6ff;text-align:left}
   }
 }
 
+
+.connect-panel{
+  background:#f8fbff;
+  border:1px solid #dbeafe;
+  border-radius:22px;
+  padding:20px;
+  margin-bottom:28px;
+}
+
+.connect-status-card{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  background:#fff;
+  border:1px solid #dbeafe;
+  border-radius:18px;
+  padding:18px 20px;
+  margin-bottom:16px;
+}
+
+.connect-label{
+  display:block;
+  font-size:12px;
+  font-weight:900;
+  color:#2563eb;
+  margin-bottom:5px;
+}
+
+.connect-status-card strong{
+  display:block;
+  font-size:20px;
+  color:#0f172a;
+  margin-bottom:4px;
+}
+
+.connect-status-card p{
+  margin:0;
+  color:#64748b;
+  line-height:1.5;
+  font-size:14px;
+}
+
+.connect-pill{
+  flex:0 0 auto;
+  padding:8px 12px;
+  border-radius:999px;
+  background:#e2e8f0;
+  color:#334155;
+  font-weight:900;
+  font-size:13px;
+}
+
+.connect-pill.is-on{
+  background:#dcfce7;
+  color:#166534;
+}
+
+.connect-pill.is-warn{
+  background:#fef3c7;
+  color:#92400e;
+}
+
+.connect-steps{
+  display:grid;
+  gap:12px;
+}
+
+.connect-step{
+  display:grid;
+  grid-template-columns:38px 1fr;
+  gap:12px;
+  background:#fff;
+  border:1px solid #e2e8f0;
+  border-radius:18px;
+  padding:16px;
+}
+
+.step-number{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  background:#2563eb;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+}
+
+.step-body h3{
+  margin:3px 0 6px;
+  font-size:16px;
+}
+
+.step-body p{
+  margin:0 0 10px;
+  color:#64748b;
+  line-height:1.55;
+  font-size:14px;
+}
+
+.compact-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+
+.connect-message{
+  margin-top:14px;
+  background:#fff;
+  border:1px dashed #bfdbfe;
+  border-radius:14px;
+  padding:14px 16px;
+}
+
+.connect-message p{
+  margin:4px 0;
+}
+
+@media(max-width:768px){
+  .connect-panel{
+    padding:14px;
+    border-radius:18px;
+  }
+
+  .connect-status-card{
+    align-items:flex-start;
+    flex-direction:column;
+    padding:15px;
+  }
+
+  .connect-step{
+    grid-template-columns:30px 1fr;
+    padding:14px;
+  }
+
+  .step-number{
+    width:28px;
+    height:28px;
+    font-size:13px;
+  }
+
+  .compact-grid{
+    grid-template-columns:1fr;
+  }
+}
+
 </style>
 </head>
 <body>
 <header>
-  <h1>Welmoa 운영일지 v35</h1>
-  <p>초기설정 UX / 스냅샷 복구 / 배포 가이드</p>
+  <h1>Welmoa 운영일지 v36</h1>
+  <p>Google Sheet 연결 화면 정리 / 단계형 설정 UI</p>
 </header>
 
 <div class="container">
@@ -878,54 +1024,97 @@ th{background:#eff6ff;text-align:left}
 
     <h2>Google Sheet 연동</h2>
 
-    <div class="grid" style="margin-bottom:24px">
-      <div style="grid-column:1/-1">
-        <label>Apps Script 웹앱 URL</label>
-        <input id="googleScriptUrl" placeholder="https://script.google.com/macros/s/.../exec">
-      </div>
-
-      <div>
-        <label>구글시트 백업 사용</label>
-        <select id="googleSyncUse">
-          <option value="N">미사용</option>
-          <option value="Y">사용</option>
-        </select>
-      </div>
-
-      <div>
-        <label>저장 방식</label>
-        <select id="googleSyncMode">
-          <option value="manual">수동 백업</option>
-          <option value="auto">자동 백업</option>
-        </select>
-      </div>
-
-      <div style="grid-column:1/-1">
-        <div class="button-row">
-          <button class="light" onclick="saveGoogleSettings()">연동 설정 저장</button>
-          <button class="gray" onclick="testGoogleConnection()">연결 테스트</button>
-          <button class="light" onclick="setupGoogleSheetStructure()">시트 구조 초기화</button>
-          <button class="green" onclick="backupToGoogleSheet()">현재 데이터 구글시트 저장</button>
-          <button class="light" onclick="loadFromGoogleSheet()">구글시트 데이터 불러오기</button>
+    <div class="connect-panel">
+      <div class="connect-status-card">
+        <div>
+          <span class="connect-label">연결 상태</span>
+          <strong id="googleConnectionSummary">설정 전</strong>
+          <p id="googleConnectionDesc">Apps Script 웹앱 URL을 입력하면 Google Sheet와 연동할 수 있습니다.</p>
         </div>
-        <p class="small" id="googleSyncStatus" style="margin-top:10px">
-          구글시트 연동은 현재 브라우저 데이터 전체를 저장/불러오기 하는 방식입니다.
+        <div class="connect-pill" id="googleConnectionPill">미연결</div>
+      </div>
+
+      <div class="connect-steps">
+        <section class="connect-step">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <h3>웹앱 URL 입력</h3>
+            <p>Google Apps Script에서 발급받은 웹앱 URL을 붙여넣습니다.</p>
+            <input id="googleScriptUrl" placeholder="https://script.google.com/macros/s/.../exec">
+          </div>
+        </section>
+
+        <section class="connect-step">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <h3>저장 방식 선택</h3>
+            <div class="grid compact-grid">
+              <div>
+                <label>구글시트 백업 사용</label>
+                <select id="googleSyncUse">
+                  <option value="N">미사용</option>
+                  <option value="Y">사용</option>
+                </select>
+              </div>
+              <div>
+                <label>저장 방식</label>
+                <select id="googleSyncMode">
+                  <option value="manual">수동 백업</option>
+                  <option value="auto">자동 백업</option>
+                </select>
+              </div>
+            </div>
+            <div class="button-row">
+              <button class="light" onclick="saveGoogleSettings()">연동 설정 저장</button>
+              <button class="gray" onclick="testGoogleConnection()">연결 테스트</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="connect-step">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <h3>시트 구조 준비</h3>
+            <p>처음 1회만 실행하면 운영일지용 시트 탭이 자동 생성됩니다.</p>
+            <button class="light" onclick="setupGoogleSheetStructure()">시트 구조 초기화</button>
+          </div>
+        </section>
+
+        <section class="connect-step">
+          <div class="step-number">4</div>
+          <div class="step-body">
+            <h3>데이터 저장·불러오기</h3>
+            <p>현재 데이터를 구글시트에 저장하거나, 구글시트의 데이터를 불러올 수 있습니다.</p>
+            <div class="button-row">
+              <button class="green" onclick="backupToGoogleSheet()">현재 데이터 저장</button>
+              <button class="light" onclick="loadFromGoogleSheet()">구글시트 데이터 불러오기</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="connect-step">
+          <div class="step-number">5</div>
+          <div class="step-body">
+            <h3>스냅샷 복구</h3>
+            <p>이전 저장 시점으로 돌아가야 할 때 스냅샷을 조회하고 복구합니다.</p>
+            <button class="gray" onclick="loadSnapshotList()">스냅샷 목록 조회</button>
+            <div id="snapshotList" class="snapshot-list">
+              <p class="small">스냅샷 목록을 조회하면 저장 시점별 복구 지점을 확인할 수 있습니다.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="connect-message">
+        <p class="small" id="googleSyncStatus">
+          Google Sheet 연동은 현재 브라우저 데이터 전체를 저장/불러오기 하는 방식입니다.
         </p>
-        <p class="small" id="googleLastSyncStatus" style="margin-top:6px">
+        <p class="small" id="googleLastSyncStatus">
           최근 동기화: -
         </p>
-        <p class="small" style="margin-top:6px">
-          구조 초기화 후 저장하면 staff, programs, works, operations, notes, adjustments 시트에도 데이터가 나누어 저장됩니다.
+        <p class="small">
+          웰모아 서버에는 운영일지 데이터가 저장되지 않으며, 사용자가 연결한 Google Sheet에 저장됩니다.
         </p>
-
-        <div class="snapshot-panel">
-          <div class="button-row">
-            <button class="gray" onclick="loadSnapshotList()">스냅샷 목록 조회</button>
-          </div>
-          <div id="snapshotList" class="snapshot-list">
-            <p class="small">스냅샷 목록을 조회하면 저장 시점별 복구 지점을 확인할 수 있습니다.</p>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -3026,6 +3215,41 @@ function loadGoogleSettings(){
   if(use) use.value = settings.use || 'N';
   if(mode) mode.value = settings.mode || 'manual';
   renderLastSyncTime();
+  updateGoogleConnectionSummary();
+}
+
+function updateGoogleConnectionSummary(){
+  const settings = googleSettings();
+
+  const summary = document.getElementById('googleConnectionSummary');
+  const desc = document.getElementById('googleConnectionDesc');
+  const pill = document.getElementById('googleConnectionPill');
+
+  if(!summary || !desc || !pill) return;
+
+  pill.classList.remove('is-on', 'is-warn');
+
+  if(!settings.url){
+    summary.innerText = '설정 전';
+    desc.innerText = 'Apps Script 웹앱 URL을 입력하면 Google Sheet와 연동할 수 있습니다.';
+    pill.innerText = '미연결';
+    return;
+  }
+
+  if(settings.use !== 'Y'){
+    summary.innerText = 'URL 입력됨';
+    desc.innerText = '웹앱 URL은 저장되어 있지만 구글시트 백업 사용이 미사용 상태입니다.';
+    pill.innerText = '대기';
+    pill.classList.add('is-warn');
+    return;
+  }
+
+  summary.innerText = settings.mode === 'auto' ? '자동 백업 사용 중' : '수동 백업 사용 중';
+  desc.innerText = settings.mode === 'auto'
+    ? '저장 시 Google Sheet로 자동 동기화됩니다.'
+    : '필요할 때 현재 데이터 저장 버튼으로 Google Sheet에 저장합니다.';
+  pill.innerText = '연결됨';
+  pill.classList.add('is-on');
 }
 
 function saveGoogleSettings(){
@@ -3045,6 +3269,7 @@ function saveGoogleSettings(){
   }
 
   localStorage.setItem('welmoaLogV4', JSON.stringify(data));
+  updateGoogleConnectionSummary();
   setGoogleStatus('Google Sheet 연동 설정이 저장되었습니다.', 'ok');
 }
 
