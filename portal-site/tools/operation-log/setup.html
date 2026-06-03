@@ -65,6 +65,8 @@
       padding: 28px;
       box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: flex;
+      flex-direction: column;
     }
 
     .setup-card:hover {
@@ -93,12 +95,14 @@
       color: #0f172a;
     }
 
-    .setup-card p {
-      color: #64748b;
-      line-height: 1.75;
-      margin: 0 0 24px;
-      word-break: keep-all;
-    }
+.setup-card p {
+  color: #64748b;
+  line-height: 1.75;
+  margin: 0 0 24px;
+  word-break: keep-all;
+
+  flex: 1;
+}
 
     .primary-button,
     .secondary-button {
@@ -140,6 +144,7 @@
       color: #1e3a8a;
       line-height: 1.75;
       word-break: keep-all;
+      max-width: 1120px;
     }
 
     .setup-actions {
