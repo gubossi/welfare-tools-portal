@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Welmoa 운영일지 v32</title>
+<title>Welmoa 운영일지 v33</title>
 <style>
 :root{
   --blue:#2563eb;
@@ -637,8 +637,8 @@ th{background:#eff6ff;text-align:left}
 </head>
 <body>
 <header>
-  <h1>Welmoa 운영일지 v32</h1>
-  <p>모바일 탭 숨김 수정 / PDF 출력 UI 제거</p>
+  <h1>Welmoa 운영일지 v33</h1>
+  <p>Google Sheet 시트 구조 초기화 / 데이터 구조 분리 준비</p>
 </header>
 
 <div class="container">
@@ -796,6 +796,7 @@ th{background:#eff6ff;text-align:left}
         <div class="button-row">
           <button class="light" onclick="saveGoogleSettings()">연동 설정 저장</button>
           <button class="gray" onclick="testGoogleConnection()">연결 테스트</button>
+          <button class="light" onclick="setupGoogleSheetStructure()">시트 구조 초기화</button>
           <button class="green" onclick="backupToGoogleSheet()">현재 데이터 구글시트 저장</button>
           <button class="light" onclick="loadFromGoogleSheet()">구글시트 데이터 불러오기</button>
         </div>
@@ -804,6 +805,9 @@ th{background:#eff6ff;text-align:left}
         </p>
         <p class="small" id="googleLastSyncStatus" style="margin-top:6px">
           최근 동기화: -
+        </p>
+        <p class="small" style="margin-top:6px">
+          구조 초기화 시 settings, staff, programs, works, operations, notes, adjustments, snapshots 시트가 생성됩니다.
         </p>
       </div>
     </div>
@@ -3044,6 +3048,36 @@ async function testGoogleConnection(){
   }catch(error){
     console.error(error);
     setGoogleStatus('연결 테스트 중 오류가 발생했습니다.', 'error');
+  }
+}
+
+async function setupGoogleSheetStructure(){
+  saveGoogleSettings();
+
+  const settings = googleSettings();
+
+  if(!settings.url){
+    setGoogleStatus('Apps Script 웹앱 URL을 입력해 주세요.', 'error');
+    return;
+  }
+
+  if(!confirm('Google Sheet에 운영일지용 시트 구조를 초기화할까요? 기존 데이터는 삭제하지 않고 없는 시트와 헤더만 생성합니다.')){
+    return;
+  }
+
+  try{
+    const response = await fetch(settings.url + '?action=setup');
+    const json = await response.json();
+
+    if(json && json.ok){
+      setGoogleStatus('시트 구조 초기화가 완료되었습니다.', 'ok');
+      return;
+    }
+
+    setGoogleStatus('시트 구조 초기화 응답을 확인하지 못했습니다.', 'warn');
+  }catch(error){
+    console.error(error);
+    setGoogleStatus('시트 구조 초기화 중 오류가 발생했습니다.', 'error');
   }
 }
 
