@@ -1,674 +1,2628 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-4TNGJX9WB9"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-4TNGJX9WB9');
-</script>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>도구 목록 | Welmoa</title>
-  <meta
-    name="description"
-    content="Welmoa에서 제공하는 업무도구 목록입니다. 급여조회, 신청자 추첨, URL 단축, 명단정리 기능을 이용할 수 있습니다."
-  />
-  <link rel="stylesheet" href="/assets/site.css" />
-
-  <style>
-    :root {
-      --tool-accent: #3559a8;
-      --tool-accent-dark: #2c4a8a;
-      --tool-accent-soft: #edf3ff;
-      --tool-surface: #ffffff;
-      --tool-surface-soft: #f8fbff;
-      --tool-border: #dfe7f3;
-      --tool-text: #18212f;
-      --tool-muted: #637287;
-      --tool-shadow-soft: 0 10px 26px rgba(15, 23, 42, 0.05);
-      --tool-radius-xl: 24px;
-      --tool-radius-lg: 18px;
-      --tool-radius-md: 14px;
-      --tool-max: 1180px;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      margin: 0;
-      background:
-        radial-gradient(circle at top left, rgba(53, 89, 168, 0.05), transparent 28%),
-        linear-gradient(180deg, #f7f9fc 0%, #f3f6fb 100%);
-      color: var(--tool-text);
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      line-height: 1.6;
-    }
-
-    .container {
-      width: min(var(--tool-max), calc(100% - 32px));
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .site-header {
-      position: relative;
-      top: auto;
-      z-index: 1;
-      background: #2c4058;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-      box-shadow: none;
-    }
-
-    .header-inner {
-      min-height: 74px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-      padding-top: 10px;
-      padding-bottom: 6px;
-    }
-
-    .brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-      color: #ffffff;
-      font-weight: 900;
-      font-size: 1.35rem;
-      letter-spacing: -0.02em;
-    }
-
-    .site-header nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .site-header nav a {
-      color: rgba(255,255,255,0.92);
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 0.97rem;
-      padding: 10px 14px;
-      border-radius: 999px;
-      transition: 0.18s ease;
-    }
-
-    .site-header nav a:hover {
-      background: rgba(255,255,255,0.12);
-      color: #ffffff;
-    }
-
-    .tools-page {
-      padding: 10px 0 56px;
-    }
-
-    .hero {
-      margin-bottom: 24px;
-    }
-
-    .hero-card {
-      position: relative;
-      overflow: hidden;
-      padding: 36px 36px 34px;
-      border-radius: 30px;
-      background: linear-gradient(135deg, rgba(53, 89, 168, 0.98), rgba(88, 125, 206, 0.94));
-      color: #fff;
-      box-shadow: 0 24px 54px rgba(53, 89, 168, 0.24);
-    }
-
-    .hero-card::after {
-      content: "";
-      position: absolute;
-      inset: auto -80px -80px auto;
-      width: 220px;
-      height: 220px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.12);
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      min-height: 32px;
-      padding: 0 12px;
-      border-radius: 999px;
-      font-size: 0.9rem;
-      font-weight: 800;
-      letter-spacing: -0.01em;
-      margin-bottom: 14px;
-    }
-
-    .hero-card .badge {
-      background: rgba(255,255,255,0.18);
-      color: #fff;
-    }
-
-    .hero-card h1 {
-      margin: 0 0 12px;
-      font-size: clamp(2rem, 4vw, 2.8rem);
-      line-height: 1.18;
-      letter-spacing: -0.03em;
-      color: #fff;
-    }
-
-    .hero-card .lead {
-      margin: 0;
-      max-width: 780px;
-      color: rgba(255,255,255,0.92);
-      font-size: 1.03rem;
-      line-height: 1.7;
-    }
-
-    .hero-actions {
-      margin-top: 22px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .btn {
-      min-height: 50px;
-      padding: 12px 18px;
-      border-radius: 999px;
-      font: inherit;
-      font-weight: 800;
-      letter-spacing: -0.01em;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      transition: 0.18s ease;
-      box-sizing: border-box;
-    }
-
-    .btn--primary {
-      appearance: none;
-      border: none;
-      background: linear-gradient(135deg, var(--tool-accent), #4f72c8);
-      color: #fff;
-      box-shadow: 0 14px 26px rgba(53, 89, 168, 0.18);
-    }
-
-    .btn--primary:hover {
-      transform: translateY(-1px);
-      background: linear-gradient(135deg, var(--tool-accent-dark), #4567ba);
-    }
-
-    .btn--ghost {
-      appearance: none;
-      border: 1px solid #cfe0ff;
-      background: #fff;
-      color: var(--tool-accent);
-      box-shadow: none;
-    }
-
-    .btn--ghost:hover {
-      background: #f4f8ff;
-      border-color: #bdd2ff;
-      transform: translateY(-1px);
-    }
-
-    .section {
-      margin-top: 28px;
-    }
-
-    .section-title {
-      margin: 0 0 16px;
-      font-size: 1.7rem;
-      letter-spacing: -0.03em;
-      color: var(--tool-text);
-    }
-
-    .card-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 18px;
-    }
-
-    @media (min-width: 760px) {
-      .card-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-
-    .card {
-      background: var(--tool-surface);
-      border: 1px solid var(--tool-border);
-      border-radius: var(--tool-radius-xl);
-      box-shadow: var(--tool-shadow-soft);
-      padding: 24px 26px;
-    }
-
-    .card--tool {
-      display: flex;
-      flex-direction: column;
-      min-height: 100%;
-    }
-
-    .card__title {
-      margin: 0 0 10px;
-      font-size: 1.28rem;
-      font-weight: 900;
-      line-height: 1.35;
-      letter-spacing: -0.02em;
-      color: var(--tool-text);
-    }
-
-    .card__text {
-      margin: 0;
-      color: var(--tool-muted);
-      line-height: 1.7;
-      font-size: 0.95rem;
-      flex-grow: 1;
-    }
-
-    .card__meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 14px;
-      margin-bottom: 18px;
-    }
-
-    .card__meta .badge {
-      margin-bottom: 0;
-      min-height: 34px;
-      padding: 0 12px;
-      border: 1px solid var(--tool-border);
-      background: #fff;
-      color: var(--tool-muted);
-      font-size: 12px;
-    }
-
-    .badge--blue {
-      background: var(--tool-accent-soft) !important;
-      border-color: #d7e6ff !important;
-      color: var(--tool-accent-dark) !important;
-    }
-
-    .badge--green {
-      background: #eef9f1 !important;
-      border-color: #d5eddc !important;
-      color: #2f7a47 !important;
-    }
-
-    .badge--orange {
-      background: #fff3e8 !important;
-      border-color: #ffdcbc !important;
-      color: #b96a22 !important;
-    }
-
-    .notice,
-    .content-box {
-      background: var(--tool-surface);
-      border: 1px solid var(--tool-border);
-      border-radius: var(--tool-radius-xl);
-      box-shadow: var(--tool-shadow-soft);
-      padding: 24px 26px;
-      color: var(--tool-muted);
-    }
-
-    .notice {
-      margin-top: 18px;
-      font-size: 0.95rem;
-      line-height: 1.7;
-    }
-
-    .content-box h2 {
-      margin: 0 0 12px;
-      font-size: 1.28rem;
-      font-weight: 900;
-      line-height: 1.35;
-      letter-spacing: -0.02em;
-      color: var(--tool-text);
-    }
-
-    .content-box p {
-      margin: 0 0 12px;
-      color: var(--tool-muted);
-      line-height: 1.7;
-      font-size: 0.95rem;
-    }
-
-    .content-box ul {
-      margin: 0;
-      padding-left: 20px;
-      color: var(--tool-muted);
-    }
-
-    .content-box li + li {
-      margin-top: 8px;
-    }
-
-    .content-actions {
-      margin-top: 18px;
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .site-footer {
-      margin-top: 48px;
-      border-top: 1px solid rgba(223, 231, 243, 0.9);
-      background: rgba(255, 255, 255, 0.78);
-    }
-
-    .footer-inner {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      padding-top: 22px;
-      padding-bottom: 18px;
-      color: var(--tool-muted);
-      font-size: 0.95rem;
-    }
-
-    .footer-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .footer-links a {
-      color: var(--tool-muted);
-      text-decoration: none;
-      font-weight: 700;
-    }
-
-    .footer-links a:hover {
-      color: var(--tool-accent-dark);
-    }
-
-    .footer-note {
-      padding-bottom: 24px;
-      color: #777;
-      font-size: 13px;
-    }
-
-    @media (max-width: 720px) {
-      .container {
-        width: min(var(--tool-max), calc(100% - 20px));
-      }
-
-      .header-inner,
-      .footer-inner {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .header-inner {
-        padding-top: 6px;
-        padding-bottom: 6px;
-      }
-
-      .hero-card {
-        padding: 26px 20px 24px;
-        border-radius: 24px;
-      }
-
-      .card,
-      .notice,
-      .content-box {
-        padding: 20px 18px;
-      }
-
-      .site-header nav {
-        width: 100%;
-      }
-
-      .site-header nav a {
-        padding-left: 10px;
-        padding-right: 10px;
-      }
-    }
-  
-
-    /* Welmoa unified theme override v1 */
-    :root {
-      --tool-accent: #2563eb;
-      --tool-accent-dark: #1d4ed8;
-      --tool-accent-soft: #dbeafe;
-      --tool-surface: #ffffff;
-      --tool-surface-soft: #f8fafc;
-      --tool-border: #e2e8f0;
-      --tool-text: #0f172a;
-      --tool-muted: #64748b;
-      --tool-shadow-soft: 0 16px 42px rgba(15, 23, 42, 0.07);
-      --tool-radius-xl: 28px;
-      --tool-radius-lg: 22px;
-      --tool-radius-md: 18px;
-    }
-
-    body {
-      background:
-        radial-gradient(circle at top left, rgba(37, 99, 235, 0.10), transparent 32%),
-        linear-gradient(180deg, #f8fafc 0%, #ffffff 42%, #f8fafc 100%);
-      color: var(--tool-text);
-    }
-
-    .site-header {
-      background: rgba(255,255,255,0.94);
-      color: var(--tool-text);
-      border-bottom: 1px solid var(--tool-border);
-      box-shadow: none;
-      backdrop-filter: blur(14px);
-    }
-
-    .brand { color: var(--tool-accent); }
-    .site-header nav a { color: #334155; }
-    .site-header nav a:hover { background: #eff6ff; color: var(--tool-accent); }
-
-    .hero-card {
-      background:
-        radial-gradient(circle at top left, rgba(37, 99, 235, 0.12), transparent 34%),
-        linear-gradient(135deg, #eff6ff 0%, #ffffff 58%, #f8fafc 100%);
-      color: var(--tool-text);
-      border: 1px solid var(--tool-border);
-      box-shadow: var(--tool-shadow-soft);
-    }
-
-    .hero-card::after { display: none; }
-    .hero-card h1 { color: var(--tool-text); }
-    .hero-card .lead { color: var(--tool-muted); line-height: 1.85; }
-    .hero-card .badge { background: #dbeafe; color: #1d4ed8; border: 1px solid #bfdbfe; }
-
-    .card,
-    .notice,
-    .content-box {
-      border: 1px solid var(--tool-border);
-      border-radius: var(--tool-radius-xl);
-      background: #ffffff;
-      box-shadow: var(--tool-shadow-soft);
-    }
-
-    .card__title,
-    .content-box h2,
-    .section-title { color: #172554; }
-    .card__text,
-    .content-box p,
-    .notice { color: var(--tool-muted); }
-
-    .btn--primary {
-      background: var(--tool-accent);
-      border: 1px solid var(--tool-accent);
-      color: #fff;
-      box-shadow: 0 12px 26px rgba(37, 99, 235, 0.22);
-    }
-
-    .btn--primary:hover { background: var(--tool-accent-dark); color: #fff; }
-
-    .btn--ghost {
-      background: #fff;
-      color: var(--tool-accent);
-      border: 1px solid #bfdbfe;
-    }
-
-    .btn--ghost:hover { background: #eff6ff; color: var(--tool-accent); }
-
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welmoa 운영일지 v25</title>
+<style>
+:root{
+  --blue:#2563eb;
+  --blue-dark:#1d4ed8;
+  --bg:#f4f7fb;
+  --card:#ffffff;
+  --line:#dbe4f0;
+  --text:#1e293b;
+  --muted:#64748b;
+  --green:#16a34a;
+  --red:#dc2626;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  font-family:Arial,"Malgun Gothic",sans-serif;
+  color:var(--text);
+}
+header{
+  background:linear-gradient(135deg,#2563eb,#60a5fa);
+  color:#fff;
+  padding:26px 34px;
+}
+header h1{margin:0;font-size:30px}
+header p{margin:8px 0 0;opacity:.92}
+.container{
+  width:1500px;
+  max-width:95%;
+  margin:24px auto 60px;
+}
+.notice{
+  background:#eef2ff;
+  border:1px solid #c7d2fe;
+  color:#1e3a8a;
+  padding:14px 16px;
+  border-radius:14px;
+  margin-bottom:18px;
+  font-weight:700;
+}
+.datebar{
+  display:grid;
+  grid-template-columns:220px 1fr auto auto;
+  gap:12px;
+  align-items:end;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:18px;
+}
+label{display:block;font-weight:bold;margin-bottom:8px}
+input,select,textarea{
+  width:100%;
+  border:1px solid #cbd5e1;
+  border-radius:10px;
+  padding:11px 12px;
+  font-size:15px;
+}
+textarea{min-height:130px;resize:vertical}
+button{
+  background:var(--blue);
+  color:#fff;
+  border:0;
+  border-radius:10px;
+  padding:12px 17px;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+}
+button.gray{background:#475569}
+button.green{background:var(--green)}
+button.red{background:var(--red)}
+button.light{background:#eef2ff;color:#1d4ed8}
+.topbar{
+  display:flex;
+  gap:12px;
+  margin-bottom:20px;
+}
+.tab{
+  flex:1;
+  background:#fff;
+  border:2px solid var(--line);
+  border-radius:18px;
+  padding:18px;
+  cursor:pointer;
+}
+.tab.active{
+  border-color:var(--blue);
+  background:#eff6ff;
+}
+.tab-title{font-size:21px;font-weight:bold;margin-bottom:6px}
+.tab-desc{font-size:14px;color:var(--muted)}
+.summary{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:14px;
+  margin-bottom:18px;
+}
+.summary-box{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:16px;
+}
+.summary-title{
+  color:var(--muted);
+  font-size:14px;
+  margin-bottom:8px;
+}
+.summary-value{
+  font-size:28px;
+  font-weight:900;
+}
+.card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:24px;
+  margin-bottom:20px;
+}
+h2{
+  margin-top:0;
+  border-left:6px solid var(--blue);
+  padding-left:12px;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:16px;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:14px;
+}
+th,td{
+  border:1px solid var(--line);
+  padding:11px;
+  vertical-align:top;
+}
+th{background:#eff6ff;text-align:left}
+.button-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:18px;
+}
+.hidden{display:none}
+.small{font-size:14px;color:var(--muted)}
+.report-title{
+  text-align:center;
+  font-size:30px;
+  font-weight:900;
+  margin:8px 0 24px;
+}
+.empty{
+  padding:18px;
+  border:1px dashed #cbd5e1;
+  color:#64748b;
+  border-radius:12px;
+  background:#f8fafc;
+}
+.row-actions{
+  display:flex;
+  gap:6px;
+}
+.row-actions button{
+  padding:7px 9px;
+  font-size:13px;
+}
+
+
+.compact-datebar{
+  display:flex;
+  justify-content:space-between;
+  align-items:end;
+  gap:18px;
+}
+
+.date-controls{
+  display:flex;
+  align-items:end;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.date-actions{
+  display:flex;
+  align-items:end;
+  justify-content:flex-end;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.date-field{
+  width:220px;
+}
+
+.filter-field{
+  width:160px;
+}
+
+.quick-date-buttons{
+  display:flex;
+  align-items:end;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.section-header{
+  display:block;
+  margin-bottom:14px;
+}
+
+.section-header h2{
+  margin-bottom:12px;
+}
+
+.inline-date{
+  width:220px;
+  margin-bottom:14px;
+}
+
+.inline-date label{
+  display:block;
+  font-size:14px;
+  color:#475569;
+  margin-bottom:6px;
+}
+
+
+.approval-name-grid{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(120px,1fr));
+  gap:10px;
+}
+
+.approval-table{
+  width:auto;
+  min-width:280px;
+  margin-left:auto;
+  margin-bottom:22px;
+}
+
+.approval-table th,
+.approval-table td{
+  min-width:86px;
+  text-align:center;
+}
+
+.approval-table td{
+  height:54px;
+}
+
+
+.report-output-header{
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:start;
+  gap:18px;
+  margin-bottom:18px;
+}
+
+.report-output-header .report-title{
+  text-align:left;
+  margin:0;
+  padding-top:8px;
+}
+
+.report-title-center{
+  text-align:center;
+  font-size:30px;
+  font-weight:900;
+  margin:8px 0 24px;
+}
+
+.report-header-title-wrap{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.report-header-title-wrap .report-title{
+  text-align:center;
+}
+
+@media(max-width:900px){
+  .report-output-header{
+    grid-template-columns:1fr;
+  }
+
+  .report-output-header .approval-table{
+    margin-left:0;
+  }
+}
+
+@media(max-width:900px){
+  .approval-name-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:900px){
+  .compact-datebar,
+  .date-controls,
+  .date-actions{
+    align-items:stretch;
+    flex-direction:column;
+  }
+
+  .date-field,
+  .filter-field,
+  .inline-date{
+    width:100%;
+  }
+}
+
+@media(max-width:900px){
+  .datebar{grid-template-columns:1fr}
+  .summary{grid-template-columns:repeat(2,1fr)}
+  .topbar{flex-direction:column}
+  .grid{grid-template-columns:1fr}
+}
+@media print{
+  header,.notice,.datebar,.topbar,.summary,.button-row,.no-print{display:none!important}
+  body{background:#fff}
+  .container{width:100%;max-width:100%;margin:0}
+  .card{border:0;padding:0;margin:0}
+  textarea,input,select{border:0;padding:0}
+}
+
+.report-output-header{
+  display:block;
+  position:relative;
+  margin-bottom:18px;
+  min-height:78px;
+}
+
+.report-output-header .report-title{
+  text-align:center;
+  font-size:30px;
+  font-weight:900;
+  margin:8px 0 18px;
+  padding-top:8px;
+}
+
+.report-output-header .approval-top-right{
+  display:flex;
+  justify-content:flex-end;
+  width:100%;
+  margin-bottom:8px;
+}
+
+.report-output-header .approval-table{
+  margin-left:auto;
+  margin-right:0;
+}
+
+.approval-table{
+  width:auto;
+  margin-left:auto;
+  margin-right:0;
+}
+
+@media print{
+  .report-output-header .approval-top-right{
+    justify-content:flex-end;
+  }
+
+  .approval-table{
+    margin-left:auto !important;
+    margin-right:0 !important;
+  }
+}
+
+</style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="https://tools.welmoa.kr/">Welmoa</a>
-      <nav>
-        <a href="https://tools.welmoa.kr/">홈</a>
-        <a href="https://tools.welmoa.kr/tools/">도구</a>
-        <a href="https://blog.welmoa.kr/blog/">콘텐츠</a>
-        <a href="https://tools.welmoa.kr/about/">소개</a>
-        <a href="https://tools.welmoa.kr/privacy/">개인정보처리방침</a>
-        <a href="https://tools.welmoa.kr/terms/">이용약관</a>
-      </nav>
-    </div>
-  </header>
+<header>
+  <h1>Welmoa 운영일지 v25</h1>
+  <p>결재라인 우측 상단 정렬 / 출력 레이아웃 개선</p>
+</header>
 
-<section class="platform-hero">
-  <div class="container">
-    <span class="badge">Welmoa Tools</span>
+<div class="container">
+  <div class="notice">v6 핵심: 개인업무 칸을 제거하고, 직원명과 업무내용 중심으로 더 간결하게 정리했습니다.</div>
 
-    <h1>
-      실무에 바로 쓰는<br>
-      사회복지 업무 도구
-    </h1>
-
-    <p>
-      급여 계산, 신청자 추첨, URL 단축, 명단 정리 등 사회복지 현장에서 반복되는
-      행정 업무를 더 빠르고 정확하게 처리할 수 있도록 돕습니다.
-    </p>
-
-    <div class="hero-actions">
-      <a class="btn primary" href="#tool-list">도구 둘러보기</a>
-      <a class="btn secondary" href="/guide">이용가이드 보기</a>
-    </div>
-  </div>
-</section>
-  
-  <main class="container tools-page">
-    <section class="section" id="tool-list">
-      <h2 class="section-title">제공 중인 도구</h2>
-
-      <div class="card-grid">
-        <article class="card card--tool">
-          <h2 class="card__title">급여조회 💰</h2>
-          <p class="card__text">
-            사회복지시설 급여와 수당 기준을 확인하고 실무 계산에 활용할 수 있는 도구입니다.
-          </p>
-          <div class="card__meta">
-            <span class="badge badge--blue">급여·수당</span>
-            <span class="badge">실무도구</span>
-          </div>
-          <div>
-            <a class="btn btn--ghost" href="/salary">내 급여 모의계산 바로가기</a>
-          </div>
-        </article>
-
-        <article class="card card--tool">
-          <h2 class="card__title">신청자 추첨 🎲</h2>
-          <p class="card__text">
-            프로그램 신청자 명단을 기준으로 공정한 추첨을 진행하고 결과를 정리할 수 있는 도구입니다.
-          </p>
-          <div class="card__meta">
-            <span class="badge badge--blue">추첨·선정</span>
-            <span class="badge">운영지원</span>
-          </div>
-          <div>
-            <a class="btn btn--ghost" href="/lottery">추첨도구 바로가기</a>
-          </div>
-        </article>
-
-        <article class="card card--tool">
-          <h2 class="card__title">URL 단축 🔗</h2>
-          <p class="card__text">
-            긴 링크를 짧고 공유하기 쉬운 주소로 변환하여 공지, 안내문, 홍보물에 활용할 수 있는 도구입니다.
-          </p>
-          <div class="card__meta">
-            <span class="badge badge--green">공유편의</span>
-            <span class="badge">링크관리</span>
-          </div>
-          <div>
-            <a class="btn btn--ghost" href="/shortener">URL단축 바로가기</a>
-          </div>
-        </article>
-
-        <article class="card card--tool">
-          <h2 class="card__title">명단정리 🧾</h2>
-          <p class="card__text">
-            이름, 생년월일, 연락처 등 명단 데이터를 일정한 형식으로 정리하고 변환할 수 있는 도구입니다.
-          </p>
-          <div class="card__meta">
-            <span class="badge badge--orange">포맷변환</span>
-            <span class="badge">명단정리</span>
-          </div>
-          <div>
-            <a class="btn btn--ghost" href="/formatter">명단정리 바로가기</a>
-          </div>
-        </article>
-
-<article class="card card--tool">
-  <h2 class="card__title">총괄운영일지 🗂️</h2>
-  <p class="card__text">
-    개인업무, 프로그램 운영, 실적 집계, 운영일지 출력까지 한 번에 관리할 수 있는 온라인 운영일지 도구입니다.
-  </p>
-  <div class="card__meta">
-    <span class="badge badge--blue">운영일지</span>
-    <span class="badge">실적관리</span>
-  </div>
-  <div>
-    <a class="btn btn--ghost" href="/tools/operation-log/">총괄운영일지 바로가기</a>
-  </div>
-</article>
-        
+  <div class="datebar no-print compact-datebar">
+    <div class="date-controls">
+      <div class="date-field">
+        <label>기준일자</label>
+        <input id="currentDate" type="date">
       </div>
 
-      <div class="notice">
-        각 도구는 웹 브라우저에서 바로 사용할 수 있으며, 기능은 운영 상황에 따라 계속 개선될 수 있습니다.
+      <div class="quick-date-buttons">
+        <button class="gray" onclick="moveDate(-1)">◀ 이전날</button>
+        <button onclick="moveToday()">📅 오늘</button>
+        <button class="gray" onclick="moveDate(1)">다음날 ▶</button>
       </div>
-    </section>
+    </div>
 
-    <section class="section">
-      <h2 class="section-title">Welmoa Tools 이용 안내</h2>
+    <div class="date-actions">
+      <div class="filter-field">
+        <label>직원 필터</label>
+        <select id="filterWorker" onchange="renderAll()"></select>
+      </div>
+      <button onclick="renderAll()">조회</button>
+      <button class="gray" onclick="exportBackup()">백업 다운로드</button>
+    </div>
+  </div>
 
-      <div class="content-box">
-        <p>
-          Welmoa Tools는 사회복지 현장과 행정 실무를 보다 편리하게 지원하기 위해 구성된 웹 기반 포털입니다.
-          각 도구는 별도의 프로그램 설치 없이 브라우저에서 바로 사용할 수 있도록 설계되어 있습니다.
-        </p>
-        <ul>
-          <li>도구별 기능은 실제 업무 활용도를 기준으로 지속적으로 개선됩니다.</li>
-          <li>입력 정보와 결과는 사용 목적에 맞게 최종 확인 후 활용해 주세요.</li>
-          <li>정책과 이용 관련 사항은 개인정보처리방침 및 이용약관 페이지에서 확인할 수 있습니다.</li>
-        </ul>
+  <div class="summary">
+    <div class="summary-box">
+      <div class="summary-title">기준일 업무</div>
+      <div class="summary-value" id="dayWorkCount">0</div>
+    </div>
+    <div class="summary-box">
+      <div class="summary-title">기준일 참여인원</div>
+      <div class="summary-value" id="dayPerfTotal">0</div>
+    </div>
+    <div class="summary-box">
+      <div class="summary-title">월 참여인원</div>
+      <div class="summary-value" id="monthPerfTotal">0</div>
+    </div>
+    <div class="summary-box">
+      <div class="summary-title">연 참여인원</div>
+      <div class="summary-value" id="yearPerfTotal">0</div>
+    </div>
+    <div class="summary-box">
+      <div class="summary-title">평균 달성률</div>
+      <div class="summary-value" id="avgRate">0%</div>
+    </div>
+  </div>
 
-        <div class="content-actions">
-          <a class="btn btn--primary" href="/guide">이용가이드 보기</a>
-          <a class="btn btn--ghost" href="/about">소개 페이지 보기</a>
+  <div class="topbar no-print">
+    <div class="tab active" onclick="showTab('programManage', this)">
+      <div class="tab-title">⚙️ 사업관리</div>
+      <div class="tab-desc">초기 사업명, 세부사업, 목표 설정</div>
+    </div>
+    <div class="tab" onclick="showTab('staffManage', this)">
+      <div class="tab-title">👥 직원관리</div>
+      <div class="tab-desc">직원명, 직책, 사용여부 설정</div>
+    </div>
+    <div id="workTabButton" class="tab" onclick="showTab('work', this)">
+      <div class="tab-title">📋 개인업무 입력</div>
+      <div class="tab-desc">선택 날짜 기준 업무내용 빠른 입력</div>
+    </div>
+    <div class="tab" onclick="showTab('operation', this)">
+      <div class="tab-title">🧩 프로그램 운영</div>
+      <div class="tab-desc">사업명, 참여인원, 횟수 기록</div>
+    </div>
+    <div class="tab" onclick="showTab('performance', this)">
+      <div class="tab-title">📊 실적 확인·보정</div>
+      <div class="tab-desc">자동 집계 확인 및 필요 시 보정</div>
+    </div>
+    <div class="tab" onclick="showTab('report', this)">
+      <div class="tab-title">🖨 운영일지 출력</div>
+      <div class="tab-desc">선택 날짜 운영일지 PDF 출력</div>
+    </div>
+    <div class="tab" onclick="showTab('monthly', this)">
+      <div class="tab-title">📈 월간 운영현황</div>
+      <div class="tab-desc">월별 실적 및 목표대비 확인</div>
+    </div>
+  </div>
+
+
+
+
+  <section id="programManageTab" class="card">
+    <h2>운영설정</h2>
+
+    <div class="grid" style="margin-bottom:24px">
+      <div>
+        <label>개인업무 입력 사용</label>
+        <select id="usePersonalWork" onchange="saveFeatureSettings()">
+          <option value="Y">사용</option>
+          <option value="N">미사용</option>
+        </select>
+      </div>
+
+      <div>
+        <label>설명</label>
+        <div class="notice" style="margin-top:6px">
+          미사용 시 개인업무 입력 탭과 운영일지 출력의 개인업무 영역이 숨겨집니다.
         </div>
       </div>
-    </section>
-  </main>
 
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <div>© Welmoa. 사회복지 실무자를 위한 도구와 정보 플랫폼</div>
-      <div class="footer-links">
-        <a href="/about/">소개</a>
-        <a href="/privacy/">개인정보처리방침</a>
-        <a href="/terms/">이용약관</a>
-        <a href="https://blog.welmoa.kr/blog/">콘텐츠</a>
+      <div>
+        <label>결재라인 사용</label>
+        <select id="approvalUse" onchange="toggleApprovalSettingFields(); saveFeatureSettings()">
+          <option value="Y">사용</option>
+          <option value="N">미사용</option>
+        </select>
+      </div>
+
+      <div id="approvalCountWrap">
+        <label>결재칸 개수</label>
+        <select id="approvalCount" onchange="renderApprovalNameInputs(); saveFeatureSettings();">
+          <option value="2">2칸</option>
+          <option value="3">3칸</option>
+          <option value="4">4칸</option>
+          <option value="5">5칸</option>
+        </select>
+      </div>
+
+      <div id="approvalNamesWrap" style="grid-column:1/-1">
+        <label>결재칸 명칭</label>
+        <div id="approvalNameInputs" class="approval-name-grid"></div>
       </div>
     </div>
-    <div class="container footer-note">
-      본 사이트는 사회복지 실무 정보 제공을 목적으로 운영됩니다.
+
+    <h2>사업관리</h2>
+
+    <div class="notice" style="margin-bottom:16px">
+      여기서 등록한 사업명과 세부사업이 프로그램 운영 입력, 실적 확인·보정, 운영일지 출력에 자동 연동됩니다.
     </div>
-  </footer>
+
+    <div class="grid">
+      <div>
+        <label>사업명</label>
+        <input id="pmProgram" placeholder="예: 방과후프로그램">
+      </div>
+      <div>
+        <label>세부사업</label>
+        <input id="pmSub" placeholder="예: 그룹활동">
+      </div>
+      <div>
+        <label>연간목표</label>
+        <input id="pmTarget" type="number" min="0" value="0">
+      </div>
+      <div>
+        <label>사용여부</label>
+        <select id="pmActive">
+          <option value="Y">사용</option>
+          <option value="N">미사용</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="button-row">
+      <button id="programSaveButton" onclick="saveProgramItem()">사업 저장</button>
+      <button id="programCancelEditButton" class="gray hidden" onclick="cancelProgramEdit()">수정 취소</button>
+      <button class="gray" onclick="clearProgramForm()">입력 초기화</button>
+    </div>
+
+    <h2 style="margin-top:30px">사업목록</h2>
+    <div id="programList"></div>
+  </section>
+
+
+  <section id="staffManageTab" class="card hidden">
+    <h2>직원관리</h2>
+
+    <div class="notice" style="margin-bottom:16px">
+      여기서 등록한 직원명이 개인업무 입력과 직원 필터에 자동 연동됩니다.
+    </div>
+
+    <div class="grid">
+      <div>
+        <label>직원명</label>
+        <input id="smName" placeholder="예: 조상규">
+      </div>
+      <div>
+        <label>직책/역할</label>
+        <input id="smRole" placeholder="예: 팀장, 사회복지사, 치료사">
+      </div>
+      <div>
+        <label>사용여부</label>
+        <select id="smActive">
+          <option value="Y">사용</option>
+          <option value="N">미사용</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="button-row">
+      <button id="staffSaveButton" onclick="saveStaffItem()">직원 저장</button>
+      <button id="staffCancelEditButton" class="gray hidden" onclick="cancelStaffEdit()">수정 취소</button>
+      <button class="gray" onclick="clearStaffForm()">입력 초기화</button>
+    </div>
+
+    <h2 style="margin-top:30px">직원목록</h2>
+    <div id="staffListArea"></div>
+  </section>
+
+  <section id="workTab" class="card hidden">
+    <div class="section-header">
+      <h2>개인업무 입력</h2>
+      <div class="inline-date no-print">
+        <label>입력일자</label>
+        <input id="workDate" type="date" onchange="changeSectionDate(this.value)">
+      </div>
+    </div>
+    <div style="max-width:420px">
+      <label>직원명</label>
+      <select id="workWorker"></select>
+    </div>
+
+    <label style="margin-top:18px">업무내용</label>
+    <textarea id="workContent" placeholder="금일 수행 업무를 입력하세요."></textarea>
+
+    <div class="button-row">
+      <button id="workSaveButton" onclick="saveWork()">업무 저장</button>
+      <button id="workCancelEditButton" class="gray hidden" onclick="cancelWorkEdit()">수정 취소</button>
+      <button class="gray" onclick="clearWorkForm()">입력 초기화</button>
+    </div>
+
+    <h2 style="margin-top:30px">금일 업무현황</h2>
+    <div id="workList"></div>
+  </section>
+
+
+  <section id="operationTab" class="card hidden">
+    <div class="section-header">
+      <h2>프로그램 운영 입력</h2>
+      <div class="inline-date no-print">
+        <label>입력일자</label>
+        <input id="operationDate" type="date" onchange="changeSectionDate(this.value)">
+      </div>
+    </div>
+    <div class="grid">
+      <div>
+        <label>사업명</label>
+        <select id="opProgram" onchange="syncSubProgramOptions()"></select>
+      </div>
+      <div>
+        <label>세부사업</label>
+        <select id="opSubProgram"></select>
+      </div>
+      <div>
+        <label>참여인원</label>
+        <input id="opParticipants" type="number" min="0" value="0">
+      </div>
+      <div>
+        <label>횟수</label>
+        <input id="opCount" type="number" min="0" value="1">
+      </div>
+    </div>
+
+    <label style="margin-top:18px">운영내용</label>
+    <textarea id="opContent" placeholder="프로그램 운영내용, 주요 활동, 참고사항 등을 입력하세요."></textarea>
+
+    <div class="button-row">
+      <button id="operationSaveButton" onclick="saveOperation()">프로그램 운영 저장</button>
+      <button id="operationCancelEditButton" class="gray hidden" onclick="cancelOperationEdit()">수정 취소</button>
+      <button class="gray" onclick="clearOperationForm()">입력 초기화</button>
+    </div>
+
+    <h2 style="margin-top:30px">금일 프로그램 운영현황</h2>
+    <div id="operationList"></div>
+
+    <div class="card no-print" style="padding:18px;margin:22px 0">
+      <h2>특이사항 입력</h2>
+      <label>특이사항</label>
+      <textarea id="specialNote" placeholder="운영상 특이사항, 보호자 문의, 외부기관 연계사항 등을 입력하세요."></textarea>
+
+      <label style="margin-top:14px">관리자 의견</label>
+      <textarea id="managerOpinion" placeholder="팀장 확인사항, 조치 의견, 다음 일정 등을 입력하세요."></textarea>
+
+      <div class="button-row">
+        <button onclick="saveNote()">특이사항 저장</button>
+        <button class="gray" onclick="clearNoteForm()">입력칸 초기화</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="performanceTab" class="card hidden">
+    <h2>실적 확인·보정</h2>
+
+    <div class="notice" style="margin-bottom:16px">
+      프로그램 운영 탭에서 저장한 참여인원과 횟수가 자동 집계됩니다. 보정 입력은 선택 날짜·사업의 최종 일계값을 맞추는 방식입니다.
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width:16%">사업명</th>
+          <th style="width:18%">세부사업</th>
+          <th style="width:9%">일 참여인원</th>
+          <th style="width:8%">일 횟수</th>
+          <th style="width:9%">월 참여인원</th>
+          <th style="width:8%">월 횟수</th>
+          <th style="width:9%">연 참여인원</th>
+          <th style="width:8%">연 횟수</th>
+          <th style="width:10%">목표</th>
+          <th style="width:9%">달성률</th>
+        </tr>
+      </thead>
+      <tbody id="perfAutoBody"></tbody>
+    </table>
+
+    <h2 style="margin-top:30px">일계 보정 입력</h2>
+    <div class="grid">
+      <div>
+        <label>사업명</label>
+        <select id="adjProgram" onchange="syncAdjSubProgramOptions()"></select>
+      </div>
+      <div>
+        <label>세부사업</label>
+        <select id="adjSubProgram" onchange="loadAdjustmentFormValue()"></select>
+      </div>
+      <div>
+        <label>최종 일 참여인원</label>
+        <input id="adjParticipants" type="number" value="0">
+      </div>
+      <div>
+        <label>최종 일 횟수</label>
+        <input id="adjCount" type="number" value="0">
+      </div>
+    </div>
+
+    <label style="margin-top:18px">보정 사유</label>
+    <textarea id="adjMemo" placeholder="예: 중복 입력 정정, 누락 실적 반영, 최종 일계 확인 등"></textarea>
+
+    <div class="button-row">
+      <button onclick="saveAdjustment()">최종값 저장</button>
+      <button class="gray" onclick="clearAdjustmentForm()">보정 입력 초기화</button>
+    </div>
+
+    <h2 style="margin-top:30px">금일 보정값</h2>
+    <div id="adjustmentList"></div>
+  </section>
+  <section id="reportTab" class="card hidden">
+    <div class="button-row no-print">
+      <button onclick="window.print()">PDF 출력</button>
+      <button class="green" onclick="downloadDailyCsv()">엑셀 다운로드</button>
+      <button class="light" onclick="downloadDailyWord()">Word 다운로드</button>
+      <button class="gray" onclick="renderReport()">새로고침</button>
+    </div>
+    <div id="reportArea"></div>
+  </section>
+
+
+
+
+  <section id="monthlyTab" class="card hidden">
+    <h2>월간 운영현황</h2>
+
+    <div class="notice" style="margin-bottom:16px">
+      기준일자의 월을 기준으로 사업별 참여인원, 횟수, 목표 대비 달성률을 확인합니다.
+    </div>
+
+    <div class="grid no-print">
+      <div>
+        <label>조회 월</label>
+        <input id="monthlyMonth" type="month" onchange="renderMonthly()">
+      </div>
+      <div style="display:flex;align-items:end;gap:10px">
+        <button onclick="renderMonthly()">월간현황 조회</button>
+        <button class="green" onclick="downloadMonthlyCsv()">엑셀 다운로드</button>
+        <button class="gray" onclick="window.print()">PDF 출력</button>
+      </div>
+    </div>
+
+    <div class="summary" style="margin-top:18px">
+      <div class="summary-box">
+        <div class="summary-title">월 참여인원</div>
+        <div class="summary-value" id="monthlyParticipantsTotal">0</div>
+      </div>
+      <div class="summary-box">
+        <div class="summary-title">월 횟수</div>
+        <div class="summary-value" id="monthlyCountTotal">0</div>
+      </div>
+      <div class="summary-box">
+        <div class="summary-title">운영 사업 수</div>
+        <div class="summary-value" id="monthlyActivePrograms">0</div>
+      </div>
+      <div class="summary-box">
+        <div class="summary-title">평균 달성률</div>
+        <div class="summary-value" id="monthlyAvgRate">0%</div>
+      </div>
+      <div class="summary-box">
+        <div class="summary-title">보정 건수</div>
+        <div class="summary-value" id="monthlyAdjustmentCount">0</div>
+      </div>
+    </div>
+
+    <h2 style="margin-top:30px">사업별 월간 실적</h2>
+    <div id="monthlyTableArea"></div>
+
+    <h2 style="margin-top:30px">일자별 운영현황</h2>
+    <div id="monthlyDailyArea"></div>
+  </section>
+</div>
+
+<script>
+const DEFAULT_PROGRAMS = [
+  { id: 1, program:'방과후프로그램', sub:'그룹활동', target:200, active:'Y' },
+  { id: 2, program:'방과후프로그램', sub:'일상생활지원', target:200, active:'Y' },
+  { id: 3, program:'가족지원사업', sub:'부모상담', target:50, active:'Y' },
+  { id: 4, program:'지역연계사업', sub:'외부연계활동', target:30, active:'Y' }
+];
+
+const DEFAULT_STAFF = [
+  { id: 1, name:'조상규', role:'팀장', active:'Y' },
+  { id: 2, name:'직원2', role:'팀원', active:'Y' },
+  { id: 3, name:'직원3', role:'팀원', active:'Y' }
+];
+
+let editingWorkId = null;
+let editingOperationId = null;
+let editingProgramId = null;
+let editingStaffId = null;
+
+function getStaffList(){
+  const data = getData();
+  if(!data.staff || !data.staff.length){
+    data.staff = DEFAULT_STAFF.map(s => ({...s}));
+    setData(data);
+  }
+  return (data.staff || []).filter(s => s.active !== 'N');
+}
+
+function getAllStaff(){
+  const data = getData();
+  if(!data.staff || !data.staff.length){
+    data.staff = DEFAULT_STAFF.map(s => ({...s}));
+    setData(data);
+  }
+  return data.staff || [];
+}
+
+function getPrograms(){
+  const data = getData();
+  if(!data.programs || !data.programs.length){
+    data.programs = DEFAULT_PROGRAMS.map(p => ({...p}));
+    setData(data);
+  }
+  return (data.programs || []).filter(p => p.active !== 'N');
+}
+
+function getAllPrograms(){
+  const data = getData();
+  if(!data.programs || !data.programs.length){
+    data.programs = DEFAULT_PROGRAMS.map(p => ({...p}));
+    setData(data);
+  }
+  return data.programs || [];
+}
+
+function today(){
+  return new Date().toISOString().slice(0,10);
+}
+
+document.getElementById('currentDate').value = today();
+syncSectionDates();
+
+function getData(){
+  return JSON.parse(localStorage.getItem('welmoaLogV4') || '{"works":[],"performances":[],"notes":[],"operations":[],"adjustments":[],"settings":{},"programs":[],"staff":[]}');
+}
+
+function setData(data){
+  localStorage.setItem('welmoaLogV4', JSON.stringify(data));
+}
+
+function currentDate(){
+  return document.getElementById('currentDate').value || today();
+}
+
+function setCurrentDate(value){
+  document.getElementById('currentDate').value = value;
+  syncSectionDates();
+  renderAll();
+}
+
+function syncSectionDates(){
+  const d = currentDate();
+  const workDate = document.getElementById('workDate');
+  const operationDate = document.getElementById('operationDate');
+
+  if(workDate) workDate.value = d;
+  if(operationDate) operationDate.value = d;
+}
+
+function changeSectionDate(value){
+  if(!value) return;
+  setCurrentDate(value);
+}
+
+function moveDate(diff){
+  const base = new Date(currentDate());
+  base.setDate(base.getDate() + diff);
+
+  const yyyy = base.getFullYear();
+  const mm = String(base.getMonth() + 1).padStart(2, '0');
+  const dd = String(base.getDate()).padStart(2, '0');
+
+  setCurrentDate(`${yyyy}-${mm}-${dd}`);
+}
+
+function moveToday(){
+  setCurrentDate(today());
+}
+
+function showTab(tab, element){
+  document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+  element.classList.add('active');
+
+  ['programManage','staffManage','work','operation','performance','report','monthly'].forEach(name => {
+    document.getElementById(name + 'Tab').classList.toggle('hidden', name !== tab);
+  });
+
+  if(tab === 'report') renderReport();
+  if(tab === 'performance') renderPerfInputs();
+  if(tab === 'operation') renderOperations();
+  if(tab === 'programManage') renderProgramList();
+  if(tab === 'staffManage') renderStaffList();
+  if(tab === 'monthly') renderMonthly();
+}
+
+function saveWork(){
+  const content = document.getElementById('workContent').value.trim();
+  if(!content){
+    alert('업무내용을 입력해 주세요.');
+    return;
+  }
+
+  const data = getData();
+  const worker = document.getElementById('workWorker').value;
+
+  if(editingWorkId){
+    const target = data.works.find(w => w.id === editingWorkId);
+    if(target){
+      target.date = currentDate();
+      target.worker = worker;
+      target.content = content;
+      target.updatedAt = new Date().toISOString();
+    }
+    editingWorkId = null;
+    resetWorkEditMode();
+    alert('업무내용이 수정되었습니다.');
+  }else{
+    data.works.push({
+      id: Date.now(),
+      date: currentDate(),
+      worker,
+      content,
+      createdAt: new Date().toISOString()
+    });
+    alert('업무가 저장되었습니다.');
+  }
+
+  setData(data);
+  clearDraft('workContent');
+  clearWorkForm();
+  renderAll();
+}
+
+function editWork(id){
+  const data = getData();
+  const target = data.works.find(w => w.id === id);
+  if(!target) return;
+
+  editingWorkId = id;
+  document.getElementById('workWorker').value = target.worker;
+  document.getElementById('workContent').value = target.content;
+  document.getElementById('workSaveButton').innerText = '수정 완료';
+  document.getElementById('workCancelEditButton').classList.remove('hidden');
+
+  const workTabButton = [...document.querySelectorAll('.tab')].find(t => t.innerText.includes('개인업무'));
+  if(workTabButton) showTab('work', workTabButton);
+  document.getElementById('workContent').focus();
+}
+
+function cancelWorkEdit(){
+  editingWorkId = null;
+  resetWorkEditMode();
+  clearWorkForm();
+}
+
+function resetWorkEditMode(){
+  document.getElementById('workSaveButton').innerText = '업무 저장';
+  document.getElementById('workCancelEditButton').classList.add('hidden');
+}
+
+function deleteWork(id){
+  if(!confirm('이 업무기록을 삭제할까요?')) return;
+  const data = getData();
+  data.works = data.works.filter(w => w.id !== id);
+  setData(data);
+
+  if(editingWorkId === id){
+    editingWorkId = null;
+    resetWorkEditMode();
+    clearWorkForm();
+  }
+
+  renderAll();
+}
+
+function clearWorkForm(){
+  document.getElementById('workContent').value = '';
+}
+
+function filteredWorks(){
+  const data = getData();
+  const d = currentDate();
+  const worker = document.getElementById('filterWorker').value;
+  return data.works.filter(w => w.date === d && (!worker || w.worker === worker));
+}
+
+function renderWorks(){
+  const works = filteredWorks();
+
+  if(!works.length){
+    document.getElementById('workList').innerHTML = '<div class="empty">선택한 날짜에 입력된 업무가 없습니다.</div>';
+    return;
+  }
+
+  document.getElementById('workList').innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th style="width:16%">직원명</th>
+          <th>업무내용</th>
+          <th class="no-print" style="width:10%">관리</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${works.map(w => `
+          <tr>
+            <td>${escapeHtml(w.worker)}</td>
+            <td>${nl2br(escapeHtml(w.content))}</td>
+            <td class="no-print">
+              <div class="row-actions">
+                <button class="light" onclick="editWork(${w.id})">수정</button>
+                <button class="red" onclick="deleteWork(${w.id})">삭제</button>
+              </div>
+            </td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+function renderPerfInputs(){
+  const data = getData();
+  const d = currentDate();
+  const html = getPrograms().map((p, idx) => {
+    const day = sumPerf(data.performances, p, d, 'day');
+    const month = sumPerf(data.performances, p, d, 'month');
+    const year = sumPerf(data.performances, p, d, 'year');
+    const rate = p.target ? Math.round(year / p.target * 100) : 0;
+
+    return `
+      <tr>
+        <td>${p.program}</td>
+        <td>${p.sub}</td>
+        <td><input type="number" min="0" value="0" data-idx="${idx}" class="dailyInput"></td>
+        <td>${month}</td>
+        <td>${year}</td>
+        <td>${p.target}</td>
+        <td>${rate}%</td>
+        <td><input type="text" data-memo-idx="${idx}" placeholder="비고"></td>
+      </tr>
+    `;
+  }).join('');
+
+  document.getElementById('perfInputBody').innerHTML = html;
+}
+
+
+
+function sumPerf(list, programObj, date, mode){
+  return list
+    .filter(x => {
+      if(x.program !== programObj.program || x.sub !== programObj.sub) return false;
+      if(mode === 'day') return x.date === date;
+      if(mode === 'month') return x.date.slice(0,7) === date.slice(0,7);
+      if(mode === 'year') return x.date.slice(0,4) === date.slice(0,4);
+      return false;
+    })
+    .reduce((sum, x) => sum + Number(x.count || 0), 0);
+}
+
+
+
+
+function renderStaffSelects(){
+  const staff = getStaffList();
+  const filter = document.getElementById('filterWorker');
+  const worker = document.getElementById('workWorker');
+
+  if(filter){
+    const current = filter.value;
+    filter.innerHTML = '<option value="">전체 직원</option>' + staff.map(s => `<option value="${escapeHtml(s.name)}">${escapeHtml(s.name)}${s.role ? ' · ' + escapeHtml(s.role) : ''}</option>`).join('');
+    if([...filter.options].some(o => o.value === current)) filter.value = current;
+  }
+
+  if(worker){
+    const current = worker.value;
+    worker.innerHTML = staff.map(s => `<option value="${escapeHtml(s.name)}">${escapeHtml(s.name)}${s.role ? ' · ' + escapeHtml(s.role) : ''}</option>`).join('');
+    if([...worker.options].some(o => o.value === current)) worker.value = current;
+  }
+}
+
+function saveStaffItem(){
+  const name = document.getElementById('smName').value.trim();
+  const role = document.getElementById('smRole').value.trim();
+  const active = document.getElementById('smActive').value;
+
+  if(!name){
+    alert('직원명을 입력해 주세요.');
+    return;
+  }
+
+  const data = getData();
+  if(!data.staff || !data.staff.length){
+    data.staff = DEFAULT_STAFF.map(s => ({...s}));
+  }
+
+  if(editingStaffId){
+    const item = data.staff.find(s => s.id === editingStaffId);
+    if(item){
+      item.name = name;
+      item.role = role;
+      item.active = active;
+      item.updatedAt = new Date().toISOString();
+    }
+    editingStaffId = null;
+    resetStaffEditMode();
+    alert('직원정보가 수정되었습니다.');
+  }else{
+    const duplicated = data.staff.some(s => s.name === name && s.active !== 'N');
+    if(duplicated){
+      alert('이미 등록된 직원명입니다.');
+      return;
+    }
+
+    data.staff.push({
+      id: Date.now(),
+      name,
+      role,
+      active,
+      createdAt: new Date().toISOString()
+    });
+    alert('직원정보가 저장되었습니다.');
+  }
+
+  setData(data);
+  clearStaffForm();
+  refreshStaffDependentViews();
+}
+
+function editStaffItem(id){
+  const item = getAllStaff().find(s => s.id === id);
+  if(!item) return;
+
+  editingStaffId = id;
+  document.getElementById('smName').value = item.name;
+  document.getElementById('smRole').value = item.role || '';
+  document.getElementById('smActive').value = item.active || 'Y';
+  document.getElementById('staffSaveButton').innerText = '수정 완료';
+  document.getElementById('staffCancelEditButton').classList.remove('hidden');
+}
+
+function cancelStaffEdit(){
+  editingStaffId = null;
+  resetStaffEditMode();
+  clearStaffForm();
+}
+
+function resetStaffEditMode(){
+  document.getElementById('staffSaveButton').innerText = '직원 저장';
+  document.getElementById('staffCancelEditButton').classList.add('hidden');
+}
+
+function clearStaffForm(){
+  document.getElementById('smName').value = '';
+  document.getElementById('smRole').value = '';
+  document.getElementById('smActive').value = 'Y';
+}
+
+function toggleStaffActive(id){
+  const data = getData();
+  const item = (data.staff || []).find(s => s.id === id);
+  if(!item) return;
+
+  item.active = item.active === 'N' ? 'Y' : 'N';
+  item.updatedAt = new Date().toISOString();
+
+  setData(data);
+  refreshStaffDependentViews();
+}
+
+function deleteStaffItem(id){
+  const item = getAllStaff().find(s => s.id === id);
+  if(!item) return;
+
+  const used = isStaffUsed(item.name);
+  if(used){
+    alert('이미 업무기록에서 사용된 직원입니다. 삭제 대신 미사용 처리해 주세요.');
+    return;
+  }
+
+  if(!confirm('이 직원정보를 삭제할까요?')) return;
+
+  const data = getData();
+  data.staff = (data.staff || []).filter(s => s.id !== id);
+  setData(data);
+
+  if(editingStaffId === id){
+    editingStaffId = null;
+    resetStaffEditMode();
+    clearStaffForm();
+  }
+
+  refreshStaffDependentViews();
+}
+
+function isStaffUsed(name){
+  const data = getData();
+  return (data.works || []).some(w => w.worker === name);
+}
+
+function renderStaffList(){
+  const area = document.getElementById('staffListArea');
+  if(!area) return;
+
+  const staff = getAllStaff();
+
+  if(!staff.length){
+    area.innerHTML = '<div class="empty">등록된 직원이 없습니다.</div>';
+    return;
+  }
+
+  area.innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th style="width:28%">직원명</th>
+          <th style="width:28%">직책/역할</th>
+          <th style="width:14%">사용여부</th>
+          <th class="no-print">관리</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${staff.map(s => `
+          <tr>
+            <td>${escapeHtml(s.name)}</td>
+            <td>${escapeHtml(s.role || '')}</td>
+            <td>${s.active === 'N' ? '미사용' : '사용'}</td>
+            <td class="no-print">
+              <div class="row-actions">
+                <button class="light" onclick="editStaffItem(${s.id})">수정</button>
+                <button class="gray" onclick="toggleStaffActive(${s.id})">${s.active === 'N' ? '사용' : '미사용'}</button>
+                <button class="red" onclick="deleteStaffItem(${s.id})">삭제</button>
+              </div>
+            </td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+function refreshStaffDependentViews(){
+  const feature = featureSettings();
+document.getElementById('usePersonalWork').value = feature.usePersonalWork || 'Y';
+document.getElementById('approvalUse').value = feature.approvalUse || 'Y';
+document.getElementById('approvalCount').value = feature.approvalCount || '3';
+renderApprovalNameInputs();
+toggleApprovalSettingFields();
+applyFeatureVisibility();
+renderStaffSelects();
+  renderStaffList();
+  renderAll();
+}
+
+
+function saveProgramItem(){
+  const program = document.getElementById('pmProgram').value.trim();
+  const sub = document.getElementById('pmSub').value.trim();
+  const target = Number(document.getElementById('pmTarget').value || 0);
+  const active = document.getElementById('pmActive').value;
+
+  if(!program || !sub){
+    alert('사업명과 세부사업을 입력해 주세요.');
+    return;
+  }
+
+  const data = getData();
+  if(!data.programs || !data.programs.length){
+    data.programs = DEFAULT_PROGRAMS.map(p => ({...p}));
+  }
+
+  if(editingProgramId){
+    const item = data.programs.find(p => p.id === editingProgramId);
+    if(item){
+      item.program = program;
+      item.sub = sub;
+      item.target = target;
+      item.active = active;
+      item.updatedAt = new Date().toISOString();
+    }
+    editingProgramId = null;
+    resetProgramEditMode();
+    alert('사업정보가 수정되었습니다.');
+  }else{
+    const duplicated = data.programs.some(p => p.program === program && p.sub === sub && p.active !== 'N');
+    if(duplicated){
+      alert('이미 등록된 사업/세부사업입니다.');
+      return;
+    }
+
+    data.programs.push({
+      id: Date.now(),
+      program,
+      sub,
+      target,
+      active,
+      createdAt: new Date().toISOString()
+    });
+    alert('사업정보가 저장되었습니다.');
+  }
+
+  setData(data);
+  clearProgramForm();
+  refreshProgramDependentViews();
+}
+
+function editProgramItem(id){
+  const item = getAllPrograms().find(p => p.id === id);
+  if(!item) return;
+
+  editingProgramId = id;
+  document.getElementById('pmProgram').value = item.program;
+  document.getElementById('pmSub').value = item.sub;
+  document.getElementById('pmTarget').value = Number(item.target || 0);
+  document.getElementById('pmActive').value = item.active || 'Y';
+  document.getElementById('programSaveButton').innerText = '수정 완료';
+  document.getElementById('programCancelEditButton').classList.remove('hidden');
+}
+
+function cancelProgramEdit(){
+  editingProgramId = null;
+  resetProgramEditMode();
+  clearProgramForm();
+}
+
+function resetProgramEditMode(){
+  document.getElementById('programSaveButton').innerText = '사업 저장';
+  document.getElementById('programCancelEditButton').classList.add('hidden');
+}
+
+function clearProgramForm(){
+  document.getElementById('pmProgram').value = '';
+  document.getElementById('pmSub').value = '';
+  document.getElementById('pmTarget').value = 0;
+  document.getElementById('pmActive').value = 'Y';
+}
+
+function toggleProgramActive(id){
+  const data = getData();
+  const item = (data.programs || []).find(p => p.id === id);
+  if(!item) return;
+
+  item.active = item.active === 'N' ? 'Y' : 'N';
+  item.updatedAt = new Date().toISOString();
+
+  setData(data);
+  refreshProgramDependentViews();
+}
+
+function deleteProgramItem(id){
+  const item = getAllPrograms().find(p => p.id === id);
+  if(!item) return;
+
+  const used = isProgramUsed(item.program, item.sub);
+  if(used){
+    alert('이미 운영기록 또는 보정기록에서 사용된 사업입니다. 삭제 대신 미사용 처리해 주세요.');
+    return;
+  }
+
+  if(!confirm('이 사업정보를 삭제할까요?')) return;
+
+  const data = getData();
+  data.programs = (data.programs || []).filter(p => p.id !== id);
+  setData(data);
+
+  if(editingProgramId === id){
+    editingProgramId = null;
+    resetProgramEditMode();
+    clearProgramForm();
+  }
+
+  refreshProgramDependentViews();
+}
+
+function isProgramUsed(program, sub){
+  const data = getData();
+  const opUsed = (data.operations || []).some(o => o.program === program && o.sub === sub);
+  const adjUsed = (data.adjustments || []).some(a => a.program === program && a.sub === sub);
+  return opUsed || adjUsed;
+}
+
+function renderProgramList(){
+  const list = document.getElementById('programList');
+  if(!list) return;
+
+  const programs = getAllPrograms();
+
+  if(!programs.length){
+    list.innerHTML = '<div class="empty">등록된 사업이 없습니다.</div>';
+    return;
+  }
+
+  list.innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th style="width:22%">사업명</th>
+          <th style="width:24%">세부사업</th>
+          <th style="width:12%">연간목표</th>
+          <th style="width:12%">사용여부</th>
+          <th class="no-print">관리</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${programs.map(p => `
+          <tr>
+            <td>${escapeHtml(p.program)}</td>
+            <td>${escapeHtml(p.sub)}</td>
+            <td>${Number(p.target || 0)}</td>
+            <td>${p.active === 'N' ? '미사용' : '사용'}</td>
+            <td class="no-print">
+              <div class="row-actions">
+                <button class="light" onclick="editProgramItem(${p.id})">수정</button>
+                <button class="gray" onclick="toggleProgramActive(${p.id})">${p.active === 'N' ? '사용' : '미사용'}</button>
+                <button class="red" onclick="deleteProgramItem(${p.id})">삭제</button>
+              </div>
+            </td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+function refreshProgramDependentViews(){
+  renderOperationSelects();
+  renderAdjustmentSelects();
+  renderProgramList();
+  renderAll();
+}
+
+
+function renderAdjustmentSelects(){
+  const programs = [...new Set(getPrograms().map(p => p.program))];
+  const select = document.getElementById('adjProgram');
+  if(!select) return;
+  select.innerHTML = programs.map(p => `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('');
+  syncAdjSubProgramOptions();
+}
+
+function syncAdjSubProgramOptions(){
+  const program = document.getElementById('adjProgram').value;
+  const subs = getPrograms().filter(p => p.program === program);
+  document.getElementById('adjSubProgram').innerHTML = subs.map(p => `<option value="${escapeHtml(p.sub)}">${escapeHtml(p.sub)}</option>`).join('');
+  loadAdjustmentFormValue();
+}
+
+function loadAdjustmentFormValue(){
+  const program = document.getElementById('adjProgram')?.value;
+  const sub = document.getElementById('adjSubProgram')?.value;
+  if(!program || !sub) return;
+
+  const programObj = getPrograms().find(p => p.program === program && p.sub === sub);
+  if(!programObj) return;
+
+  const adj = getAdjustmentForDate(programObj, currentDate());
+  const participants = adj ? Number(adj.participants || 0) : rawOperationTotal(programObj, currentDate(), 'participants');
+  const count = adj ? Number(adj.count || 0) : rawOperationTotal(programObj, currentDate(), 'count');
+
+  document.getElementById('adjParticipants').value = participants;
+  document.getElementById('adjCount').value = count;
+  document.getElementById('adjMemo').value = adj?.memo || '';
+}
+
+function rawOperationTotal(programObj, date, metric){
+  const data = getData();
+  return (data.operations || [])
+    .filter(x => x.program === programObj.program && x.sub === programObj.sub && x.date === date)
+    .reduce((sum, x) => {
+      if(metric === 'participants') return sum + Number(x.participants || 0);
+      if(metric === 'count') return sum + Number(x.count || 0);
+      return sum;
+    }, 0);
+}
+
+function getAdjustmentForDate(programObj, date){
+  const data = getData();
+  const list = (data.adjustments || [])
+    .filter(x => x.program === programObj.program && x.sub === programObj.sub && x.date === date)
+    .sort((a,b) => Number(b.id || 0) - Number(a.id || 0));
+
+  return list[0] || null;
+}
+
+function finalDayValue(programObj, date, metric){
+  const adj = getAdjustmentForDate(programObj, date);
+  if(adj){
+    if(metric === 'participants') return Number(adj.participants || 0);
+    if(metric === 'count') return Number(adj.count || 0);
+  }
+  return rawOperationTotal(programObj, date, metric);
+}
+
+function datesInScope(date, mode){
+  const data = getData();
+  const dates = new Set();
+
+  (data.operations || []).forEach(x => {
+    if(mode === 'day' && x.date === date) dates.add(x.date);
+    if(mode === 'month' && x.date.slice(0,7) === date.slice(0,7)) dates.add(x.date);
+    if(mode === 'year' && x.date.slice(0,4) === date.slice(0,4)) dates.add(x.date);
+  });
+
+  (data.adjustments || []).forEach(x => {
+    if(mode === 'day' && x.date === date) dates.add(x.date);
+    if(mode === 'month' && x.date.slice(0,7) === date.slice(0,7)) dates.add(x.date);
+    if(mode === 'year' && x.date.slice(0,4) === date.slice(0,4)) dates.add(x.date);
+  });
+
+  return [...dates].sort();
+}
+
+function sumMetric(programObj, date, mode, metric){
+  if(mode === 'day') return finalDayValue(programObj, date, metric);
+
+  return datesInScope(date, mode)
+    .reduce((sum, d) => sum + finalDayValue(programObj, d, metric), 0);
+}
+
+function renderPerfInputs(){
+  const d = currentDate();
+  const rows = getPrograms().map(p => {
+    const dayParticipants = sumMetric(p, d, 'day', 'participants');
+    const dayCount = sumMetric(p, d, 'day', 'count');
+    const monthParticipants = sumMetric(p, d, 'month', 'participants');
+    const monthCount = sumMetric(p, d, 'month', 'count');
+    const yearParticipants = sumMetric(p, d, 'year', 'participants');
+    const yearCount = sumMetric(p, d, 'year', 'count');
+    const rate = p.target ? Math.round(yearParticipants / p.target * 100) : 0;
+
+    return `
+      <tr>
+        <td>${escapeHtml(p.program)}</td>
+        <td>${escapeHtml(p.sub)}</td>
+        <td>${dayParticipants}</td>
+        <td>${dayCount}</td>
+        <td>${monthParticipants}</td>
+        <td>${monthCount}</td>
+        <td>${yearParticipants}</td>
+        <td>${yearCount}</td>
+        <td>${p.target}</td>
+        <td>${rate}%</td>
+      </tr>
+    `;
+  }).join('');
+
+  const body = document.getElementById('perfAutoBody');
+  if(body) body.innerHTML = rows;
+  renderAdjustments();
+}
+
+function saveAdjustment(){
+  const data = getData();
+  if(!data.adjustments) data.adjustments = [];
+
+  const participants = Number(document.getElementById('adjParticipants').value || 0);
+  const count = Number(document.getElementById('adjCount').value || 0);
+  const memo = document.getElementById('adjMemo').value.trim();
+  const program = document.getElementById('adjProgram').value;
+  const sub = document.getElementById('adjSubProgram').value;
+  const d = currentDate();
+
+  if(participants < 0 || count < 0){
+    alert('최종값은 0 이상으로 입력해 주세요.');
+    return;
+  }
+
+  const existing = data.adjustments.find(a => a.date === d && a.program === program && a.sub === sub);
+
+  if(existing){
+    existing.participants = participants;
+    existing.count = count;
+    existing.memo = memo;
+    existing.updatedAt = new Date().toISOString();
+  }else{
+    data.adjustments.push({
+      id: Date.now(),
+      date: d,
+      program,
+      sub,
+      participants,
+      count,
+      memo,
+      updatedAt: new Date().toISOString()
+    });
+  }
+
+  setData(data);
+  clearAdjustmentForm();
+  renderAll();
+  alert('최종 일계값이 저장되었습니다.');
+}
+
+function clearAdjustmentForm(){
+  loadAdjustmentFormValue();
+}
+
+function filteredAdjustments(){
+  const data = getData();
+  const d = currentDate();
+  return (data.adjustments || []).filter(a => a.date === d);
+}
+
+function deleteAdjustment(id){
+  if(!confirm('이 보정내역을 삭제할까요?')) return;
+  const data = getData();
+  data.adjustments = (data.adjustments || []).filter(a => a.id !== id);
+  setData(data);
+  renderAll();
+}
+
+function renderAdjustments(){
+  const list = document.getElementById('adjustmentList');
+  if(!list) return;
+
+  const adjustments = filteredAdjustments();
+  if(!adjustments.length){
+    list.innerHTML = '<div class="empty">선택한 날짜에 저장된 보정값이 없습니다.</div>';
+    return;
+  }
+
+  list.innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th>사업명</th>
+          <th>세부사업</th>
+          <th>최종 일 참여인원</th>
+          <th>최종 일 횟수</th>
+          <th>사유</th>
+          <th class="no-print">관리</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${adjustments.map(a => `
+          <tr>
+            <td>${escapeHtml(a.program)}</td>
+            <td>${escapeHtml(a.sub)}</td>
+            <td>${Number(a.participants || 0)}</td>
+            <td>${Number(a.count || 0)}</td>
+            <td>${nl2br(escapeHtml(a.memo || ''))}</td>
+            <td class="no-print"><button class="red" onclick="deleteAdjustment(${a.id})">삭제</button></td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+
+function renderSummary(){
+  const d = currentDate();
+  const works = filteredWorks();
+
+  const dayParticipants = getPrograms().reduce((sum, p) => sum + sumMetric(p, d, 'day', 'participants'), 0);
+  const monthParticipants = getPrograms().reduce((sum, p) => sum + sumMetric(p, d, 'month', 'participants'), 0);
+  const yearParticipants = getPrograms().reduce((sum, p) => sum + sumMetric(p, d, 'year', 'participants'), 0);
+
+  const rates = getPrograms().map(p => {
+    const y = sumMetric(p, d, 'year', 'participants');
+    return p.target ? y / p.target * 100 : 0;
+  });
+  const avg = rates.length ? Math.round(rates.reduce((a,b)=>a+b,0) / rates.length) : 0;
+
+  document.getElementById('dayWorkCount').innerText = works.length;
+  document.getElementById('dayPerfTotal').innerText = dayParticipants;
+  document.getElementById('monthPerfTotal').innerText = monthParticipants;
+  document.getElementById('yearPerfTotal').innerText = yearParticipants;
+  document.getElementById('avgRate').innerText = avg + '%';
+}
+
+
+
+function loadSettings(){
+  const data = getData();
+  const settings = data.settings || {};
+  const defaults = {
+    orgName:'',
+    teamName:'',
+    writerName:'',
+    approvalUse:'Y'
+  };
+
+  ['orgName','teamName','writerName','approvalUse'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.value = settings[id] ?? defaults[id] ?? '';
+  });
+}
+
+function saveSettings(){
+  const data = getData();
+  data.settings = {
+    orgName: document.getElementById('orgName').value.trim(),
+    teamName: document.getElementById('teamName').value.trim(),
+    writerName: document.getElementById('writerName').value.trim(),
+    approvalUse: document.getElementById('approvalUse').value
+  };
+  setData(data);
+  renderReport();
+  alert('운영일지 기본정보가 저장되었습니다.');
+}
+
+function renderOperationSelects(){
+  const programs = [...new Set(getPrograms().map(p => p.program))];
+  const programSelect = document.getElementById('opProgram');
+  if(!programSelect) return;
+
+  programSelect.innerHTML = programs.map(p => `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('');
+  syncSubProgramOptions();
+}
+
+function syncSubProgramOptions(){
+  const program = document.getElementById('opProgram').value;
+  const subs = getPrograms().filter(p => p.program === program);
+  document.getElementById('opSubProgram').innerHTML = subs.map(p => `<option value="${escapeHtml(p.sub)}">${escapeHtml(p.sub)}</option>`).join('');
+}
+
+function saveOperation(){
+  const data = getData();
+  if(!data.operations) data.operations = [];
+
+  const participants = Number(document.getElementById('opParticipants').value || 0);
+  const count = Number(document.getElementById('opCount').value || 0);
+  const content = document.getElementById('opContent').value.trim();
+  const program = document.getElementById('opProgram').value;
+  const sub = document.getElementById('opSubProgram').value;
+
+  if(!program || !sub){
+    alert('사업명과 세부사업을 선택해 주세요.');
+    return;
+  }
+
+  if(participants === 0 && count === 0 && !content){
+    alert('참여인원, 횟수 또는 운영내용 중 하나 이상 입력해 주세요.');
+    return;
+  }
+
+  if(editingOperationId){
+    const target = data.operations.find(o => o.id === editingOperationId);
+    if(target){
+      target.date = currentDate();
+      target.program = program;
+      target.sub = sub;
+      target.participants = participants;
+      target.count = count;
+      target.content = content;
+      target.updatedAt = new Date().toISOString();
+    }
+
+    editingOperationId = null;
+    resetOperationEditMode();
+    alert('프로그램 운영기록이 수정되었습니다.');
+  }else{
+    data.operations.push({
+      id: Date.now(),
+      date: currentDate(),
+      program,
+      sub,
+      participants,
+      count,
+      content,
+      createdAt: new Date().toISOString()
+    });
+
+    alert('프로그램 운영내용이 저장되었습니다.');
+  }
+
+  setData(data);
+  clearDraft('opContent');
+  clearOperationForm();
+  renderAll();
+}
+
+function editOperation(id){
+  const data = getData();
+  const target = (data.operations || []).find(o => o.id === id);
+  if(!target) return;
+
+  editingOperationId = id;
+
+  document.getElementById('opProgram').value = target.program;
+  syncSubProgramOptions();
+  document.getElementById('opSubProgram').value = target.sub;
+  document.getElementById('opParticipants').value = Number(target.participants || 0);
+  document.getElementById('opCount').value = Number(target.count || 0);
+  document.getElementById('opContent').value = target.content || '';
+
+  document.getElementById('operationSaveButton').innerText = '수정 완료';
+  document.getElementById('operationCancelEditButton').classList.remove('hidden');
+
+  const operationTab = [...document.querySelectorAll('.tab')].find(t => t.innerText.includes('프로그램 운영'));
+  if(operationTab) showTab('operation', operationTab);
+
+  document.getElementById('opContent').focus();
+}
+
+function cancelOperationEdit(){
+  editingOperationId = null;
+  resetOperationEditMode();
+  clearOperationForm();
+}
+
+function resetOperationEditMode(){
+  document.getElementById('operationSaveButton').innerText = '프로그램 운영 저장';
+  document.getElementById('operationCancelEditButton').classList.add('hidden');
+}
+
+function clearOperationForm(){
+  document.getElementById('opParticipants').value = 0;
+  document.getElementById('opCount').value = 1;
+  document.getElementById('opContent').value = '';
+}
+
+function deleteOperation(id){
+  if(!confirm('이 프로그램 운영기록을 삭제할까요?')) return;
+  const data = getData();
+  data.operations = (data.operations || []).filter(o => o.id !== id);
+  setData(data);
+
+  if(editingOperationId === id){
+    editingOperationId = null;
+    resetOperationEditMode();
+    clearOperationForm();
+  }
+
+  renderAll();
+}
+
+function filteredOperations(){
+  const data = getData();
+  const d = currentDate();
+  return (data.operations || []).filter(o => o.date === d);
+}
+
+function renderOperations(){
+  const ops = filteredOperations();
+
+  if(!ops.length){
+    document.getElementById('operationList').innerHTML = '<div class="empty">선택한 날짜에 입력된 프로그램 운영기록이 없습니다.</div>';
+    return;
+  }
+
+  document.getElementById('operationList').innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th style="width:18%">사업명</th>
+          <th style="width:18%">세부사업</th>
+          <th style="width:10%">참여인원</th>
+          <th style="width:8%">횟수</th>
+          <th>운영내용</th>
+          <th class="no-print" style="width:10%">관리</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${ops.map(o => `
+          <tr>
+            <td>${escapeHtml(o.program)}</td>
+            <td>${escapeHtml(o.sub)}</td>
+            <td>${Number(o.participants || 0)}</td>
+            <td>${Number(o.count || 0)}</td>
+            <td>${nl2br(escapeHtml(o.content || ''))}</td>
+            <td class="no-print">
+              <div class="row-actions">
+                <button class="light" onclick="editOperation(${o.id})">수정</button>
+                <button class="red" onclick="deleteOperation(${o.id})">삭제</button>
+              </div>
+            </td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+function setupFastInput(){
+  document.addEventListener('keydown', function(e){
+    if((e.ctrlKey || e.metaKey) && e.key === 'Enter'){
+      const visible = ['programManage','staffManage','work','operation','performance','report','monthly'].find(name => !document.getElementById(name + 'Tab').classList.contains('hidden'));
+      if(visible === 'work') saveWork();
+      if(visible === 'operation') saveOperation();
+      if(visible === 'performance') saveAdjustment();
+    }
+  });
+
+  ['workContent','opContent','specialNote','managerOpinion'].forEach(id => {
+    const el = document.getElementById(id);
+    if(!el) return;
+    const draftKey = 'welmoaDraft_' + id;
+    el.value = localStorage.getItem(draftKey) || el.value;
+    el.addEventListener('input', () => localStorage.setItem(draftKey, el.value));
+  });
+}
+
+function clearDraft(id){
+  localStorage.removeItem('welmoaDraft_' + id);
+}
+
+
+function getNoteByDate(date){
+  const data = getData();
+  return (data.notes || []).find(n => n.date === date) || { date, special:'', manager:'' };
+}
+
+function saveNote(){
+  const data = getData();
+  if(!data.notes) data.notes = [];
+
+  const d = currentDate();
+  const existing = data.notes.find(n => n.date === d);
+
+  const note = {
+    date: d,
+    special: document.getElementById('specialNote').value.trim(),
+    manager: document.getElementById('managerOpinion').value.trim(),
+    updatedAt: new Date().toISOString()
+  };
+
+  if(existing){
+    existing.special = note.special;
+    existing.manager = note.manager;
+    existing.updatedAt = note.updatedAt;
+  }else{
+    data.notes.push(note);
+  }
+
+  setData(data);
+  clearDraft('specialNote');
+  clearDraft('managerOpinion');
+  renderReport();
+  alert('특이사항/관리자 의견이 저장되었습니다.');
+}
+
+function loadNoteForm(){
+  const note = getNoteByDate(currentDate());
+  const special = document.getElementById('specialNote');
+  const manager = document.getElementById('managerOpinion');
+
+  if(special) special.value = note.special || '';
+  if(manager) manager.value = note.manager || '';
+}
+
+function clearNoteForm(){
+  document.getElementById('specialNote').value = '';
+  document.getElementById('managerOpinion').value = '';
+}
+
+
+
+function currentMonth(){
+  const monthInput = document.getElementById('monthlyMonth');
+  if(monthInput && monthInput.value) return monthInput.value;
+  return currentDate().slice(0,7);
+}
+
+function uniqueDatesInMonth(month){
+  const data = getData();
+  const dates = new Set();
+
+  (data.operations || []).forEach(o => {
+    if(o.date && o.date.slice(0,7) === month) dates.add(o.date);
+  });
+
+  (data.adjustments || []).forEach(a => {
+    if(a.date && a.date.slice(0,7) === month) dates.add(a.date);
+  });
+
+  return [...dates].sort();
+}
+
+function monthlyProgramRows(month){
+  return getPrograms().map(p => {
+    const participants = sumMetric(p, month + '-01', 'month', 'participants');
+    const count = sumMetric(p, month + '-01', 'month', 'count');
+    const rate = p.target ? Math.round(participants / Number(p.target || 0) * 100) : 0;
+    const hasResult = participants > 0 || count > 0;
+
+    return {
+      ...p,
+      participants,
+      count,
+      rate,
+      hasResult
+    };
+  });
+}
+
+function csvEscape(value){
+  const text = String(value ?? '');
+  return '"' + text.replace(/"/g, '""') + '"';
+}
+
+function downloadCsv(filename, rows){
+  const csv = rows.map(row => row.map(csvEscape).join(',')).join('\r\n');
+  const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function downloadMonthlyCsv(){
+  const month = currentMonth();
+  const programRows = monthlyProgramRows(month);
+  const dailyRows = uniqueDatesInMonth(month).map(date => {
+    const dayParticipants = getPrograms().reduce((sum, p) => sum + sumMetric(p, date, 'day', 'participants'), 0);
+    const dayCount = getPrograms().reduce((sum, p) => sum + sumMetric(p, date, 'day', 'count'), 0);
+    const workCount = (getData().works || []).filter(w => w.date === date).length;
+    return { date, workCount, dayParticipants, dayCount };
+  });
+
+  const rows = [];
+  rows.push(['월간 운영현황', month]);
+  rows.push([]);
+  rows.push(['사업별 월간 실적']);
+  rows.push(['사업명', '세부사업', '월 참여인원', '월 횟수', '연간목표', '달성률(%)', '비고']);
+  programRows.forEach(r => {
+    rows.push([
+      r.program,
+      r.sub,
+      r.participants,
+      r.count,
+      Number(r.target || 0),
+      r.rate,
+      r.hasResult ? '' : '실적 없음'
+    ]);
+  });
+
+  rows.push([]);
+  rows.push(['일자별 운영현황']);
+  rows.push(['일자', '업무 입력건수', '참여인원', '횟수', '비고']);
+  dailyRows.forEach(r => {
+    rows.push([r.date, r.workCount, r.dayParticipants, r.dayCount, '']);
+  });
+
+  downloadCsv(`welmoa-monthly-report-${month}.csv`, rows);
+}
+
+function dailyReportData(){
+  const data = getData();
+  const d = currentDate();
+  const settings = data.settings || {};
+  const works = filteredWorks();
+  const operations = filteredOperations();
+  const note = getNoteByDate(d);
+
+  const perfRows = getPrograms().map(p => {
+    const dayParticipants = sumMetric(p, d, 'day', 'participants');
+    const dayCount = sumMetric(p, d, 'day', 'count');
+    const monthParticipants = sumMetric(p, d, 'month', 'participants');
+    const monthCount = sumMetric(p, d, 'month', 'count');
+    const yearParticipants = sumMetric(p, d, 'year', 'participants');
+    const yearCount = sumMetric(p, d, 'year', 'count');
+    const rate = p.target ? Math.round(yearParticipants / p.target * 100) : 0;
+    return { ...p, dayParticipants, dayCount, monthParticipants, monthCount, yearParticipants, yearCount, rate };
+  });
+
+  return { d, settings, works, operations, note, perfRows };
+}
+
+function downloadDailyCsv(){
+  const { d, settings, works, operations, note, perfRows } = dailyReportData();
+
+  const rows = [];
+  rows.push(['총괄운영일지', d]);
+  rows.push([]);
+  rows.push(['기관명', settings.orgName || '', '부서/팀명', settings.teamName || '']);
+  rows.push(['작성일자', d, '작성자', settings.writerName || '']);
+  const labels = approvalLabels();
+  if(labels.length){
+    rows.push(['결재라인', ...labels]);
+  }
+  rows.push([]);
+
+  const usePersonalWork = featureSettings().usePersonalWork !== 'N';
+
+  if(usePersonalWork){
+    rows.push(['1. 개인별 업무내용']);
+    rows.push(['직원명', '업무내용']);
+    works.forEach(w => rows.push([w.worker, w.content]));
+    if(!works.length) rows.push(['', '입력된 업무가 없습니다.']);
+    rows.push([]);
+  }
+
+  rows.push([`${usePersonalWork ? '2' : '1'}. 프로그램 운영현황`]);
+  rows.push(['사업명', '세부사업', '참여인원', '횟수', '운영내용']);
+  operations.forEach(o => rows.push([o.program, o.sub, Number(o.participants || 0), Number(o.count || 0), o.content || '']));
+  if(!operations.length) rows.push(['', '', '', '', '입력된 프로그램 운영기록이 없습니다.']);
+  rows.push([]);
+
+  rows.push(['3. 사업 실적 현황']);
+  rows.push(['사업명', '세부사업', '일 참여인원', '일 횟수', '월 참여인원', '월 횟수', '연 참여인원', '연 횟수', '목표', '달성률(%)']);
+  perfRows.forEach(r => rows.push([
+    r.program,
+    r.sub,
+    r.dayParticipants,
+    r.dayCount,
+    r.monthParticipants,
+    r.monthCount,
+    r.yearParticipants,
+    r.yearCount,
+    Number(r.target || 0),
+    r.rate
+  ]));
+  rows.push([]);
+
+  rows.push(['4. 특이사항']);
+  rows.push([note.special || '특이사항 없음']);
+  rows.push([]);
+
+  rows.push(['5. 관리자 의견']);
+  rows.push([note.manager || '관리자 의견 없음']);
+
+  downloadCsv(`welmoa-daily-report-${d}.csv`, rows);
+}
+
+function downloadBlob(filename, content, type){
+  const blob = new Blob([content], { type });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function reportTableHtml(headers, rows){
+  return `
+    <table>
+      <thead>
+        <tr>${headers.map(h => `<th>${escapeHtml(h)}</th>`).join('')}</tr>
+      </thead>
+      <tbody>
+        ${rows.map(row => `<tr>${row.map(cell => `<td>${nl2br(escapeHtml(cell))}</td>`).join('')}</tr>`).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+function downloadDailyWord(){
+  const { d, settings, works, operations, note, perfRows } = dailyReportData();
+
+  const workRows = works.length
+    ? works.map(w => [w.worker, w.content])
+    : [['', '입력된 업무가 없습니다.']];
+
+  const operationRows = operations.length
+    ? operations.map(o => [o.program, o.sub, Number(o.participants || 0), Number(o.count || 0), o.content || ''])
+    : [['', '', '', '', '입력된 프로그램 운영기록이 없습니다.']];
+
+  const perfTableRows = perfRows.map(r => [
+    r.program,
+    r.sub,
+    r.dayParticipants,
+    r.dayCount,
+    r.monthParticipants,
+    r.monthCount,
+    r.yearParticipants,
+    r.yearCount,
+    Number(r.target || 0),
+    r.rate + '%'
+  ]);
+
+  const approvalLabelsForWord = approvalLabels();
+  const approvalHtml = approvalLabelsForWord.length ? `
+    <table class="approval">
+      <thead><tr>${approvalLabelsForWord.map(label => `<th>${escapeHtml(label)}</th>`).join('')}</tr></thead>
+      <tbody><tr>${approvalLabelsForWord.map(() => '<td></td>').join('')}</tr></tbody>
+    </table>
+  ` : '';
+
+  const content = `
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>총괄운영일지 ${d}</title>
+<style>
+  body{font-family:Malgun Gothic,Arial,sans-serif;font-size:11pt;color:#111;}
+  h1{text-align:center;font-size:20pt;margin:0 0 18px;}
+  h2{font-size:14pt;margin:22px 0 8px;border-left:5px solid #2563eb;padding-left:8px;}
+  table{width:100%;border-collapse:collapse;margin:8px 0 14px;}
+  th,td{border:1px solid #999;padding:7px;vertical-align:top;}
+  th{background:#eef2ff;}
+  .approval{width:auto;min-width:300px;margin-left:auto;margin-right:0;}
+  .approval td{height:42px;}
+  .box{border:1px solid #999;min-height:70px;padding:10px;white-space:pre-wrap;}
+</style>
+</head>
+<body>
+  ${approvalHtml}
+  <h1>총괄운영일지</h1>
+  <table>
+    <tr><th style="width:16%">기관명</th><td>${escapeHtml(settings.orgName || '-')}</td><th style="width:16%">부서/팀명</th><td>${escapeHtml(settings.teamName || '-')}</td></tr>
+    <tr><th>작성일자</th><td>${d}</td><th>작성자</th><td>${escapeHtml(settings.writerName || '-')}</td></tr>
+  </table>
+
+  ${featureSettings().usePersonalWork !== 'N' ? `
+  <h2>1. 개인별 업무내용</h2>
+  ${reportTableHtml(['직원명','업무내용'], workRows)}
+  ` : ''}
+
+  <h2>${featureSettings().usePersonalWork !== 'N' ? '2' : '1'}. 프로그램 운영현황</h2>
+  ${reportTableHtml(['사업명','세부사업','참여인원','횟수','운영내용'], operationRows)}
+
+  <h2>3. 사업 실적 현황</h2>
+  ${reportTableHtml(['사업명','세부사업','일 참여인원','일 횟수','월 참여인원','월 횟수','연 참여인원','연 횟수','목표','달성률'], perfTableRows)}
+
+  <h2>4. 특이사항</h2>
+  <div class="box">${nl2br(escapeHtml(note.special || '특이사항 없음'))}</div>
+
+  <h2>5. 관리자 의견</h2>
+  <div class="box">${nl2br(escapeHtml(note.manager || '관리자 의견 없음'))}</div>
+</body>
+</html>`;
+
+  downloadBlob(`welmoa-daily-report-${d}.doc`, '\ufeff' + content, 'application/msword;charset=utf-8;');
+}
+
+function renderMonthly(){
+  const monthlyInput = document.getElementById('monthlyMonth');
+  if(monthlyInput && !monthlyInput.value) monthlyInput.value = currentDate().slice(0,7);
+
+  const month = currentMonth();
+  const rows = monthlyProgramRows(month);
+  const totalParticipants = rows.reduce((sum, r) => sum + Number(r.participants || 0), 0);
+  const totalCount = rows.reduce((sum, r) => sum + Number(r.count || 0), 0);
+  const activePrograms = rows.filter(r => r.hasResult).length;
+  const rateRows = rows.filter(r => Number(r.target || 0) > 0);
+  const avgRate = rateRows.length ? Math.round(rateRows.reduce((sum, r) => sum + Number(r.rate || 0), 0) / rateRows.length) : 0;
+
+  const data = getData();
+  const adjustmentCount = (data.adjustments || []).filter(a => a.date && a.date.slice(0,7) === month).length;
+
+  const pTotal = document.getElementById('monthlyParticipantsTotal');
+  if(!pTotal) return;
+
+  pTotal.innerText = totalParticipants;
+  document.getElementById('monthlyCountTotal').innerText = totalCount;
+  document.getElementById('monthlyActivePrograms').innerText = activePrograms;
+  document.getElementById('monthlyAvgRate').innerText = avgRate + '%';
+  document.getElementById('monthlyAdjustmentCount').innerText = adjustmentCount;
+
+  document.getElementById('monthlyTableArea').innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th style="width:20%">사업명</th>
+          <th style="width:22%">세부사업</th>
+          <th style="width:12%">월 참여인원</th>
+          <th style="width:10%">월 횟수</th>
+          <th style="width:12%">연간목표</th>
+          <th style="width:10%">달성률</th>
+          <th>비고</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows.map(r => `
+          <tr>
+            <td>${escapeHtml(r.program)}</td>
+            <td>${escapeHtml(r.sub)}</td>
+            <td>${r.participants}</td>
+            <td>${r.count}</td>
+            <td>${Number(r.target || 0)}</td>
+            <td>${r.rate}%</td>
+            <td>${r.hasResult ? '' : '실적 없음'}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+
+  const dailyRows = uniqueDatesInMonth(month).map(date => {
+    const dayParticipants = getPrograms().reduce((sum, p) => sum + sumMetric(p, date, 'day', 'participants'), 0);
+    const dayCount = getPrograms().reduce((sum, p) => sum + sumMetric(p, date, 'day', 'count'), 0);
+    const workCount = (getData().works || []).filter(w => w.date === date).length;
+    return { date, dayParticipants, dayCount, workCount };
+  });
+
+  const usePersonalWorkMonthly = featureSettings().usePersonalWork !== 'N';
+
+  document.getElementById('monthlyDailyArea').innerHTML = dailyRows.length ? `
+    <table>
+      <thead>
+        <tr>
+          <th style="width:20%">일자</th>
+          <th style="width:18%" id="monthlyWorkCountHeader">업무 입력건수</th>
+          <th style="width:18%">참여인원</th>
+          <th style="width:14%">횟수</th>
+          <th>비고</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${dailyRows.map(r => `
+          <tr>
+            <td>${r.date}</td>
+            ${usePersonalWorkMonthly ? `<td>${r.workCount}</td>` : ''}
+            <td>${r.dayParticipants}</td>
+            <td>${r.dayCount}</td>
+            <td></td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  ` : '<div class="empty">선택한 월에 입력된 운영기록이 없습니다.</div>';
+}
+
+
+function renderReport(){
+  const works = filteredWorks();
+  const data = getData();
+  const d = currentDate();
+  const note = getNoteByDate(d);
+  const settings = (data.settings || {});
+  const operations = filteredOperations();
+  loadNoteForm();
+
+  const perfRows = getPrograms().map(p => {
+    const dayParticipants = sumMetric(p, d, 'day', 'participants');
+    const dayCount = sumMetric(p, d, 'day', 'count');
+    const monthParticipants = sumMetric(p, d, 'month', 'participants');
+    const monthCount = sumMetric(p, d, 'month', 'count');
+    const yearParticipants = sumMetric(p, d, 'year', 'participants');
+    const yearCount = sumMetric(p, d, 'year', 'count');
+    const rate = p.target ? Math.round(yearParticipants / p.target * 100) : 0;
+    return { ...p, dayParticipants, dayCount, monthParticipants, monthCount, yearParticipants, yearCount, rate };
+  });
+
+  document.getElementById('reportArea').innerHTML = `
+    <div class="report-output-header">
+      <div class="approval-top-right">${approvalTableHtml()}</div>
+      <div class="report-title">총괄운영일지</div>
+    </div>
+
+    <table style="margin-bottom:18px">
+      <tbody>
+        <tr>
+          <th style="width:16%">기관명</th>
+          <td>${escapeHtml(settings.orgName || '-')}</td>
+          <th style="width:16%">부서/팀명</th>
+          <td>${escapeHtml(settings.teamName || '-')}</td>
+        </tr>
+        <tr>
+          <th>작성일자</th>
+          <td>${d}</td>
+          <th>작성자</th>
+          <td>${escapeHtml(settings.writerName || '-')}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    ${featureSettings().usePersonalWork !== 'N' ? `
+    <h2>1. 개인별 업무내용</h2>
+    ${works.length ? `
+      <table>
+        <thead>
+          <tr><th style="width:16%">직원명</th><th>업무내용</th></tr>
+        </thead>
+        <tbody>
+          ${works.map(w => `
+            <tr>
+              <td>${escapeHtml(w.worker)}</td>
+              <td>${nl2br(escapeHtml(w.content))}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    ` : '<div class="empty">입력된 업무가 없습니다.</div>'}
+    ` : ''}
+
+    <h2 style="margin-top:28px">${featureSettings().usePersonalWork !== 'N' ? '2' : '1'}. 프로그램 운영현황</h2>
+    ${operations.length ? `
+      <table>
+        <thead>
+          <tr><th>사업명</th><th>세부사업</th><th>참여인원</th><th>횟수</th><th>운영내용</th></tr>
+        </thead>
+        <tbody>
+          ${operations.map(o => `
+            <tr>
+              <td>${escapeHtml(o.program)}</td>
+              <td>${escapeHtml(o.sub)}</td>
+              <td>${Number(o.participants || 0)}</td>
+              <td>${Number(o.count || 0)}</td>
+              <td>${nl2br(escapeHtml(o.content || ''))}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    ` : '<div class="empty">입력된 프로그램 운영기록이 없습니다.</div>'}
+
+    <h2 style="margin-top:28px">${featureSettings().usePersonalWork !== 'N' ? '3' : '2'}. 사업 실적 현황</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>사업명</th><th>세부사업</th><th>일 참여인원</th><th>일 횟수</th><th>월 참여인원</th><th>월 횟수</th><th>연 참여인원</th><th>연 횟수</th><th>목표</th><th>달성률</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${perfRows.map(r => `
+          <tr>
+            <td>${r.program}</td>
+            <td>${r.sub}</td>
+            <td>${r.dayParticipants}</td>
+            <td>${r.dayCount}</td>
+            <td>${r.monthParticipants}</td>
+            <td>${r.monthCount}</td>
+            <td>${r.yearParticipants}</td>
+            <td>${r.yearCount}</td>
+            <td>${r.target}</td>
+            <td>${r.rate}%</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+
+    <h2 style="margin-top:28px">${featureSettings().usePersonalWork !== 'N' ? '4' : '3'}. 특이사항</h2>
+    <div class="empty" style="min-height:90px">${note.special ? nl2br(escapeHtml(note.special)) : '특이사항 없음'}</div>
+
+    <h2 style="margin-top:28px">${featureSettings().usePersonalWork !== 'N' ? '5' : '4'}. 관리자 의견</h2>
+    <div class="empty" style="min-height:90px">${note.manager ? nl2br(escapeHtml(note.manager)) : '관리자 의견 없음'}</div>
+  `;
+}
+
+
+function featureSettings(){
+  const data = getData();
+  if(!data.featureSettings){
+    data.featureSettings = {};
+  }
+
+  const defaults = {
+    usePersonalWork: 'Y',
+    approvalUse: 'Y',
+    approvalCount: '3',
+    approvalNames: ['담당', '팀장', '관장']
+  };
+
+  data.featureSettings = {
+    ...defaults,
+    ...data.featureSettings
+  };
+
+  if(!Array.isArray(data.featureSettings.approvalNames)){
+    data.featureSettings.approvalNames = defaults.approvalNames;
+  }
+
+  setData(data);
+  return data.featureSettings;
+}
+
+function saveFeatureSettings(){
+  const data = getData();
+
+  const count = Number(document.getElementById('approvalCount')?.value || 3);
+  const names = [];
+
+  for(let i = 0; i < count; i++){
+    const input = document.getElementById(`approvalName${i}`);
+    names.push((input?.value || '').trim() || `결재${i + 1}`);
+  }
+
+  data.featureSettings = {
+    usePersonalWork: document.getElementById('usePersonalWork').value,
+    approvalUse: document.getElementById('approvalUse')?.value || 'Y',
+    approvalCount: String(count),
+    approvalNames: names
+  };
+
+  setData(data);
+  toggleApprovalSettingFields();
+  applyFeatureVisibility();
+  renderAll();
+}
+
+function applyFeatureVisibility(){
+  const settings = featureSettings();
+
+  const workTabButton = document.getElementById('workTabButton');
+  const workTab = document.getElementById('workTab');
+
+  const useWork = settings.usePersonalWork !== 'N';
+
+  if(workTabButton){
+    workTabButton.style.display = useWork ? '' : 'none';
+  }
+
+  if(workTab){
+    workTab.style.display = useWork ? '' : 'none';
+  }
+
+  const currentActive = document.querySelector('.tab.active');
+
+  if(!useWork && currentActive && currentActive.id === 'workTabButton'){
+    const operationTab = [...document.querySelectorAll('.tab')].find(t => t.innerText.includes('프로그램 운영'));
+    if(operationTab){
+      showTab('operation', operationTab);
+    }
+  }
+}
+
+
+function toggleApprovalSettingFields(){
+  const use = document.getElementById('approvalUse')?.value || 'Y';
+  const countWrap = document.getElementById('approvalCountWrap');
+  const namesWrap = document.getElementById('approvalNamesWrap');
+
+  if(countWrap) countWrap.style.display = use === 'N' ? 'none' : '';
+  if(namesWrap) namesWrap.style.display = use === 'N' ? 'none' : '';
+}
+
+function renderApprovalNameInputs(){
+  const area = document.getElementById('approvalNameInputs');
+  if(!area) return;
+
+  const settings = featureSettings();
+  const count = Number(document.getElementById('approvalCount')?.value || settings.approvalCount || 3);
+  const names = settings.approvalNames || ['담당', '팀장', '관장'];
+
+  area.innerHTML = Array.from({ length: count }).map((_, i) => `
+    <input
+      id="approvalName${i}"
+      value="${escapeHtml(names[i] || `결재${i + 1}`)}"
+      placeholder="예: 담당"
+      oninput="saveFeatureSettings()"
+    >
+  `).join('');
+}
+
+function approvalLabels(){
+  const settings = featureSettings();
+  if(settings.approvalUse === 'N') return [];
+
+  const count = Number(settings.approvalCount || 3);
+  const names = settings.approvalNames || ['담당', '팀장', '관장'];
+
+  return Array.from({ length: count }).map((_, i) => names[i] || `결재${i + 1}`);
+}
+
+function approvalTableHtml(){
+  const labels = approvalLabels();
+  if(!labels.length) return '';
+
+  return `
+    <table class="approval-table">
+      <thead>
+        <tr>${labels.map(label => `<th>${escapeHtml(label)}</th>`).join('')}</tr>
+      </thead>
+      <tbody>
+        <tr>${labels.map(() => '<td></td>').join('')}</tr>
+      </tbody>
+    </table>
+  `;
+}
+
+function renderAll(){
+  renderWorks();
+  renderOperations();
+  renderPerfInputs();
+  loadAdjustmentFormValue();
+  renderSummary();
+  renderReport();
+}
+
+function exportBackup(){
+  const data = getData();
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `welmoa-operation-log-backup-${currentDate()}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function escapeHtml(str){
+  return String(str ?? '').replace(/[&<>"']/g, m => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#039;'
+  }[m]));
+}
+
+function nl2br(str){
+  return str.replace(/\\n/g, '<br>');
+}
+
+document.getElementById('currentDate').addEventListener('change', function(){ syncSectionDates(); renderAll(); });
+
+getPrograms();
+getStaffList();
+document.getElementById('monthlyMonth').value = currentDate().slice(0,7);
+document.getElementById('usePersonalWork').value = featureSettings().usePersonalWork || 'Y';
+applyFeatureVisibility();
+renderStaffSelects();
+renderOperationSelects();
+renderAdjustmentSelects();
+renderProgramList();
+renderStaffList();
+loadSettings();
+setupFastInput();
+renderAll();
+renderMonthly();
+</script>
 </body>
 </html>
