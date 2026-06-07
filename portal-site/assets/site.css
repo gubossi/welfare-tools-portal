@@ -499,3 +499,30 @@ main > p, main > ul, main > ol {
   }
 }
 
+.brand-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.brand-divider {
+  width: 1px;
+  height: 22px;
+  background: #cbd5e1;
+  display: inline-block;
+}
+
+.brand-tagline {
+  font-size: 15px;
+  font-weight: 500;
+  color: #475569;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .brand-tagline,
+  .brand-divider {
+    display: none;
+  }
+}
