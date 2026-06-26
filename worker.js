@@ -18,25 +18,26 @@ const ROOT_HTML = `
 `;
 
 const ANALYTICS_SCRIPT = `
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-4TNGJX9WB9"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4TNGJX9WB9"></script>
+  <script is:inline>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-  gtag('config', 'G-4TNGJX9WB9');
-</script>
+    gtag('config', 'G-4TNGJX9WB9');
+  </script>
 
-<!-- Naver Analytics -->
-<script type="text/javascript" src="https://wcs.pstatic.net/wcslog.js"></script>
-<script type="text/javascript">
-if(!wcs_add) var wcs_add = {};
-wcs_add["wa"] = "c4e4f76e4b7f40";
-if(window.wcs) {
-  wcs_do();
-}
-</script>
+  <!-- Naver Analytics -->
+  <script src="https://wcs.pstatic.net/wcslog.js"></script>
+  <script is:inline>
+    if (!window.wcs_add) window.wcs_add = {};
+    window.wcs_add["wa"] = "c4e4f76e4b7f40";
+
+    if (window.wcs) {
+      wcs_do();
+    }
+  </script>
 `;
 
 async function injectAnalytics(response) {
