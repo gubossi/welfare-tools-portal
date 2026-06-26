@@ -526,3 +526,22 @@ main > p, main > ul, main > ol {
     display: none;
   }
 }
+
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.footer-copy p {
+  margin: 14px 0 0;
+  color: #777;
+  font-size: 13px;
+}
+
+.footer-links {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+}
