@@ -78,6 +78,52 @@ if(window.wcs) {
       margin-bottom: 10px;
     }
 
+    .home-tool-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .home-tool-card {
+      min-width: 0;
+      padding: 0;
+      overflow: hidden;
+      border-radius: 22px;
+    }
+
+    .home-tool-thumb {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      border-bottom: 1px solid #e2e8f0;
+      background: #eff6ff;
+    }
+
+    .home-tool-thumb img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.25s ease;
+    }
+
+    .home-tool-card:hover .home-tool-thumb img {
+      transform: scale(1.025);
+    }
+
+    .home-tool-body {
+      width: 100%;
+      padding: 17px 19px 20px;
+    }
+
+    .home-tool-body .tag {
+      margin-bottom: 8px !important;
+    }
+
+    .home-tool-body h3 {
+      margin: 0 !important;
+      font-size: 1.12rem;
+    }
+
     .trust-panel {
       display: grid;
       grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
@@ -121,12 +167,18 @@ if(window.wcs) {
       .trust-panel {
         grid-template-columns: 1fr;
       }
+
+      .home-tool-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
     }
 
-    @media (max-width: 720px) {
-  .hero-highlights {
-    grid-template-columns: 1fr;
-  }
+    @media (max-width: 560px) {
+      .hero-highlights,
+      .home-tool-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
@@ -195,39 +247,66 @@ if(window.wcs) {
         반복되는 계산과 정리 업무는 도구로 줄이고, 중요한 판단과 기록에 더 집중할 수 있도록 구성했습니다.
       </p>
 
-      <div class="card-grid">
-        <a class="tool-card" href="https://tools.welmoa.kr/salary">
-          <span class="tag">급여</span>
-          <h3>급여 계산기</h3>
-          <p>사회복지 종사자의 급여 및 실수령액을 계산할 수 있는 도구입니다.</p>
+      <div class="card-grid home-tool-grid">
+        <a class="tool-card home-tool-card" href="https://tools.welmoa.kr/salary">
+          <div class="home-tool-thumb">
+            <img src="/assets/tool-thumbnails/salary.webp" alt="사회복지 종사자 급여 모의 계산기 화면" width="960" height="540" loading="lazy">
+          </div>
+          <div class="home-tool-body">
+            <span class="tag">급여</span>
+            <h3>급여 모의 계산기</h3>
+          </div>
         </a>
 
-        <a class="tool-card" href="https://tools.welmoa.kr/lottery">
-          <span class="tag">선정</span>
-          <h3>추첨 도구</h3>
-          <p>프로그램 참여자 선정을 위한 랜덤 추첨 도구입니다.</p>
+        <a class="tool-card home-tool-card" href="https://tools.welmoa.kr/lottery">
+          <div class="home-tool-thumb">
+            <img src="/assets/tool-thumbnails/lottery.webp" alt="프로그램 신청자 추첨 도구 화면" width="960" height="540" loading="lazy">
+          </div>
+          <div class="home-tool-body">
+            <span class="tag">선정</span>
+            <h3>신청자 추첨</h3>
+          </div>
         </a>
 
-        <a class="tool-card" href="https://tools.welmoa.kr/shortener">
-          <span class="tag">공유</span>
-          <h3>URL 단축</h3>
-          <p>긴 링크를 간단하게 줄여 안내문, 문자, 공지에 활용할 수 있습니다.</p>
+        <a class="tool-card home-tool-card" href="https://tools.welmoa.kr/shortener">
+          <div class="home-tool-thumb">
+            <img src="/assets/tool-thumbnails/shortener.webp" alt="URL 단축 도구 화면" width="960" height="540" loading="lazy">
+          </div>
+          <div class="home-tool-body">
+            <span class="tag">공유</span>
+            <h3>URL 단축</h3>
+          </div>
         </a>
 
-        <a class="tool-card" href="https://tools.welmoa.kr/formatter">
-          <span class="tag">명단</span>
-          <h3>텍스트 정리 도구</h3>
-          <p>명단 정리 및 텍스트 가공을 쉽게 처리할 수 있습니다.</p>
+        <a class="tool-card home-tool-card" href="https://tools.welmoa.kr/formatter">
+          <div class="home-tool-thumb">
+            <img src="/assets/tool-thumbnails/formatter.webp" alt="명단 정리 도구 화면" width="960" height="540" loading="lazy">
+          </div>
+          <div class="home-tool-body">
+            <span class="tag">명단</span>
+            <h3>명단정리</h3>
+          </div>
         </a>
 
-<a class="tool-card" href="https://tools.welmoa.kr/tools/operation-log">
-  <span class="tag">운영관리</span>
-  <h3>총괄운영일지 Beta</h3>
-  <p>
-    Google Sheet 연동 기반 개인업무, 프로그램 운영, 실적 집계, 월간현황, 운영일지 출력까지
-    한 번에 관리할 수 있는 온라인 운영관리 도구입니다.
-  </p>
-</a>
+        <a class="tool-card home-tool-card" href="https://tools.welmoa.kr/tools/operation-log/">
+          <div class="home-tool-thumb">
+            <img src="/assets/tool-thumbnails/operation-log.webp" alt="웰모아 총괄운영일지 화면" width="960" height="540" loading="lazy">
+          </div>
+          <div class="home-tool-body">
+            <span class="tag">운영관리</span>
+            <h3>총괄운영일지 Beta</h3>
+          </div>
+        </a>
+
+        <a class="tool-card home-tool-card" href="https://tools.welmoa.kr/tools/eapproval/">
+          <div class="home-tool-thumb">
+            <img src="/assets/tool-thumbnails/eapproval.webp" alt="웰모아 교육용 모의 전자결재 화면" width="960" height="540" loading="lazy">
+          </div>
+          <div class="home-tool-body">
+            <span class="tag">교육·실습</span>
+            <h3>교육용 모의 전자결재</h3>
+          </div>
+        </a>
       </div>
     </section>
 
