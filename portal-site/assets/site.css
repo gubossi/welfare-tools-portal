@@ -252,6 +252,9 @@ article hr, .page-content hr, .policy-card hr, .doc-card hr { border: 0; border-
 .tool-nav-desc { color: var(--muted); font-size: 0.9rem; }
 .tool-nav-card.is-active { background: #edf3ff; border-color: #cfe0ff; cursor: default; }
 .tool-nav-card.is-active:hover { transform: none; box-shadow: none; }
+.tool-nav-card--all { background: #eff6ff; border-color: #bfdbfe; }
+.tool-nav-card--all .tool-nav-title { color: #1d4ed8; }
+.tool-nav-grid.is-shared { grid-template-columns: 1fr; }
 
 /* Notes and callouts */
 .note, .info-box, .callout { padding: 16px 18px; border: 1px solid #dbeafe; border-radius: 14px; background: #f8fbff; color: #29456b; }
@@ -295,6 +298,10 @@ main > p, main > ul, main > ol {
 /* Responsive */
 @media (min-width: 720px) {
   .tool-nav-grid { grid-template-columns: repeat(4, 1fr); }
+  .tool-nav-grid.is-shared { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1000px) {
+  .tool-nav-grid.is-shared { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 @media (max-width: 860px) {
   .container { width: min(var(--max), calc(100% - 28px)); }
