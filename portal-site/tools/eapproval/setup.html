@@ -1,0 +1,17 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>전자결재 설치 방법 | Welmoa</title><meta name="description" content="웰모아 교육용 모의 전자결재 사본 만들기, setup 실행, 권한 승인, 웹앱 배포 안내"><link rel="stylesheet" href="/assets/site.css"><link rel="stylesheet" href="/tools/eapproval/eapproval.css"></head><body>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="/">Welmoa</a><nav><a href="/tools/eapproval/">전자결재 소개</a><a href="/tools/eapproval/guide/">사용 가이드</a><a href="/tools/">도구</a></nav></div></header>
+<main class="ea-wrap"><section class="ea-hero"><span class="ea-badge">설치 안내</span><h1>교육용 모의 전자결재 설치</h1><p class="ea-lead">실습지도자가 자신의 Google Drive에 사본을 만든 뒤 Apps Script 웹앱으로 배포합니다.</p><div class="ea-actions"><a class="ea-btn primary" href="https://docs.google.com/spreadsheets/d/1-clkWfwK96orbjf4CXYHIlIPEA9h6moa6FmhcnUOFo4/copy" target="_blank" rel="noopener">1단계: 사본 만들기</a></div></section>
+<section class="ea-section"><h2>설치 전 확인</h2><ul><li>Google 계정이 필요하며 PC 설치를 권장합니다.</li><li>사본을 설치한 계정이 교육환경과 첨부파일의 관리자가 됩니다.</li><li>기관용 Google Workspace는 관리자 정책에 따라 외부 웹앱 배포가 제한될 수 있습니다.</li></ul></section>
+<section class="ea-section"><h2>전체 설치 순서</h2><div class="ea-steps">
+<div class="ea-step"><strong>스프레드시트 사본 만들기</strong>위 버튼을 눌러 자신의 Google Drive에 사본을 만듭니다.</div>
+<div class="ea-step"><strong>Apps Script 열기</strong><span class="ea-code">확장 프로그램 → Apps Script</span></div>
+<div class="ea-step"><strong>setup 함수 실행</strong>상단 함수 목록에서 <code>setup</code>을 선택하고 실행합니다. 최초 1회만 필요합니다.</div>
+<div class="ea-step"><strong>Google 권한 승인</strong>권한 검토 후 설치 계정을 선택하고 허용합니다. 확인되지 않은 앱 안내가 나오면 원본이 맞는지 확인한 뒤 고급 메뉴에서 계속합니다.</div>
+<div class="ea-step"><strong>웹앱 배포</strong><span class="ea-code">배포 → 새 배포 → 웹 앱</span>실행 사용자는 <b>나</b>, 액세스 권한은 <b>모든 사용자</b>로 설정합니다.</div>
+<div class="ea-step"><strong>최초 로그인과 비밀번호 변경</strong><span class="ea-code">이름: 실습지도자 · 초기 비밀번호: 9999</span>로그인 직후 우측 상단에서 비밀번호를 변경하세요.</div>
+<div class="ea-step"><strong>교육환경 설정</strong>환경설정 → 기본 설정에서 기관·교육과정명, 사용자, 기본 결재선을 정합니다.</div>
+<div class="ea-step"><strong>설치 상태 점검</strong>환경설정 → 설치 상태 점검에서 모든 항목이 정상인지 확인합니다.</div>
+</div></section>
+<section class="ea-section"><h2>정상 설치 확인</h2><div class="ea-shot"><img src="/tools/eapproval/images/eapproval-status.png" alt="전자결재 설치 상태 점검 화면"></div><p>사용자, 결재문서, 결재이력, 게시판, 게시판댓글, 설정과 첨부파일 폴더가 모두 정상으로 표시되어야 합니다. 이상이 있으면 ‘시트·폴더 점검 및 복구’를 실행하세요.</p></section>
+<section class="ea-section"><h2>설치 후 해야 할 일</h2><table class="ea-table"><tr><th>항목</th><th>권장 설정</th></tr><tr><td>기관·교육과정명</td><td>○○복지관 2026년 하계 사회복지현장실습</td></tr><tr><td>문서번호</td><td>EA 등 기관별 접두어</td></tr><tr><td>사용자</td><td>교육용 가명 등록, 초기 비밀번호 변경 안내</td></tr><tr><td>기본 결재선</td><td>실습지도자 선택</td></tr></table><div class="ea-actions"><a class="ea-btn primary" href="/tools/eapproval/guide/">사용 가이드 보기 →</a><a class="ea-btn" href="/tools/eapproval/">소개로 돌아가기</a></div></section>
+</main></body></html>
