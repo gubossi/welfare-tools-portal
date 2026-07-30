@@ -1,116 +1,302 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>업데이트 | Welmoa Tools</title>
-  <meta
-    name="description"
-    content="Welmoa Tools의 기능 추가 및 개선 내역을 안내합니다."
-  />
-  <link rel="stylesheet" href="/assets/site.css" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4TNGJX9WB9"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-4TNGJX9WB9');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welmoa 업데이트 | 사회복지 실무 도구 개선 기록</title>
+  <meta name="description" content="Welmoa의 사회복지 실무 도구와 플랫폼에 새롭게 추가되거나 개선된 기능을 월별로 확인합니다.">
+  <link rel="canonical" href="https://tools.welmoa.kr/updates/">
+  <link rel="stylesheet" href="/assets/site.css">
+  <style>
+    .updates-page {
+      padding-top: 36px;
+      padding-bottom: 56px;
+    }
+
+    .updates-hero {
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 30px;
+      padding: 42px 44px;
+      border: 1px solid #dbe5f2;
+      border-radius: 30px;
+      background:
+        radial-gradient(circle at 92% 12%, rgba(37, 99, 235, 0.12), transparent 26%),
+        linear-gradient(135deg, #eff6ff 0%, #fff 66%, #f8fbff 100%);
+      box-shadow: var(--shadow);
+    }
+
+    .updates-hero h1 {
+      margin: 0 0 12px;
+      font-size: clamp(2.25rem, 4.8vw, 3.8rem);
+      line-height: 1.15;
+      letter-spacing: -0.055em;
+    }
+
+    .updates-hero p {
+      max-width: 700px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.08rem;
+      line-height: 1.8;
+      word-break: keep-all;
+    }
+
+    .updates-board {
+      padding: 34px;
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .updates-board__head {
+      margin-bottom: 30px;
+    }
+
+    .updates-board__head h2 {
+      margin: 0 0 7px;
+      font-size: 1.75rem;
+      letter-spacing: -0.035em;
+    }
+
+    .updates-board__head p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .update-timeline {
+      position: relative;
+      display: grid;
+      gap: 30px;
+    }
+
+    .update-group {
+      position: relative;
+      display: grid;
+      grid-template-columns: 92px minmax(0, 1fr);
+      gap: 24px;
+    }
+
+    .update-month {
+      position: relative;
+      z-index: 1;
+      align-self: start;
+      padding: 8px 12px;
+      border: 1px solid #bfdbfe;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-size: 0.86rem;
+      font-weight: 900;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .update-cards {
+      display: grid;
+      gap: 13px;
+    }
+
+    .update-card {
+      position: relative;
+      padding: 19px 21px;
+      border: 1px solid #e2e8f0;
+      border-radius: 19px;
+      background: #fff;
+      transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+    }
+
+    .update-card:hover {
+      transform: translateY(-2px);
+      border-color: #bfdbfe;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .update-card h3 {
+      margin: 0 0 6px;
+      color: #172554;
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
+    }
+
+    .update-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.94rem;
+      line-height: 1.7;
+    }
+
+    .update-tag {
+      display: inline-flex;
+      margin-bottom: 9px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      color: #475569;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .update-note {
+      margin-top: 28px;
+      padding: 17px 19px;
+      border: 1px solid #dbeafe;
+      border-radius: 16px;
+      background: #f8fbff;
+      color: #475569;
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 700px) {
+      .updates-page {
+        padding-top: 18px;
+        padding-bottom: 30px;
+      }
+
+      .updates-hero {
+        padding: 29px 23px;
+        border-radius: 22px;
+      }
+
+      .updates-hero p {
+        font-size: 1rem;
+      }
+
+      .updates-board {
+        padding: 24px 18px;
+        border-radius: 22px;
+      }
+
+      .update-group {
+        display: block;
+      }
+
+      .update-month {
+        width: fit-content;
+        margin-bottom: 12px;
+      }
+
+      .update-card {
+        padding: 17px;
+      }
+    }
+  </style>
 </head>
 <body>
   <header class="site-header">
-    <div class="container site-header__inner">
-      <a class="site-brand" href="/">
-        <span class="site-brand__logo">W</span>
-        <span class="site-brand__text">
-          <span class="site-brand__title">Welmoa Tools</span>
-          <span class="site-brand__sub">복지 실무를 위한 간편 업무도구</span>
-        </span>
-      </a>
+    <div class="container header-inner">
+      <div class="brand-wrap">
+        <a class="brand" href="/">Welmoa</a>
+        <span class="brand-divider"></span>
+        <span class="brand-tagline">사회복지 실무자를 위한 정보와 도구 플랫폼</span>
+      </div>
 
-      <nav class="site-nav" aria-label="주요 메뉴">
+      <nav aria-label="주요 메뉴">
         <a href="/">홈</a>
-        <a href="/tools">도구</a>
-        <a href="/guide">이용가이드</a>
-        <a class="is-active" href="/updates">업데이트</a>
-        <a href="/about">소개</a>
+        <a href="https://blog.welmoa.kr/blog/">콘텐츠</a>
+        <a href="/tools/">도구</a>
+        <a href="/about/">소개</a>
       </nav>
     </div>
   </header>
 
-  <main>
-    <section class="page-title">
-      <div class="container">
-        <h1>업데이트</h1>
-        <p>
-          Welmoa Tools의 기능 추가 및 개선 내역을 안내합니다.
-        </p>
-      </div>
+  <main class="container updates-page">
+    <section class="updates-hero">
+      <div class="badge">Welmoa Update</div>
+      <h1>업데이트</h1>
+      <p>
+        현장에서 더 편하게 사용할 수 있도록 새로 만든 기능과
+        사용 과정에서 다듬은 내용을 차곡차곡 기록합니다.
+      </p>
     </section>
 
-    <section class="section">
-      <div class="container">
-        <div class="update-list">
-          <article class="update-item">
-            <div class="update-item__top">
-              <h3>포털 기본 구조 정비</h3>
-              <div class="update-date">2026.03</div>
-            </div>
-            <p>
-              Welmoa Tools 메인 포털 구조를 정리하고, 홈·도구·소개·이용가이드·정책 페이지 구성을 정비했습니다.
-            </p>
-          </article>
+    <section class="updates-board" aria-labelledby="update-history-title">
+      <div class="updates-board__head">
+        <h2 id="update-history-title">최근 업데이트</h2>
+        <p>새로운 도구 공개와 주요 개선 사항을 월별로 확인할 수 있습니다.</p>
+      </div>
 
-          <article class="update-item">
-            <div class="update-item__top">
-              <h3>급여조회 도구 포털 연동</h3>
-              <div class="update-date">2026.03</div>
-            </div>
-            <p>
-              급여조회 도구를 포털 내 서브경로로 연동하고, 공통 상단 메뉴와 레이아웃이 적용되도록 개선했습니다.
-            </p>
-          </article>
+      <div class="update-timeline">
+        <section class="update-group" aria-labelledby="updates-2026-07">
+          <time class="update-month" id="updates-2026-07" datetime="2026-07">2026. 07.</time>
+          <div class="update-cards">
+            <article class="update-card">
+              <span class="update-tag">새 도구</span>
+              <h3>사회복지 호봉계산기 공개</h3>
+              <p>2026 사회복지시설 관리안내를 기준으로 경력 인정기간, 예상 호봉과 다음 승급일을 모의 계산할 수 있도록 구성했습니다.</p>
+            </article>
+            <article class="update-card">
+              <span class="update-tag">기능 개선</span>
+              <h3>호봉계산기 유사경력 입력 보완</h3>
+              <p>병원 간호사·치료사 등 80% 유사경력을 바로 추가하고, 실제 경력과 인정률 적용 후 경력을 함께 확인할 수 있도록 개선했습니다.</p>
+            </article>
+            <article class="update-card">
+              <span class="update-tag">새 도구</span>
+              <h3>교육용 모의 전자결재 공개</h3>
+              <p>사회복지현장실습과 신규직원 교육에서 기안·반려·재기안·승인 과정을 직접 연습할 수 있는 교육용 시스템을 추가했습니다.</p>
+            </article>
+          </div>
+        </section>
 
-          <article class="update-item">
-            <div class="update-item__top">
-              <h3>신청자 추첨 도구 포털 연동</h3>
-              <div class="update-date">2026.03</div>
-            </div>
-            <p>
-              신청자 추첨 기능을 Welmoa Tools 포털에 통합하여 하나의 서비스처럼 이용할 수 있도록 구성했습니다.
-            </p>
-          </article>
+        <section class="update-group" aria-labelledby="updates-2026-06">
+          <time class="update-month" id="updates-2026-06" datetime="2026-06">2026. 06.</time>
+          <div class="update-cards">
+            <article class="update-card">
+              <span class="update-tag">Beta</span>
+              <h3>총괄운영일지 공개</h3>
+              <p>개인업무와 프로그램 운영, 실적 집계, 월간현황을 한곳에서 관리하고 PDF·Word·Excel로 출력할 수 있도록 구성했습니다.</p>
+            </article>
+          </div>
+        </section>
 
-          <article class="update-item">
-            <div class="update-item__top">
-              <h3>URL 단축 기능 추가</h3>
-              <div class="update-date">2026.03</div>
-            </div>
-            <p>
-              긴 링크를 짧은 주소로 변환하고, 생성된 단축 링크를 관리할 수 있는 기능을 추가했습니다.
-            </p>
-          </article>
+        <section class="update-group" aria-labelledby="updates-2026-03">
+          <time class="update-month" id="updates-2026-03" datetime="2026-03">2026. 03.</time>
+          <div class="update-cards">
+            <article class="update-card">
+              <span class="update-tag">플랫폼</span>
+              <h3>Welmoa 실무 도구 포털 정비</h3>
+              <p>홈·도구·소개·이용안내 페이지와 공통 메뉴를 정비하고, 여러 실무 도구를 하나의 플랫폼에서 이용할 수 있도록 연결했습니다.</p>
+            </article>
+            <article class="update-card">
+              <span class="update-tag">도구 연동</span>
+              <h3>급여 모의 계산기·신청자 추첨 도구 연동</h3>
+              <p>기존 도구를 Welmoa 포털의 공통 경로와 디자인 체계 안에서 이용할 수 있도록 개선했습니다.</p>
+            </article>
+            <article class="update-card">
+              <span class="update-tag">새 도구</span>
+              <h3>URL 단축·명단정리 기능 추가</h3>
+              <p>긴 주소를 간편하게 공유하고 반복되는 명단 데이터를 일정한 형식으로 정리할 수 있는 실무 기능을 추가했습니다.</p>
+            </article>
+          </div>
+        </section>
+      </div>
 
-          <article class="update-item">
-            <div class="update-item__top">
-              <h3>명단정리 기능 추가</h3>
-              <div class="update-date">2026.03</div>
-            </div>
-            <p>
-              이름, 생년월일, 연락처 등 명단 데이터를 일정한 형식으로 정리할 수 있는 기능을 추가했습니다.
-            </p>
-          </article>
-        </div>
-
-        <div class="notice">
-          기능과 화면 구성은 운영 상황에 따라 계속 개선될 수 있습니다.
-        </div>
+      <div class="update-note">
+        기능과 화면 구성은 현장 사용 경험과 의견을 반영해 계속 개선하고 있습니다.
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div class="container site-footer__inner">
-<div>© 2026 Welmoa Tools. All rights reserved.</div>
-<div>문의: gubossi@gmail.com</div>
-      <div class="site-footer__nav">
-        <a href="/about">소개</a>
-        <a href="/guide">이용가이드</a>
-        <a href="/privacy">개인정보처리방침</a>
-        <a href="/terms">이용약관</a>
+    <div class="container footer-inner">
+      <div class="footer-copy">
+        <div>© Welmoa. 사회복지 실무자를 위한 정보와 도구 플랫폼</div>
+        <p>본 사이트는 사회복지 실무 정보 제공을 목적으로 운영됩니다.</p>
+      </div>
+      <div class="footer-links">
+        <a href="/about/">소개</a>
+        <a href="https://blog.welmoa.kr/blog/">콘텐츠</a>
+        <a href="/privacy/">개인정보처리방침</a>
+        <a href="/terms/">이용약관</a>
       </div>
     </div>
   </footer>
