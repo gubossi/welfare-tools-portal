@@ -240,12 +240,18 @@
       }
     }
 
+    @media (min-width: 1080px) {
+      .card-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
     .card {
       background: var(--tool-surface);
       border: 1px solid var(--tool-border);
       border-radius: var(--tool-radius-xl);
       box-shadow: var(--tool-shadow-soft);
-      padding: 24px 26px;
+      padding: 19px 20px;
     }
 
     .card--tool {
@@ -255,8 +261,8 @@
     }
 
     .card__title {
-      margin: 0 0 10px;
-      font-size: 1.28rem;
+      margin: 0 0 8px;
+      font-size: 1.12rem;
       font-weight: 900;
       line-height: 1.35;
       letter-spacing: -0.02em;
@@ -266,27 +272,33 @@
     .card__text {
       margin: 0;
       color: var(--tool-muted);
-      line-height: 1.7;
-      font-size: 0.95rem;
+      line-height: 1.62;
+      font-size: 0.88rem;
       flex-grow: 1;
     }
 
     .card__meta {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 14px;
-      margin-bottom: 18px;
+      gap: 6px;
+      margin-top: 11px;
+      margin-bottom: 13px;
     }
 
     .card__meta .badge {
       margin-bottom: 0;
-      min-height: 34px;
-      padding: 0 12px;
+      min-height: 28px;
+      padding: 0 10px;
       border: 1px solid var(--tool-border);
       background: #fff;
       color: var(--tool-muted);
       font-size: 12px;
+    }
+
+    .card--tool .btn {
+      min-height: 40px;
+      padding: 9px 14px;
+      font-size: 0.88rem;
     }
 
     .badge--blue {
@@ -561,7 +573,7 @@
 
       <div class="card-grid">
         <article class="card card--tool">
-          <h2 class="card__title">급여조회 💰</h2>
+          <h2 class="card__title">사회복지 종사자 급여 모의 계산기 💰</h2>
           <p class="card__text">
             사회복지시설 급여와 수당 기준을 확인하고 실무 계산에 활용할 수 있는 도구입니다.
           </p>
