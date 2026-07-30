@@ -30,12 +30,24 @@
     }
 
     .welmoa-history__head h2 {
-      margin: 0 0 8px;
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0;
     }
 
-    .welmoa-history__head p {
-      margin: 0;
+    .history-head-divider {
+      color: #cbd5e1;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .history-head-desc {
       color: #64748b;
+      font-size: 0.92rem;
+      font-weight: 500;
+      letter-spacing: 0;
     }
 
     .history-timeline {
@@ -118,6 +130,20 @@
         border-radius: 20px;
       }
 
+      .welmoa-history__head h2 {
+        gap: 6px;
+      }
+
+      .history-head-divider {
+        display: none;
+      }
+
+      .history-head-desc {
+        flex-basis: 100%;
+        font-size: 0.88rem;
+        line-height: 1.5;
+      }
+
       .history-timeline::before {
         left: 5px;
       }
@@ -185,8 +211,11 @@
 
       <section class="welmoa-history" aria-labelledby="welmoa-history-title">
         <div class="welmoa-history__head">
-          <h2 id="welmoa-history-title">Welmoa가 걸어온 과정</h2>
-          <p>현장의 작은 불편을 콘텐츠와 도구로 바꿔온 주요 과정을 정리했습니다.</p>
+          <h2 id="welmoa-history-title">
+            <span>Welmoa가 걸어온 과정</span>
+            <span class="history-head-divider" aria-hidden="true">|</span>
+            <span class="history-head-desc">현장의 작은 불편을 콘텐츠와 도구로 바꿔온 주요 과정을 정리했습니다.</span>
+          </h2>
         </div>
 
         <ol class="history-timeline">
