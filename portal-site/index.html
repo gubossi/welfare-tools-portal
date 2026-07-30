@@ -79,7 +79,7 @@ if(window.wcs) {
     }
 
     .home-tool-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 18px;
     }
 
@@ -121,7 +121,19 @@ if(window.wcs) {
 
     .home-tool-body h3 {
       margin: 0 !important;
-      font-size: 1.12rem;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 1050px) {
+      .home-tool-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 620px) {
+      .home-tool-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     .trust-panel {
@@ -254,7 +266,17 @@ if(window.wcs) {
           </div>
           <div class="home-tool-body">
             <span class="tag">급여</span>
-            <h3>급여 모의 계산기</h3>
+            <h3>사회복지 종사자 급여 모의 계산기</h3>
+          </div>
+        </a>
+
+        <a class="tool-card home-tool-card" href="https://tools.welmoa.kr/tools/hobong/">
+          <div class="home-tool-thumb">
+            <img src="/assets/tool-thumbnails/hobong.webp" alt="사회복지 호봉계산기 화면" width="960" height="540" loading="lazy">
+          </div>
+          <div class="home-tool-body">
+            <span class="tag">호봉·경력</span>
+            <h3>사회복지 호봉계산기</h3>
           </div>
         </a>
 
