@@ -186,6 +186,15 @@ input:focus, select:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgb
 .secondary { width: 100%; padding: 12px 15px; border: 1px solid #b9cbe0; border-radius: 10px; background: #fff; color: var(--teal-dark); font-weight: 800; }
 .secondary:hover { border-color: var(--teal); background: #f3f8fe; }
 .disclaimer { margin: 14px 21px 21px; color: #59677a; font-size: 13px; line-height: 1.6; }
+.other-tools-section { margin-bottom: 42px; padding: 28px; border: 1px solid #e2e8f0; border-radius: 28px; background: #fff; box-shadow: 0 16px 42px rgba(15,23,42,.07); }
+.other-tools-section h2 { margin: 0 0 18px; font-size: 25px; letter-spacing: -.035em; }
+.other-tools-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.other-tools-grid a { display: grid; gap: 7px; min-width: 0; padding: 18px 17px; border: 1px solid #dbe4ee; border-radius: 18px; background: #fff; color: var(--navy); text-decoration: none; box-shadow: 0 8px 22px rgba(15,23,42,.04); transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
+.other-tools-grid a:hover { transform: translateY(-2px); border-color: #bfd7f2; box-shadow: 0 12px 28px rgba(15,23,42,.08); }
+.other-tools-grid b { overflow-wrap: anywhere; font-size: 15px; line-height: 1.4; }
+.other-tools-grid span { color: var(--muted); font-size: 13px; }
+.other-tools-grid .all-tools { background: #eff6ff; border-color: #bfdbfe; }
+.other-tools-grid .all-tools b { color: #1d4ed8; }
 .portal-footer { border-top: 1px solid var(--line); background: #fff; }
 .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-top: 24px; padding-bottom: 24px; color: #65748a; font-size: 13px; }
 .footer-inner b { color: var(--teal-dark); }
@@ -230,6 +239,7 @@ input:focus, select:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgb
   .calculator-grid { grid-template-columns: 1fr; }
   .result-panel { position: static; }
   .career-fields { grid-template-columns: 1fr 1fr; }
+  .other-tools-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 600px) {
@@ -255,6 +265,10 @@ input:focus, select:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgb
   .steps span { padding: 7px 8px; font-size: 11px; }
   .steps i { width: 10px; }
   .calculator-grid { width: min(100% - 16px, 1120px); margin-bottom: 32px; padding: 12px; border-radius: 22px; }
+  .other-tools-section { width: min(100% - 16px, 1120px); margin-bottom: 28px; padding: 20px 16px; border-radius: 22px; }
+  .other-tools-section h2 { font-size: 21px; }
+  .other-tools-grid { grid-template-columns: 1fr; gap: 10px; }
+  .other-tools-grid a { padding: 15px; border-radius: 15px; }
   .panel { padding: 19px; }
   .basic-grid, .basic-options, .basic-date-row, .quick-buttons, .career-fields, .career-fields.military-fields, .military-date-grid { grid-template-columns: 1fr; }
   .basic-summary { align-items: flex-start; flex-wrap: wrap; }
