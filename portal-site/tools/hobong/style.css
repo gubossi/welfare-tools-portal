@@ -116,7 +116,7 @@ button { cursor: pointer; }
 label { display: grid; gap: 8px; color: #465266; font-size: 13px; font-weight: 700; }
 input, select { width: 100%; height: 45px; padding: 0 13px; border: 1px solid #cfd7e2; border-radius: 10px; background: #fff; color: var(--navy); outline: none; }
 input:focus, select:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(15,118,110,.1); }
-.quick-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.quick-buttons { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
 .quick-buttons button { display: grid; gap: 5px; padding: 16px; text-align: left; border: 1px solid #bfd4ea; border-radius: 12px; background: #f3f8fe; color: var(--teal-dark); }
 .quick-buttons small { color: #6d8198; }
 .military-question { margin-top: 13px; padding: 20px; border: 1px solid #c8dcef; border-radius: 13px; background: #f8fbff; }
@@ -160,6 +160,10 @@ input:focus, select:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgb
 .career-fields { grid-template-columns: 1fr 1fr .72fr .72fr; }
 .career-fields.military-fields { grid-template-columns: 1fr 1fr; }
 .military-card-note { margin: 12px 0 0; padding: 10px 12px; border-radius: 8px; background: #edf5ff; color: #5e7690; font-size: 12px; }
+.similar-card-note { display: grid; gap: 5px; margin: 13px 0 0; padding: 12px 14px; border: 1px solid #cfe0f3; border-radius: 10px; background: #f2f7fd; color: #526b86; }
+.similar-card-note b { color: var(--teal-dark); font-size: 13px; }
+.similar-card-note span { color: #1f3d5c; font-size: 13px; font-weight: 800; }
+.similar-card-note small { color: #6d7f94; font-size: 11px; line-height: 1.5; }
 .check { display: flex; align-items: center; gap: 8px; margin-top: 12px; color: var(--muted); font-weight: 500; }
 .check input { width: 16px; height: 16px; }
 .result-panel { position: sticky; top: 20px; overflow: hidden; }
@@ -239,6 +243,7 @@ input:focus, select:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgb
   .calculator-grid { grid-template-columns: 1fr; }
   .result-panel { position: static; }
   .career-fields { grid-template-columns: 1fr 1fr; }
+  .quick-buttons { grid-template-columns: 1fr 1fr; }
   .other-tools-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
