@@ -4,9 +4,15 @@
   const tools = [
     {
       id: "salary",
-      title: "급여조회 💰",
+      title: "사회복지 종사자 급여 모의 계산기 💰",
       description: "급여 및 수당 계산",
       url: "/salary"
+    },
+    {
+      id: "hobong",
+      title: "사회복지 호봉계산기 📈",
+      description: "경력 인정과 예상 호봉 계산",
+      url: "/tools/hobong/"
     },
     {
       id: "lottery",
@@ -69,7 +75,7 @@
   function renderToolNavigation(container) {
     const currentId = container.dataset.currentTool ||
       (detectCurrentTool(window.location.pathname) || {}).id;
-    const limit = Number(container.dataset.toolLimit || 5);
+    const limit = Number(container.dataset.toolLimit || 6);
 
     tools
       .filter(function (tool) { return tool.id !== currentId; })
