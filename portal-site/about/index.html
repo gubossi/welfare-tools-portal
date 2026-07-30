@@ -15,6 +15,138 @@
   <meta name="description" content="Welmoa는 18년차 사회복지사의 현장 경험을 바탕으로 급여·노무·행정 콘텐츠와 사회복지 실무 도구를 직접 만들고 공유하는 플랫폼입니다.">
   <link rel="canonical" href="https://tools.welmoa.kr/about/">
   <link rel="stylesheet" href="/assets/site.css">
+  <style>
+    .welmoa-history {
+      margin: 34px 0 40px;
+      padding: 30px;
+      border: 1px solid #dfe7f3;
+      border-radius: 26px;
+      background: linear-gradient(145deg, #f8fbff 0%, #fff 72%);
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.055);
+    }
+
+    .welmoa-history__head {
+      margin-bottom: 24px;
+    }
+
+    .welmoa-history__head h2 {
+      margin: 0 0 8px;
+    }
+
+    .welmoa-history__head p {
+      margin: 0;
+      color: #64748b;
+    }
+
+    .history-timeline {
+      position: relative;
+      display: grid;
+      gap: 18px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .history-timeline::before {
+      content: "";
+      position: absolute;
+      top: 10px;
+      bottom: 10px;
+      left: 74px;
+      width: 2px;
+      background: #dbeafe;
+    }
+
+    .history-item {
+      position: relative;
+      display: grid;
+      grid-template-columns: 58px minmax(0, 1fr);
+      gap: 28px;
+      align-items: start;
+    }
+
+    .history-date {
+      padding-top: 3px;
+      color: #2563eb;
+      font-size: 0.86rem;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .history-content {
+      position: relative;
+      padding: 17px 19px;
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      background: #fff;
+    }
+
+    .history-content::before {
+      content: "";
+      position: absolute;
+      top: 21px;
+      left: -20px;
+      width: 10px;
+      height: 10px;
+      border: 4px solid #fff;
+      border-radius: 50%;
+      background: #2563eb;
+      box-shadow: 0 0 0 2px #bfdbfe;
+    }
+
+    .history-content h3 {
+      margin: 0 0 6px;
+      font-size: 1rem;
+    }
+
+    .history-content p {
+      margin: 0;
+      color: #64748b;
+      font-size: 0.92rem;
+      line-height: 1.65;
+    }
+
+    .history-actions {
+      margin: 24px 0 0;
+      padding-left: 86px;
+    }
+
+    @media (max-width: 600px) {
+      .welmoa-history {
+        margin: 28px 0 34px;
+        padding: 22px 17px;
+        border-radius: 20px;
+      }
+
+      .history-timeline::before {
+        left: 5px;
+      }
+
+      .history-item {
+        display: block;
+        padding-left: 25px;
+      }
+
+      .history-date {
+        display: block;
+        margin-bottom: 7px;
+        padding-top: 0;
+      }
+
+      .history-content {
+        padding: 15px 16px;
+      }
+
+      .history-content::before {
+        top: 20px;
+        left: -25px;
+      }
+
+      .history-actions {
+        padding-left: 25px;
+      }
+    }
+  </style>
 </head>
 <body>
   <header class="site-header">
@@ -91,6 +223,10 @@
           기본급과 각종 수당·공제 항목을 입력해 참고용 월급과 실수령액을 계산합니다.
         </li>
         <li>
+          <strong>사회복지 호봉계산기</strong>:
+          경력 유형과 근무기간을 바탕으로 인정 경력, 예상 호봉과 다음 승급일을 모의 계산합니다.
+        </li>
+        <li>
           <strong>신청자 추첨 도구</strong>:
           프로그램 참여자와 대기자를 무작위로 선정하고 추첨 결과를 확인·저장합니다.
         </li>
@@ -116,6 +252,55 @@
         각 도구는 사회복지 현장에서 느낀 불편과 실제 사용 경험을 바탕으로 만들었으며,
         사용 과정에서 발견한 오류와 개선 의견을 반영해 계속 보완하고 있습니다.
       </p>
+
+      <section class="welmoa-history" aria-labelledby="welmoa-history-title">
+        <div class="welmoa-history__head">
+          <h2 id="welmoa-history-title">Welmoa가 걸어온 과정</h2>
+          <p>현장의 작은 불편을 콘텐츠와 도구로 바꿔온 주요 과정을 정리했습니다.</p>
+        </div>
+
+        <ol class="history-timeline">
+          <li class="history-item">
+            <time class="history-date" datetime="2026-03">2026. 03.</time>
+            <div class="history-content">
+              <h3>Welmoa 실무 도구 포털 정비</h3>
+              <p>급여 모의 계산기와 신청자 추첨, URL 단축, 명단정리 도구를 하나의 포털에서 이용할 수 있도록 기본 구조를 정리했습니다.</p>
+            </div>
+          </li>
+          <li class="history-item">
+            <time class="history-date" datetime="2026-06">2026. 06.</time>
+            <div class="history-content">
+              <h3>총괄운영일지 Beta 공개</h3>
+              <p>개인업무와 프로그램 운영, 실적 집계, 월간현황과 문서 출력을 한 번에 관리하는 운영일지 도구를 공개했습니다.</p>
+            </div>
+          </li>
+          <li class="history-item">
+            <time class="history-date" datetime="2026-07">2026. 07.</time>
+            <div class="history-content">
+              <h3>교육용 모의 전자결재 공개</h3>
+              <p>사회복지현장실습과 신규직원 교육에서 기안·반려·재기안·승인 과정을 직접 연습할 수 있는 교육도구를 추가했습니다.</p>
+            </div>
+          </li>
+          <li class="history-item">
+            <time class="history-date" datetime="2026-07">2026. 07.</time>
+            <div class="history-content">
+              <h3>사회복지 호봉계산기 공개</h3>
+              <p>2026 사회복지시설 관리안내를 기준으로 경력 인정 여부와 예상 호봉, 다음 승급일을 확인하는 모의 계산기를 공개했습니다.</p>
+            </div>
+          </li>
+          <li class="history-item">
+            <span class="history-date">현재</span>
+            <div class="history-content">
+              <h3>콘텐츠와 도구를 계속 개선하고 있습니다</h3>
+              <p>현장 경험과 실제 사용 의견을 바탕으로 사회복지 실무 콘텐츠를 보완하고, 반복 업무를 줄이는 도구를 차근차근 확장하고 있습니다.</p>
+            </div>
+          </li>
+        </ol>
+
+        <p class="history-actions">
+          <a class="cta" href="/updates/">전체 업데이트 내역 보기</a>
+        </p>
+      </section>
 
       <h2>운영자 소개</h2>
       <p>
