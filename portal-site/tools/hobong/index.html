@@ -21,6 +21,20 @@
 </head>
 <body>
   <div id="root"></div>
+  <script src="/assets/analytics.js?v=20260803-1"></script>
   <script type="module" src="/tools/hobong/app.js"></script>
+  <script>
+    window.WelmoaAnalytics?.observeResultTool({
+      toolId: 'hobong',
+      toolName: 'hobong_calculator',
+      toolVersion: '1.0',
+      rootSelector: '#root',
+      interactionSelector: '.calculator-grid input, .calculator-grid select, .calculator-grid textarea, .calculator-grid button',
+      completeSelector: '.result-top strong:not(.result-placeholder)',
+      startAction: 'calculate',
+      completeAction: 'calculate',
+      errorAction: 'calculate'
+    });
+  </script>
 </body>
 </html>
