@@ -70,6 +70,10 @@ if (pathname.startsWith("/blog")) {
 
   return Response.redirect(`https://blog.welmoa.kr${newPath}`, 301);
 }
+
+if (pathname === "/guide" || pathname === "/guide/") {
+  return Response.redirect("https://tools.welmoa.kr/tools/", 301);
+}
     
     // 공통 리소스
     if (pathname === "/_welmoa/shared.css") {
