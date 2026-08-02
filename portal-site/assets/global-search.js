@@ -25,7 +25,7 @@
 
   if (engagementPaths.has(normalizedPath) && !document.querySelector('script[data-welmoa-engagement]')) {
     const engagementScript = document.createElement('script');
-    engagementScript.src = 'https://tools.welmoa.kr/assets/engagement.js?v=20260802-2';
+    engagementScript.src = 'https://tools.welmoa.kr/assets/engagement.js?v=20260802-3';
     engagementScript.defer = true;
     engagementScript.dataset.welmoaEngagement = 'tool';
     document.head.append(engagementScript);

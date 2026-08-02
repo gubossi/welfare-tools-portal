@@ -22,8 +22,8 @@ const ANALYTICS_SCRIPT = `
 `;
 
 const GLOBAL_SEARCH_ASSETS = `
-  <link rel="stylesheet" href="/assets/global-search.css?v=20260802-3">
-  <script defer src="/assets/global-search.js?v=20260802-3"></script>
+  <link rel="stylesheet" href="/assets/global-search.css?v=20260802-4">
+  <script defer src="/assets/global-search.js?v=20260802-4"></script>
 `;
 
 async function injectPageEnhancements(response) {

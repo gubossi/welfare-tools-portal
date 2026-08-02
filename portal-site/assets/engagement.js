@@ -16,6 +16,23 @@
   const reactionLabel = pageType === 'tool' ? '실무에 활용했어요' : '도움이 되었어요';
   const localReactionKey = `welmoa-reaction:${reaction}:${pageUrl}`;
 
+  const trackEvent = (eventName, parameters = {}) => {
+    const eventParameters = {
+      page_location: pageUrl,
+      page_title: pageTitle,
+      welmoa_page_type: pageType,
+      ...parameters
+    };
+
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', eventName, eventParameters);
+      return;
+    }
+
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event: eventName, ...eventParameters });
+  };
+
   let visitorId = localStorage.getItem('welmoa-visitor-id');
   if (!visitorId) {
     visitorId = crypto.randomUUID().replaceAll('-', '');
@@ -104,6 +121,10 @@
       reactionButton.setAttribute('aria-pressed', String(data.selected));
       reactionCount.textContent = Number(data.count).toLocaleString('ko-KR');
       localStorage.setItem(localReactionKey, String(data.selected));
+      trackEvent('engagement_reaction', {
+        reaction_type: reaction,
+        reaction_action: data.selected ? 'select' : 'cancel'
+      });
       announce(data.selected ? '반응을 남겨주셔서 감사합니다.' : '반응을 취소했습니다.');
     } catch (error) {
       announce(error.message);
@@ -121,6 +142,7 @@
     try {
       await navigator.clipboard.writeText(pageUrl);
       recordShare('copy');
+      trackEvent('engagement_share', { share_method: 'copy' });
       announce('링크를 복사했습니다.');
     } catch {
       announce('주소창의 링크를 복사해 주세요.');
@@ -132,6 +154,7 @@
       try {
         await navigator.share({ title: pageTitle, text: pageTitle, url: pageUrl });
         recordShare('native');
+        trackEvent('engagement_share', { share_method: 'native' });
       } catch (error) {
         if (error.name !== 'AbortError') announce('공유 기능을 열지 못했습니다.');
       }
@@ -139,6 +162,7 @@
       try {
         await navigator.clipboard.writeText(pageUrl);
         recordShare('copy');
+        trackEvent('engagement_share', { share_method: 'copy_fallback' });
         announce('공유할 수 있도록 링크를 복사했습니다.');
       } catch {
         announce('주소창의 링크를 복사해 주세요.');
@@ -146,7 +170,10 @@
     }
   });
 
-  section.querySelector('[data-action="feedback"]').addEventListener('click', () => dialog.showModal());
+  section.querySelector('[data-action="feedback"]').addEventListener('click', () => {
+    trackEvent('engagement_feedback_open');
+    dialog.showModal();
+  });
   dialog.querySelector('[data-dialog-close]').addEventListener('click', () => dialog.close());
   dialog.addEventListener('click', (event) => {
     if (event.target === dialog) dialog.close();
@@ -171,6 +198,9 @@
       });
       form.reset();
       dialog.close();
+      trackEvent('engagement_feedback_submit', {
+        feedback_category: formData.get('category')
+      });
       announce(data.message);
     } catch (error) {
       announce(error.message);
