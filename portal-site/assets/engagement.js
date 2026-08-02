@@ -7,7 +7,7 @@
 
   const stylesheet = document.createElement('link');
   stylesheet.rel = 'stylesheet';
-  stylesheet.href = 'https://tools.welmoa.kr/assets/engagement.css?v=20260802-1';
+  stylesheet.href = 'https://tools.welmoa.kr/assets/engagement.css?v=20260802-2';
   document.head.append(stylesheet);
 
   const pageUrl = `${location.origin}${location.pathname.replace(/\/+$/, '') || '/'}`;
@@ -22,7 +22,7 @@
     localStorage.setItem('welmoa-visitor-id', visitorId);
   }
 
-  const section = document.createElement('section');
+  const section = document.createElement('div');
   section.className = 'welmoa-engagement';
   section.setAttribute('aria-labelledby', 'welmoaEngagementTitle');
   section.innerHTML = `
