@@ -1,6 +1,25 @@
 (() => {
   const PANEL_ID = 'welmoaGlobalSearchPanel';
 
+  const engagementPaths = new Set([
+    '/salary',
+    '/lottery',
+    '/shortener',
+    '/formatter',
+    '/tools/hobong',
+    '/tools/operation-log',
+    '/tools/eapproval'
+  ]);
+  const normalizedPath = location.pathname.replace(/\/+$/, '') || '/';
+
+  if (engagementPaths.has(normalizedPath) && !document.querySelector('script[data-welmoa-engagement]')) {
+    const engagementScript = document.createElement('script');
+    engagementScript.src = 'https://tools.welmoa.kr/assets/engagement.js?v=20260802-1';
+    engagementScript.defer = true;
+    engagementScript.dataset.welmoaEngagement = 'tool';
+    document.head.append(engagementScript);
+  }
+
   function installSearch() {
     if (document.querySelector('.welmoa-global-search-toggle')) return true;
 

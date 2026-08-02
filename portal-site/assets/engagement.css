@@ -1,0 +1,109 @@
+.welmoa-engagement {
+  width: min(1120px, calc(100% - 32px));
+  margin: 44px auto;
+  color: #0f172a;
+  font-family: Pretendard, "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.welmoa-engagement__inner {
+  padding: 28px;
+  border: 1px solid #dbe6f5;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #f8fbff 0%, #fff 72%);
+  box-shadow: 0 14px 36px rgba(15, 23, 42, .06);
+}
+
+.welmoa-engagement__title {
+  margin: 0 0 7px;
+  font-size: clamp(1.2rem, 2vw, 1.45rem);
+  line-height: 1.4;
+}
+
+.welmoa-engagement__description {
+  margin: 0 0 20px;
+  color: #64748b;
+  font-size: .96rem;
+}
+
+.welmoa-engagement__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.welmoa-engagement button {
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid #cbdcf6;
+  border-radius: 999px;
+  background: #fff;
+  color: #1e3a8a;
+  font: inherit;
+  font-weight: 750;
+  cursor: pointer;
+  transition: border-color .15s ease, background .15s ease, transform .15s ease;
+}
+
+.welmoa-engagement button:hover {
+  border-color: #2563eb;
+  background: #eff6ff;
+  transform: translateY(-1px);
+}
+
+.welmoa-engagement button[aria-pressed="true"] {
+  border-color: #2563eb;
+  background: #2563eb;
+  color: #fff;
+}
+
+.welmoa-engagement__feedback-button {
+  margin-left: auto;
+}
+
+.welmoa-engagement__status {
+  min-height: 1.5em;
+  margin: 12px 2px 0;
+  color: #475569;
+  font-size: .9rem;
+}
+
+.welmoa-feedback-dialog {
+  width: min(560px, calc(100% - 28px));
+  padding: 0;
+  border: 0;
+  border-radius: 22px;
+  color: #0f172a;
+  box-shadow: 0 24px 80px rgba(15, 23, 42, .28);
+}
+
+.welmoa-feedback-dialog::backdrop { background: rgba(15, 23, 42, .52); }
+
+.welmoa-feedback-form { padding: 26px; }
+.welmoa-feedback-form h2 { margin: 0 0 8px; font-size: 1.35rem; }
+.welmoa-feedback-form > p { margin: 0 0 20px; color: #64748b; line-height: 1.7; }
+.welmoa-feedback-form label { display: block; margin: 16px 0 7px; font-weight: 750; }
+.welmoa-feedback-form select,
+.welmoa-feedback-form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  background: #fff;
+  color: #0f172a;
+  font: inherit;
+}
+.welmoa-feedback-form textarea { min-height: 150px; resize: vertical; line-height: 1.65; }
+.welmoa-feedback-form select:focus,
+.welmoa-feedback-form textarea:focus { outline: 3px solid rgba(37, 99, 235, .16); border-color: #2563eb; }
+.welmoa-feedback-form__notice { margin-top: 10px !important; font-size: .86rem; color: #64748b !important; }
+.welmoa-feedback-form__actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 20px; }
+.welmoa-feedback-form__submit { border-color: #2563eb !important; background: #2563eb !important; color: #fff !important; }
+
+@media (max-width: 640px) {
+  .welmoa-engagement { width: min(100% - 24px, 1120px); margin: 32px auto; }
+  .welmoa-engagement__inner { padding: 22px 18px; border-radius: 20px; }
+  .welmoa-engagement__actions { display: grid; grid-template-columns: 1fr 1fr; }
+  .welmoa-engagement__feedback-button { grid-column: 1 / -1; margin-left: 0; }
+  .welmoa-engagement button { padding-inline: 11px; }
+}

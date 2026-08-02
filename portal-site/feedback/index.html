@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <title>반응 및 의견 관리 | Welmoa</title>
+  <link rel="stylesheet" href="/assets/site.css">
+  <style>
+    body { background: #f4f7fb; color: #0f172a; }
+    .feedback-admin { width: min(1180px, calc(100% - 32px)); margin: 44px auto 80px; }
+    .feedback-admin h1 { margin: 0 0 8px; font-size: clamp(1.8rem, 4vw, 2.5rem); }
+    .feedback-admin__lead { margin: 0 0 26px; color: #64748b; }
+    .admin-card { margin: 18px 0; padding: 24px; border: 1px solid #dbe4f0; border-radius: 20px; background: #fff; box-shadow: 0 12px 30px rgba(15,23,42,.05); }
+    .admin-login { display: flex; gap: 10px; align-items: end; }
+    .admin-login label { flex: 1; font-weight: 750; }
+    .admin-login input { display: block; width: 100%; box-sizing: border-box; min-height: 46px; margin-top: 7px; padding: 0 13px; border: 1px solid #cbd5e1; border-radius: 11px; font: inherit; }
+    .feedback-admin button { min-height: 44px; padding: 9px 16px; border: 0; border-radius: 11px; background: #2563eb; color: #fff; font: inherit; font-weight: 750; cursor: pointer; }
+    .admin-status { min-height: 1.5em; color: #b91c1c; }
+    .admin-summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
+    .admin-stat { padding: 18px; border: 1px solid #dbe4f0; border-radius: 16px; background: #fff; }
+    .admin-stat span { display: block; color: #64748b; font-size: .9rem; }
+    .admin-stat strong { display: block; margin-top: 5px; font-size: 1.65rem; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+    th, td { padding: 12px 10px; border-bottom: 1px solid #e2e8f0; text-align: left; vertical-align: top; }
+    th { color: #475569; white-space: nowrap; }
+    td a { color: #1d4ed8; }
+    .feedback-message { min-width: 300px; white-space: pre-wrap; line-height: 1.55; }
+    .status-new { color: #b45309; font-weight: 800; }
+    .status-reviewed { color: #15803d; font-weight: 800; }
+    .empty { padding: 24px 0; color: #64748b; text-align: center; }
+    [hidden] { display: none !important; }
+    @media (max-width: 720px) {
+      .admin-login { align-items: stretch; flex-direction: column; }
+      .admin-summary { grid-template-columns: 1fr 1fr; }
+      .admin-card { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand-wrap"><a class="brand" href="/">Welmoa</a><span class="brand-divider"></span><span class="brand-tagline">운영자 화면</span></div>
+      <nav><a href="/tools/">도구</a><a href="https://blog.welmoa.kr/blog/">콘텐츠</a></nav>
+    </div>
+  </header>
+
+  <main class="feedback-admin">
+    <h1>반응 및 의견 관리</h1>
+    <p class="feedback-admin__lead">콘텐츠와 도구에 남겨진 반응, 공유, 비공개 의견을 확인합니다.</p>
+
+    <section class="admin-card" id="loginPanel">
+      <form class="admin-login" id="adminLogin">
+        <label>운영자 키<input id="adminKey" type="password" autocomplete="current-password" required></label>
+        <button type="submit">확인하기</button>
+      </form>
+      <p class="admin-status" id="adminStatus" role="status"></p>
+    </section>
+
+    <div id="dashboard" hidden>
+      <section class="admin-summary" id="adminSummary"></section>
+
+      <section class="admin-card">
+        <h2>페이지별 반응</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>페이지</th><th>구분</th><th>도움</th><th>활용</th><th>공유</th><th>의견</th></tr></thead>
+            <tbody id="pageRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="admin-card">
+        <h2>접수된 의견</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>접수일</th><th>페이지</th><th>유형</th><th>의견</th><th>상태</th><th>처리</th></tr></thead>
+            <tbody id="feedbackRows"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const API = '/api/engagement';
+    const loginForm = document.querySelector('#adminLogin');
+    const keyInput = document.querySelector('#adminKey');
+    const status = document.querySelector('#adminStatus');
+    const dashboard = document.querySelector('#dashboard');
+    let adminKey = sessionStorage.getItem('welmoa-feedback-admin-key') || '';
+
+    const escapeHtml = (value) => String(value ?? '').replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char]));
+    const categoryLabels = { helpful: '도움이 된 점', suggestion: '내용·기능 제안', correction: '내용 수정', error: '오류 제보' };
+    const formatDate = (value) => value ? new Date(`${value.replace(' ', 'T')}Z`).toLocaleString('ko-KR') : '-';
+
+    async function adminApi(path, options = {}) {
+      const response = await fetch(`${API}${path}`, {
+        ...options,
+        headers: { 'content-type': 'application/json', authorization: `Bearer ${adminKey}`, ...(options.headers || {}) }
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || '자료를 불러오지 못했습니다.');
+      return data;
+    }
+
+    function render(data) {
+      const totals = data.pages.reduce((sum, page) => ({
+        reactions: sum.reactions + Number(page.helpful || 0) + Number(page.used || 0),
+        shares: sum.shares + Number(page.shares || 0),
+        feedback: sum.feedback + Number(page.feedback_count || 0)
+      }), { reactions: 0, shares: 0, feedback: 0 });
+      const newFeedback = data.feedback.filter((item) => item.status === 'new').length;
+
+      document.querySelector('#adminSummary').innerHTML = [
+        ['전체 반응', totals.reactions], ['공유', totals.shares], ['전체 의견', totals.feedback], ['미확인 의견', newFeedback]
+      ].map(([label, value]) => `<div class="admin-stat"><span>${label}</span><strong>${Number(value).toLocaleString('ko-KR')}</strong></div>`).join('');
+
+      document.querySelector('#pageRows').innerHTML = data.pages.length ? data.pages.map((page) => `
+        <tr>
+          <td><a href="${escapeHtml(page.page_url)}" target="_blank" rel="noopener">${escapeHtml(page.page_title || page.page_url)}</a></td>
+          <td>${page.page_type === 'tool' ? '도구' : '콘텐츠'}</td>
+          <td>${Number(page.helpful || 0)}</td><td>${Number(page.used || 0)}</td><td>${Number(page.shares || 0)}</td><td>${Number(page.feedback_count || 0)}</td>
+        </tr>`).join('') : '<tr><td class="empty" colspan="6">아직 수집된 반응이 없습니다.</td></tr>';
+
+      document.querySelector('#feedbackRows').innerHTML = data.feedback.length ? data.feedback.map((item) => `
+        <tr>
+          <td>${formatDate(item.created_at)}</td>
+          <td><a href="${escapeHtml(item.page_url)}" target="_blank" rel="noopener">${escapeHtml(item.page_title || item.page_url)}</a></td>
+          <td>${categoryLabels[item.category] || escapeHtml(item.category)}</td>
+          <td class="feedback-message">${escapeHtml(item.message)}</td>
+          <td class="status-${escapeHtml(item.status)}">${item.status === 'new' ? '미확인' : '확인함'}</td>
+          <td><button type="button" data-feedback-id="${Number(item.id)}" data-next-status="${item.status === 'new' ? 'reviewed' : 'new'}">${item.status === 'new' ? '확인 처리' : '미확인으로'}</button></td>
+        </tr>`).join('') : '<tr><td class="empty" colspan="6">아직 접수된 의견이 없습니다.</td></tr>';
+    }
+
+    async function loadDashboard() {
+      status.textContent = '자료를 불러오는 중입니다.';
+      const data = await adminApi('/admin/dashboard');
+      render(data);
+      sessionStorage.setItem('welmoa-feedback-admin-key', adminKey);
+      dashboard.hidden = false;
+      status.textContent = '';
+    }
+
+    loginForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      adminKey = keyInput.value.trim();
+      try { await loadDashboard(); } catch (error) { status.textContent = error.message; dashboard.hidden = true; }
+    });
+
+    document.querySelector('#feedbackRows').addEventListener('click', async (event) => {
+      const button = event.target.closest('[data-feedback-id]');
+      if (!button) return;
+      button.disabled = true;
+      try {
+        await adminApi('/admin/feedback', { method: 'PATCH', body: JSON.stringify({ id: Number(button.dataset.feedbackId), status: button.dataset.nextStatus }) });
+        await loadDashboard();
+      } catch (error) { status.textContent = error.message; button.disabled = false; }
+    });
+
+    if (adminKey) loadDashboard().catch(() => { sessionStorage.removeItem('welmoa-feedback-admin-key'); });
+  </script>
+</body>
+</html>

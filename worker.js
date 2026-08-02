@@ -101,6 +101,11 @@ if (pathname === "/guide" || pathname === "/guide/") {
       return handleDeleteShortUrl(request, env);
     }
 
+    // 콘텐츠·도구 반응 및 비공개 의견 API
+    if (pathname.startsWith("/api/engagement")) {
+      return handleEngagementRequest(request, env);
+    }
+
     // 단축 URL 리다이렉트
     if (pathname.startsWith("/s/")) {
       return handleShortRedirect(request, env);
@@ -535,6 +540,308 @@ async function generateUniqueSlug(env) {
   }
 
   throw new Error("slug generation failed");
+}
+
+//////////////////////////////////////////////////////
+// 콘텐츠·도구 반응 및 비공개 의견 API
+//////////////////////////////////////////////////////
+
+const ENGAGEMENT_ORIGINS = new Set([
+  "https://welmoa.kr",
+  "https://blog.welmoa.kr",
+  "https://tools.welmoa.kr"
+]);
+
+async function handleEngagementRequest(request, env) {
+  const url = new URL(request.url);
+  const origin = request.headers.get("origin") || "";
+  const corsHeaders = engagementCorsHeaders(origin);
+
+  if (request.method === "OPTIONS") {
+    return new Response(null, { status: 204, headers: corsHeaders });
+  }
+
+  try {
+    await ensureEngagementSchema(env);
+
+    if (url.pathname === "/api/engagement/summary" && request.method === "GET") {
+      const page = normalizeWelmoaPage(url.searchParams.get("page"));
+      if (!page) return engagementJson({ ok: false, message: "페이지 주소가 올바르지 않습니다." }, 400, corsHeaders);
+
+      const pageKey = pageKeyFromUrl(page);
+      const reactions = await env.DB.prepare(`
+        SELECT reaction, COUNT(*) AS count
+        FROM engagement_reactions
+        WHERE page_key = ?
+        GROUP BY reaction
+      `).bind(pageKey).all();
+
+      return engagementJson({
+        ok: true,
+        pageKey,
+        reactions: Object.fromEntries(reactions.results.map((row) => [row.reaction, Number(row.count)]))
+      }, 200, corsHeaders);
+    }
+
+    if (url.pathname === "/api/engagement/react" && request.method === "POST") {
+      const body = await readEngagementBody(request);
+      const page = normalizeWelmoaPage(body.pageUrl);
+      const visitorId = normalizeVisitorId(body.visitorId);
+      const reaction = ["helpful", "used"].includes(body.reaction) ? body.reaction : "";
+
+      if (!page || !visitorId || !reaction) {
+        return engagementJson({ ok: false, message: "반응 정보를 확인해 주세요." }, 400, corsHeaders);
+      }
+
+      const pageKey = pageKeyFromUrl(page);
+      const existing = await env.DB.prepare(`
+        SELECT id FROM engagement_reactions
+        WHERE page_key = ? AND reaction = ? AND visitor_id = ?
+      `).bind(pageKey, reaction, visitorId).first();
+
+      let selected = false;
+      if (existing) {
+        await env.DB.prepare("DELETE FROM engagement_reactions WHERE id = ?").bind(existing.id).run();
+      } else {
+        await env.DB.prepare(`
+          INSERT INTO engagement_reactions
+            (page_key, page_url, page_title, page_type, reaction, visitor_id)
+          VALUES (?, ?, ?, ?, ?, ?)
+        `).bind(
+          pageKey,
+          page,
+          cleanText(body.pageTitle, 180),
+          normalizePageType(body.pageType),
+          reaction,
+          visitorId
+        ).run();
+        selected = true;
+      }
+
+      const countRow = await env.DB.prepare(`
+        SELECT COUNT(*) AS count FROM engagement_reactions
+        WHERE page_key = ? AND reaction = ?
+      `).bind(pageKey, reaction).first();
+
+      return engagementJson({ ok: true, selected, count: Number(countRow?.count || 0) }, 200, corsHeaders);
+    }
+
+    if (url.pathname === "/api/engagement/share" && request.method === "POST") {
+      const body = await readEngagementBody(request);
+      const page = normalizeWelmoaPage(body.pageUrl);
+      const channel = ["copy", "kakao", "native"].includes(body.channel) ? body.channel : "copy";
+      if (!page) return engagementJson({ ok: false, message: "페이지 주소가 올바르지 않습니다." }, 400, corsHeaders);
+
+      await env.DB.prepare(`
+        INSERT INTO engagement_shares
+          (page_key, page_url, page_title, page_type, channel)
+        VALUES (?, ?, ?, ?, ?)
+      `).bind(
+        pageKeyFromUrl(page),
+        page,
+        cleanText(body.pageTitle, 180),
+        normalizePageType(body.pageType),
+        channel
+      ).run();
+
+      return engagementJson({ ok: true }, 200, corsHeaders);
+    }
+
+    if (url.pathname === "/api/engagement/feedback" && request.method === "POST") {
+      const body = await readEngagementBody(request);
+      const page = normalizeWelmoaPage(body.pageUrl);
+      const category = ["helpful", "suggestion", "correction", "error"].includes(body.category)
+        ? body.category
+        : "suggestion";
+      const message = cleanText(body.message, 2000);
+
+      if (!page || message.length < 5) {
+        return engagementJson({ ok: false, message: "의견을 5자 이상 입력해 주세요." }, 400, corsHeaders);
+      }
+
+      await env.DB.prepare(`
+        INSERT INTO engagement_feedback
+          (page_key, page_url, page_title, page_type, category, message)
+        VALUES (?, ?, ?, ?, ?, ?)
+      `).bind(
+        pageKeyFromUrl(page),
+        page,
+        cleanText(body.pageTitle, 180),
+        normalizePageType(body.pageType),
+        category,
+        message
+      ).run();
+
+      return engagementJson({ ok: true, message: "소중한 의견을 보내주셔서 감사합니다." }, 200, corsHeaders);
+    }
+
+    if (url.pathname === "/api/engagement/admin/dashboard" && request.method === "GET") {
+      const authError = requireEngagementAdmin(request, env, corsHeaders);
+      if (authError) return authError;
+
+      const [pages, feedback] = await Promise.all([
+        env.DB.prepare(`
+          SELECT
+            p.page_key,
+            MAX(p.page_url) AS page_url,
+            MAX(p.page_title) AS page_title,
+            MAX(p.page_type) AS page_type,
+            SUM(p.helpful) AS helpful,
+            SUM(p.used) AS used,
+            SUM(p.shares) AS shares,
+            SUM(p.feedback_count) AS feedback_count
+          FROM (
+            SELECT page_key, MAX(page_url) AS page_url, MAX(page_title) AS page_title,
+              MAX(page_type) AS page_type,
+              SUM(CASE WHEN reaction = 'helpful' THEN 1 ELSE 0 END) AS helpful,
+              SUM(CASE WHEN reaction = 'used' THEN 1 ELSE 0 END) AS used,
+              0 AS shares, 0 AS feedback_count
+            FROM engagement_reactions GROUP BY page_key
+            UNION ALL
+            SELECT page_key, MAX(page_url), MAX(page_title), MAX(page_type),
+              0, 0, COUNT(*), 0
+            FROM engagement_shares GROUP BY page_key
+            UNION ALL
+            SELECT page_key, MAX(page_url), MAX(page_title), MAX(page_type),
+              0, 0, 0, COUNT(*)
+            FROM engagement_feedback GROUP BY page_key
+          ) p
+          GROUP BY p.page_key
+          ORDER BY (helpful + used + shares + feedback_count) DESC
+          LIMIT 200
+        `).all(),
+        env.DB.prepare(`
+          SELECT id, page_url, page_title, page_type, category, message, status, created_at
+          FROM engagement_feedback
+          ORDER BY CASE WHEN status = 'new' THEN 0 ELSE 1 END, created_at DESC
+          LIMIT 300
+        `).all()
+      ]);
+
+      return engagementJson({ ok: true, pages: pages.results, feedback: feedback.results }, 200, corsHeaders);
+    }
+
+    if (url.pathname === "/api/engagement/admin/feedback" && request.method === "PATCH") {
+      const authError = requireEngagementAdmin(request, env, corsHeaders);
+      if (authError) return authError;
+      const body = await readEngagementBody(request);
+      const id = Number(body.id);
+      const status = ["new", "reviewed"].includes(body.status) ? body.status : "";
+      if (!Number.isInteger(id) || id < 1 || !status) {
+        return engagementJson({ ok: false, message: "처리 상태를 확인해 주세요." }, 400, corsHeaders);
+      }
+      await env.DB.prepare("UPDATE engagement_feedback SET status = ? WHERE id = ?").bind(status, id).run();
+      return engagementJson({ ok: true }, 200, corsHeaders);
+    }
+
+    return engagementJson({ ok: false, message: "요청한 기능을 찾을 수 없습니다." }, 404, corsHeaders);
+  } catch (error) {
+    console.error("engagement api error", error);
+    return engagementJson({ ok: false, message: "잠시 후 다시 시도해 주세요." }, 500, corsHeaders);
+  }
+}
+
+async function ensureEngagementSchema(env) {
+  await env.DB.batch([
+    env.DB.prepare(`CREATE TABLE IF NOT EXISTS engagement_reactions (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      page_key TEXT NOT NULL,
+      page_url TEXT NOT NULL,
+      page_title TEXT NOT NULL DEFAULT '',
+      page_type TEXT NOT NULL DEFAULT 'content',
+      reaction TEXT NOT NULL,
+      visitor_id TEXT NOT NULL,
+      created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      UNIQUE(page_key, reaction, visitor_id)
+    )`),
+    env.DB.prepare(`CREATE TABLE IF NOT EXISTS engagement_shares (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      page_key TEXT NOT NULL,
+      page_url TEXT NOT NULL,
+      page_title TEXT NOT NULL DEFAULT '',
+      page_type TEXT NOT NULL DEFAULT 'content',
+      channel TEXT NOT NULL,
+      created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+    )`),
+    env.DB.prepare(`CREATE TABLE IF NOT EXISTS engagement_feedback (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      page_key TEXT NOT NULL,
+      page_url TEXT NOT NULL,
+      page_title TEXT NOT NULL DEFAULT '',
+      page_type TEXT NOT NULL DEFAULT 'content',
+      category TEXT NOT NULL,
+      message TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'new',
+      created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+    )`),
+    env.DB.prepare("CREATE INDEX IF NOT EXISTS idx_engagement_reactions_page ON engagement_reactions(page_key)"),
+    env.DB.prepare("CREATE INDEX IF NOT EXISTS idx_engagement_feedback_status ON engagement_feedback(status, created_at)")
+  ]);
+}
+
+function normalizeWelmoaPage(value) {
+  try {
+    const url = new URL(String(value || ""));
+    if (!ENGAGEMENT_ORIGINS.has(url.origin)) return "";
+    url.search = "";
+    url.hash = "";
+    url.pathname = url.pathname.replace(/\/+$/, "") || "/";
+    return url.toString();
+  } catch {
+    return "";
+  }
+}
+
+function pageKeyFromUrl(value) {
+  return value.replace(/^https:\/\//, "").replace(/\/$/, "");
+}
+
+function normalizeVisitorId(value) {
+  const id = String(value || "");
+  return /^[a-zA-Z0-9_-]{16,80}$/.test(id) ? id : "";
+}
+
+function normalizePageType(value) {
+  return value === "tool" ? "tool" : "content";
+}
+
+function cleanText(value, maxLength) {
+  return String(value || "").replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, "").trim().slice(0, maxLength);
+}
+
+async function readEngagementBody(request) {
+  const length = Number(request.headers.get("content-length") || 0);
+  if (length > 12000) throw new Error("request body too large");
+  return request.json();
+}
+
+function engagementCorsHeaders(origin) {
+  const headers = new Headers({
+    "content-type": "application/json; charset=utf-8",
+    "cache-control": "no-store",
+    "vary": "Origin"
+  });
+  if (ENGAGEMENT_ORIGINS.has(origin)) {
+    headers.set("access-control-allow-origin", origin);
+    headers.set("access-control-allow-methods", "GET, POST, PATCH, OPTIONS");
+    headers.set("access-control-allow-headers", "Content-Type, Authorization");
+  }
+  return headers;
+}
+
+function engagementJson(data, status, headers) {
+  return new Response(JSON.stringify(data), { status, headers });
+}
+
+function requireEngagementAdmin(request, env, corsHeaders) {
+  if (!env.FEEDBACK_ADMIN_KEY) {
+    return engagementJson({ ok: false, message: "운영자 키가 아직 설정되지 않았습니다." }, 503, corsHeaders);
+  }
+  const supplied = request.headers.get("authorization") || "";
+  if (supplied !== `Bearer ${env.FEEDBACK_ADMIN_KEY}`) {
+    return engagementJson({ ok: false, message: "운영자 인증이 필요합니다." }, 401, corsHeaders);
+  }
+  return null;
 }
 
 async function handleCollectBizinfoGrants(env) {
