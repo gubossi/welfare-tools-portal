@@ -239,7 +239,7 @@ async function proxy(request, targetBase, mountPath) {
         el.append(`<base href="${mountPath}/">`, { html: true });
       }
     })
-    .on("a", new PrefixRewriter("href", mountPath))
+    .on("a", new PrefixRewriter("href", mountPath, true))
     .on("link", new PrefixRewriter("href", mountPath))
     .on("script", new PrefixRewriter("src", mountPath))
     .on("img", new PrefixRewriter("src", mountPath))
@@ -258,9 +258,10 @@ return injectPageEnhancements(rewrittenResponse);
 //////////////////////////////////////////////////////
 
 class PrefixRewriter {
-  constructor(attr, mountPath) {
+  constructor(attr, mountPath, preservePortalLinks = false) {
     this.attr = attr;
     this.mountPath = mountPath;
+    this.preservePortalLinks = preservePortalLinks;
   }
 
   element(el) {
@@ -276,10 +277,34 @@ class PrefixRewriter {
       return;
     }
 
+    if (this.preservePortalLinks && isPortalLink(value)) {
+      return;
+    }
+
     if (value.startsWith("/")) {
       el.setAttribute(this.attr, this.mountPath + value);
     }
   }
+}
+
+function isPortalLink(value) {
+  const portalPaths = new Set([
+    "/",
+    "/tools/",
+    "/about/",
+    "/privacy/",
+    "/terms/",
+    "/updates/",
+    "/guide/",
+    "/formatter/",
+    "/shortener/",
+    "/salary",
+    "/salary/",
+    "/lottery",
+    "/lottery/"
+  ]);
+
+  return portalPaths.has(value) || value.startsWith("/blog/");
 }
 
 //////////////////////////////////////////////////////
