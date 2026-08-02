@@ -21,7 +21,12 @@ const ANALYTICS_SCRIPT = `
   </script>
 `;
 
-async function injectAnalytics(response) {
+const GLOBAL_SEARCH_ASSETS = `
+  <link rel="stylesheet" href="/_welmoa/shared.css?v=20260802-1">
+  <script defer src="/_welmoa/shared.js?v=20260802-1"></script>
+`;
+
+async function injectPageEnhancements(response) {
   const contentType = response.headers.get("content-type") || "";
 
   if (!contentType.includes("text/html")) {
@@ -31,16 +36,18 @@ async function injectAnalytics(response) {
   let html = await response.text();
 
   if (
-    html.includes("G-4TNGJX9WB9") ||
-    html.includes("wcs.pstatic.net/wcslog.js")
+    !html.includes("G-4TNGJX9WB9") &&
+    !html.includes("wcs.pstatic.net/wcslog.js")
   ) {
-    return new Response(html, response);
+    html = html.replace(
+      "</head>",
+      `${ANALYTICS_SCRIPT}\n</head>`
+    );
   }
 
-  html = html.replace(
-    "</head>",
-    `${ANALYTICS_SCRIPT}\n</head>`
-  );
+  if (!html.includes("/_welmoa/shared.js")) {
+    html = html.replace("</head>", `${GLOBAL_SEARCH_ASSETS}\n</head>`);
+  }
 
   return new Response(html, {
     status: response.status,
@@ -192,7 +199,7 @@ if (pathname === "/api/grants/collect") {
     
     // 나머지 정적 파일
     const assetResponse = await env.ASSETS.fetch(request);
-return injectAnalytics(assetResponse);
+return injectPageEnhancements(assetResponse);
   }
 };
 
@@ -243,7 +250,7 @@ async function proxy(request, targetBase, mountPath) {
   response
 );
 
-return injectAnalytics(rewrittenResponse);
+return injectPageEnhancements(rewrittenResponse);
 }
 
 //////////////////////////////////////////////////////
@@ -660,13 +667,170 @@ function json(data, status = 200) {
 }
 
 //////////////////////////////////////////////////////
-// shared (사용 안하지만 유지)
+// 공통 콘텐츠 검색
 //////////////////////////////////////////////////////
 
 function sharedCss() {
-  return "";
+  return `
+.welmoa-content-search-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #334155;
+  font: inherit;
+  font-size: .95rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.welmoa-content-search-toggle:hover,
+.welmoa-content-search-toggle[aria-expanded="true"] {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.welmoa-content-search-icon {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.welmoa-content-search-panel {
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.welmoa-content-search-panel[hidden] {
+  display: none !important;
+}
+
+.welmoa-content-search-form {
+  width: min(1120px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 18px 0;
+}
+
+.welmoa-content-search-form label {
+  display: block;
+  margin-bottom: 7px;
+  color: #334155;
+  font-size: .9rem;
+  font-weight: 700;
+}
+
+.welmoa-content-search-field {
+  display: flex;
+  gap: 8px;
+}
+
+.welmoa-content-search-field input {
+  flex: 1;
+  min-width: 0;
+  min-height: 46px;
+  padding: 0 15px;
+  border: 1px solid #cbd5e1;
+  border-radius: 13px;
+  background: #fff;
+  color: #0f172a;
+  font: inherit;
+}
+
+.welmoa-content-search-field input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, .12);
+}
+
+.welmoa-content-search-field button {
+  min-width: 76px;
+  border: 0;
+  border-radius: 13px;
+  background: #2563eb;
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+@media (max-width: 640px) {
+  .welmoa-content-search-toggle {
+    padding: 8px 10px;
+  }
+
+  .welmoa-content-search-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+`;
 }
 
 function sharedJs() {
-  return "";
+  return `
+(() => {
+  if (document.querySelector('.welmoa-content-search-toggle')) return;
+
+  const header = document.querySelector('.site-header, header');
+  const nav = header?.querySelector('nav');
+
+  if (!header || !nav) return;
+
+  const toggle = document.createElement('button');
+  toggle.type = 'button';
+  toggle.className = 'welmoa-content-search-toggle';
+  toggle.setAttribute('aria-label', '검색 열기');
+  toggle.setAttribute('aria-expanded', 'false');
+  toggle.setAttribute('aria-controls', 'welmoaContentSearchPanel');
+  toggle.innerHTML = '<span class="welmoa-content-search-icon" aria-hidden="true">⌕</span><span class="welmoa-content-search-label">검색</span>';
+
+  const panel = document.createElement('div');
+  panel.id = 'welmoaContentSearchPanel';
+  panel.className = 'welmoa-content-search-panel';
+  panel.hidden = true;
+  panel.innerHTML = ` + "`" + `
+    <form class="welmoa-content-search-form" action="https://blog.welmoa.kr/blog/" method="get" role="search">
+      <label for="welmoaContentSearchInput">콘텐츠 검색</label>
+      <div class="welmoa-content-search-field">
+        <input id="welmoaContentSearchInput" name="q" type="search" placeholder="제목, 설명 또는 분류로 검색해 보세요" autocomplete="off">
+        <button type="submit">검색</button>
+      </div>
+    </form>
+  ` + "`" + `;
+
+  nav.append(toggle);
+  header.insertAdjacentElement('afterend', panel);
+
+  const input = panel.querySelector('input');
+  const close = () => {
+    panel.hidden = true;
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', '검색 열기');
+  };
+
+  toggle.addEventListener('click', () => {
+    const willOpen = panel.hidden;
+    panel.hidden = !willOpen;
+    toggle.setAttribute('aria-expanded', String(willOpen));
+    toggle.setAttribute('aria-label', willOpen ? '검색 닫기' : '검색 열기');
+    if (willOpen) input?.focus();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !panel.hidden) {
+      close();
+      toggle.focus();
+    }
+  });
+})();
+`;
 }
