@@ -12,9 +12,20 @@
   ]);
   const normalizedPath = location.pathname.replace(/\/+$/, '') || '/';
 
+  const footerLinks = document.querySelector('.footer-links');
+  if (footerLinks && !footerLinks.querySelector('a[href*="/tools/"]')) {
+    const toolsLink = document.createElement('a');
+    toolsLink.href = 'https://tools.welmoa.kr/tools/';
+    toolsLink.textContent = '도구';
+    const privacyLink = Array.from(footerLinks.querySelectorAll('a')).find((link) =>
+      link.href.includes('/privacy/')
+    );
+    footerLinks.insertBefore(toolsLink, privacyLink || null);
+  }
+
   if (engagementPaths.has(normalizedPath) && !document.querySelector('script[data-welmoa-engagement]')) {
     const engagementScript = document.createElement('script');
-    engagementScript.src = 'https://tools.welmoa.kr/assets/engagement.js?v=20260802-1';
+    engagementScript.src = 'https://tools.welmoa.kr/assets/engagement.js?v=20260802-2';
     engagementScript.defer = true;
     engagementScript.dataset.welmoaEngagement = 'tool';
     document.head.append(engagementScript);
