@@ -1,22 +1,3 @@
-const ROOT_HTML = `
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <title>Welmoa Tools</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body style="font-family:sans-serif; text-align:center; padding:60px;">
-  <h1>Welmoa Tools</h1>
-  <p>복지 실무를 위한 업무도구 포털입니다.</p>
-
-  <p style="margin-top:30px;">
-    👉 <a href="https://tools.welmoa.kr">포털 바로가기</a>
-  </p>
-</body>
-</html>
-`;
-
 const ANALYTICS_SCRIPT = `
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-4TNGJX9WB9"></script>
@@ -209,13 +190,6 @@ if (pathname === "/api/grants/collect") {
   return handleCollectBizinfoGrants(env);
 }
     
-    // 루트 도메인 안내 화면은 / 일 때만 표시
-    if (url.hostname === "welmoa.kr" && pathname === "/") {
-      return injectAnalytics(new Response(ROOT_HTML, {
-  headers: { "content-type": "text/html; charset=utf-8" }
-}));
-    }
-
     // 나머지 정적 파일
     const assetResponse = await env.ASSETS.fetch(request);
 return injectAnalytics(assetResponse);
