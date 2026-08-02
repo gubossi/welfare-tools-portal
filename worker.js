@@ -277,7 +277,10 @@ class PrefixRewriter {
       return;
     }
 
-    if (this.preservePortalLinks && isPortalLink(value)) {
+    const portalUrl = this.preservePortalLinks ? getPortalUrl(value) : null;
+
+    if (portalUrl) {
+      el.setAttribute(this.attr, portalUrl);
       return;
     }
 
@@ -287,24 +290,32 @@ class PrefixRewriter {
   }
 }
 
-function isPortalLink(value) {
-  const portalPaths = new Set([
-    "/",
-    "/tools/",
-    "/about/",
-    "/privacy/",
-    "/terms/",
-    "/updates/",
-    "/guide/",
-    "/formatter/",
-    "/shortener/",
-    "/salary",
-    "/salary/",
-    "/lottery",
-    "/lottery/"
+function getPortalUrl(value) {
+  const portalUrls = new Map([
+    ["/", "https://welmoa.kr/"],
+    ["/tools/", "https://tools.welmoa.kr/tools/"],
+    ["/about/", "https://tools.welmoa.kr/about/"],
+    ["/privacy/", "https://welmoa.kr/privacy/"],
+    ["/terms/", "https://welmoa.kr/terms/"],
+    ["/updates/", "https://tools.welmoa.kr/updates/"],
+    ["/guide/", "https://tools.welmoa.kr/guide/"],
+    ["/formatter/", "https://tools.welmoa.kr/formatter/"],
+    ["/shortener/", "https://tools.welmoa.kr/shortener/"],
+    ["/salary", "https://tools.welmoa.kr/salary"],
+    ["/salary/", "https://tools.welmoa.kr/salary/"],
+    ["/lottery", "https://tools.welmoa.kr/lottery"],
+    ["/lottery/", "https://tools.welmoa.kr/lottery/"]
   ]);
 
-  return portalPaths.has(value) || value.startsWith("/blog/");
+  if (portalUrls.has(value)) {
+    return portalUrls.get(value);
+  }
+
+  if (value.startsWith("/blog/")) {
+    return `https://blog.welmoa.kr${value}`;
+  }
+
+  return null;
 }
 
 //////////////////////////////////////////////////////
