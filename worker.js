@@ -22,8 +22,8 @@ const ANALYTICS_SCRIPT = `
 `;
 
 const GLOBAL_SEARCH_ASSETS = `
-  <link rel="stylesheet" href="/_welmoa/shared.css?v=20260802-1">
-  <script defer src="/_welmoa/shared.js?v=20260802-1"></script>
+  <link rel="stylesheet" href="/assets/global-search.css?v=20260802-2">
+  <script defer src="/assets/global-search.js?v=20260802-2"></script>
 `;
 
 async function injectPageEnhancements(response) {
@@ -45,7 +45,7 @@ async function injectPageEnhancements(response) {
     );
   }
 
-  if (!html.includes("/_welmoa/shared.js")) {
+  if (!html.includes("/assets/global-search.js")) {
     html = html.replace("</head>", `${GLOBAL_SEARCH_ASSETS}\n</head>`);
   }
 

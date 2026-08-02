@@ -1,0 +1,143 @@
+.welmoa-global-search-toggle {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  min-width: auto !important;
+  min-height: auto !important;
+  margin: 0 !important;
+  padding: 9px 12px !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #334155 !important;
+  font-family: inherit !important;
+  font-size: .95rem !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  letter-spacing: normal !important;
+  text-decoration: none !important;
+  transform: none !important;
+  cursor: pointer !important;
+}
+
+.welmoa-global-search-toggle:hover,
+.welmoa-global-search-toggle[aria-expanded="true"] {
+  background: #eff6ff !important;
+  color: #2563eb !important;
+}
+
+.welmoa-global-search-toggle svg {
+  width: 17px !important;
+  height: 17px !important;
+  flex: 0 0 17px !important;
+  fill: none !important;
+  stroke: currentColor !important;
+  stroke-width: 2 !important;
+}
+
+.welmoa-global-search-panel {
+  position: relative !important;
+  z-index: 1000 !important;
+  width: 100% !important;
+  margin: 0 !important;
+  border-top: 1px solid #e2e8f0 !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  background: #f8fafc !important;
+  box-shadow: none !important;
+}
+
+.welmoa-global-search-panel[hidden] {
+  display: none !important;
+}
+
+.welmoa-global-search-form {
+  display: block !important;
+  width: min(1120px, calc(100% - 40px)) !important;
+  margin: 0 auto !important;
+  padding: 18px 0 !important;
+}
+
+.welmoa-global-search-form label {
+  display: block !important;
+  margin: 0 0 7px !important;
+  padding: 0 !important;
+  color: #334155 !important;
+  font-family: inherit !important;
+  font-size: .9rem !important;
+  font-weight: 700 !important;
+  line-height: 1.4 !important;
+}
+
+.welmoa-global-search-field {
+  display: flex !important;
+  align-items: stretch !important;
+  gap: 8px !important;
+  width: 100% !important;
+}
+
+.welmoa-global-search-field input {
+  flex: 1 1 auto !important;
+  width: auto !important;
+  min-width: 0 !important;
+  min-height: 46px !important;
+  margin: 0 !important;
+  padding: 0 15px !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 13px !important;
+  background: #fff !important;
+  box-shadow: none !important;
+  color: #0f172a !important;
+  font-family: inherit !important;
+  font-size: 1rem !important;
+  font-weight: 400 !important;
+  line-height: normal !important;
+}
+
+.welmoa-global-search-field input:focus {
+  outline: none !important;
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, .12) !important;
+}
+
+.welmoa-global-search-submit {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: auto !important;
+  min-width: 76px !important;
+  min-height: 46px !important;
+  margin: 0 !important;
+  padding: 0 18px !important;
+  border: 0 !important;
+  border-radius: 13px !important;
+  background: #2563eb !important;
+  box-shadow: none !important;
+  color: #fff !important;
+  font-family: inherit !important;
+  font-size: .95rem !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  letter-spacing: normal !important;
+  transform: none !important;
+  cursor: pointer !important;
+}
+
+@media (max-width: 640px) {
+  .welmoa-global-search-toggle {
+    padding: 8px 9px !important;
+  }
+
+  .welmoa-global-search-label {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
+}
