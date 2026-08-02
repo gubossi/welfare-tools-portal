@@ -1,5 +1,7 @@
 .welmoa-engagement {
-  width: min(1120px, calc(100% - 32px));
+  width: 100%;
+  max-width: 1180px;
+  box-sizing: border-box;
   margin: 44px auto;
   color: #0f172a;
   font-family: Pretendard, "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -101,7 +103,7 @@
 .welmoa-feedback-form__submit { border-color: #2563eb !important; background: #2563eb !important; color: #fff !important; }
 
 @media (max-width: 640px) {
-  .welmoa-engagement { width: min(100% - 24px, 1120px); margin: 32px auto; }
+  .welmoa-engagement { width: 100%; margin: 32px auto; }
   .welmoa-engagement__inner { padding: 22px 18px; border-radius: 20px; }
   .welmoa-engagement__actions { display: grid; grid-template-columns: 1fr 1fr; }
   .welmoa-engagement__feedback-button { grid-column: 1 / -1; margin-left: 0; }
