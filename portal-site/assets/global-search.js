@@ -12,6 +12,14 @@
   ]);
   const normalizedPath = location.pathname.replace(/\/+$/, '') || '/';
 
+  const footerCopy = document.querySelector('.footer-copy > div');
+  if (footerCopy && !footerCopy.querySelector('.welmoa-admin-link') && footerCopy.innerHTML.includes('© Welmoa.')) {
+    footerCopy.innerHTML = footerCopy.innerHTML.replace(
+      '© Welmoa.',
+      '<a class="welmoa-admin-link" href="https://tools.welmoa.kr/feedback/" aria-label="Welmoa 운영자 화면" style="color:inherit;text-decoration:none">© Welmoa.</a>'
+    );
+  }
+
   const footerLinks = document.querySelector('.footer-links');
   if (footerLinks && !footerLinks.querySelector('a[href*="/tools/"]')) {
     const toolsLink = document.createElement('a');
