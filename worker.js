@@ -1,3 +1,22 @@
+const ROOT_HTML = `
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Welmoa Tools</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="font-family:sans-serif; text-align:center; padding:60px;">
+  <h1>Welmoa Tools</h1>
+  <p>복지 실무를 위한 업무도구 포털입니다.</p>
+
+  <p style="margin-top:30px;">
+    👉 <a href="https://tools.welmoa.kr">포털 바로가기</a>
+  </p>
+</body>
+</html>
+`;
+
 const ANALYTICS_SCRIPT = `
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-4TNGJX9WB9"></script>
@@ -21,12 +40,7 @@ const ANALYTICS_SCRIPT = `
   </script>
 `;
 
-const GLOBAL_SEARCH_ASSETS = `
-  <link rel="stylesheet" href="/assets/global-search.css?v=20260802-5">
-  <script defer src="/assets/global-search.js?v=20260802-5"></script>
-`;
-
-async function injectPageEnhancements(response) {
+async function injectAnalytics(response) {
   const contentType = response.headers.get("content-type") || "";
 
   if (!contentType.includes("text/html")) {
@@ -34,21 +48,18 @@ async function injectPageEnhancements(response) {
   }
 
   let html = await response.text();
-  html = await injectLatestPosts(html);
 
   if (
-    !html.includes("G-4TNGJX9WB9") &&
-    !html.includes("wcs.pstatic.net/wcslog.js")
+    html.includes("G-4TNGJX9WB9") ||
+    html.includes("wcs.pstatic.net/wcslog.js")
   ) {
-    html = html.replace(
-      "</head>",
-      `${ANALYTICS_SCRIPT}\n</head>`
-    );
+    return new Response(html, response);
   }
 
-  if (!html.includes("/assets/global-search.js")) {
-    html = html.replace("</head>", `${GLOBAL_SEARCH_ASSETS}\n</head>`);
-  }
+  html = html.replace(
+    "</head>",
+    `${ANALYTICS_SCRIPT}\n</head>`
+  );
 
   return new Response(html, {
     status: response.status,
@@ -57,131 +68,41 @@ async function injectPageEnhancements(response) {
   });
 }
 
-const LATEST_POSTS_URL = "https://blog.welmoa.kr/latest-posts.json";
-const LATEST_POSTS_LIMIT = 6;
-
-async function injectLatestPosts(html) {
-  if (!html.includes('id="latest-posts"')) return html;
-
-  try {
-    const response = await fetch(LATEST_POSTS_URL, {
-      headers: { accept: "application/json" },
-      cf: { cacheEverything: true, cacheTtl: 300 }
-    });
-
-    if (!response.ok) return html;
-
-    const data = await response.json();
-    if (!Array.isArray(data) || data.length === 0) return html;
-
-    const cards = data
-      .filter(isValidLatestPost)
-      .slice(0, LATEST_POSTS_LIMIT)
-      .map(renderLatestPostCard)
-      .join("\n");
-
-    if (!cards) return html;
-
-    return html.replace(
-      /(<div id="latest-posts"[^>]*>)[\s\S]*?(<\/div>\s*<div class="latest-more">)/,
-      `$1\n${cards}\n    $2`
-    );
-  } catch (error) {
-    console.error("latest posts injection failed", error);
-    return html;
-  }
-}
-
-function isValidLatestPost(post) {
-  if (!post || typeof post !== "object") return false;
-
-  try {
-    const url = new URL(String(post.url || ""), "https://blog.welmoa.kr");
-    return (
-      url.origin === "https://blog.welmoa.kr" &&
-      url.pathname.startsWith("/blog/") &&
-      String(post.title || "").trim() !== ""
-    );
-  } catch {
-    return false;
-  }
-}
-
-function renderLatestPostCard(post) {
-  const url = normalizeBlogUrl(post.url, "/blog/");
-  const thumbnail = normalizeBlogUrl(post.thumbnail, "/images/");
-  const title = escapeHtml(post.title);
-  const description = escapeHtml(post.description || "");
-  const category = escapeHtml(post.category || "콘텐츠");
-  const pubDate = normalizePostDate(post.pubDate);
-  const displayDate = formatPostDate(pubDate);
-
-  return `    <article class="latest-post-card">
-      <a class="post-thumb" href="${url}">
-        <img src="${thumbnail}" alt="${title}">
-      </a>
-      <div class="post-body">
-        <span class="post-category">${category}</span>
-        <h3><a href="${url}">${title}</a></h3>
-        <p>${description}</p>
-        <time class="post-date" datetime="${pubDate}">${displayDate}</time>
-      </div>
-    </article>`;
-}
-
-function normalizeBlogUrl(value, requiredPathPrefix) {
-  try {
-    const url = new URL(String(value || ""), "https://blog.welmoa.kr");
-    if (
-      url.origin === "https://blog.welmoa.kr" &&
-      url.pathname.startsWith(requiredPathPrefix)
-    ) {
-      return escapeHtml(url.toString());
-    }
-  } catch {}
-
-  return requiredPathPrefix === "/images/"
-    ? "https://blog.welmoa.kr/images/blog/default.webp"
-    : "https://blog.welmoa.kr/blog/";
-}
-
-function normalizePostDate(value) {
-  const match = String(value || "").match(/^\d{4}-\d{2}-\d{2}/);
-  return match ? match[0] : "";
-}
-
-function formatPostDate(value) {
-  if (!value) return "";
-  const [year, month, day] = value.split("-").map(Number);
-  return `${year}. ${month}. ${day}.`;
-}
-
-function escapeHtml(value) {
-  return String(value ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#39;");
-}
-
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     const pathname = url.pathname;
 
+    // GA4에서 같은 화면이 여러 경로로 나뉘지 않도록 대표 URL로 통일한다.
+    if (pathname === "/salary/") {
+      return redirectToCanonical(url, "/salary");
+    }
+
+    const directoryRoutes = new Set([
+      "/tools",
+      "/tools/hobong",
+      "/tools/eapproval",
+      "/tools/operation-log",
+      "/tools/grants",
+      "/shortener",
+      "/formatter"
+    ]);
+
+    if (directoryRoutes.has(pathname)) {
+      return redirectToCanonical(url, `${pathname}/`);
+    }
+
 if (pathname.startsWith("/blog")) {
-  let newPath = pathname.replace(/\.html$/, "");
+  let newPath = pathname
+    .replace(/／/g, "/")
+    .replace(/\/{2,}/g, "/")
+    .replace(/\.(?:html|md)\/?$/i, "");
 
   if (!newPath.endsWith("/")) {
     newPath += "/";
   }
 
-  return Response.redirect(`https://blog.welmoa.kr${newPath}`, 301);
-}
-
-if (pathname === "/guide" || pathname === "/guide/") {
-  return Response.redirect("https://tools.welmoa.kr/tools/", 301);
+  return Response.redirect(`https://blog.welmoa.kr${newPath}${url.search}`, 301);
 }
     
     // 공통 리소스
@@ -208,11 +129,6 @@ if (pathname === "/guide" || pathname === "/guide/") {
 
     if (pathname.startsWith("/api/shorten/") && request.method === "DELETE") {
       return handleDeleteShortUrl(request, env);
-    }
-
-    // 콘텐츠·도구 반응 및 비공개 의견 API
-    if (pathname.startsWith("/api/engagement")) {
-      return handleEngagementRequest(request, env);
     }
 
     // 단축 URL 리다이렉트
@@ -315,11 +231,24 @@ if (pathname === "/api/grants/collect") {
   return handleCollectBizinfoGrants(env);
 }
     
+    // 루트 도메인 안내 화면은 / 일 때만 표시
+    if (url.hostname === "welmoa.kr" && pathname === "/") {
+      return injectAnalytics(new Response(ROOT_HTML, {
+  headers: { "content-type": "text/html; charset=utf-8" }
+}));
+    }
+
     // 나머지 정적 파일
     const assetResponse = await env.ASSETS.fetch(request);
-return injectPageEnhancements(assetResponse);
+return injectAnalytics(assetResponse);
   }
 };
+
+function redirectToCanonical(url, pathname) {
+  const destination = new URL(url.toString());
+  destination.pathname = pathname;
+  return Response.redirect(destination.toString(), 301);
+}
 
 //////////////////////////////////////////////////////
 // 순수 프록시
@@ -357,7 +286,7 @@ async function proxy(request, targetBase, mountPath) {
         el.append(`<base href="${mountPath}/">`, { html: true });
       }
     })
-    .on("a", new PrefixRewriter("href", mountPath, true))
+    .on("a", new PrefixRewriter("href", mountPath))
     .on("link", new PrefixRewriter("href", mountPath))
     .on("script", new PrefixRewriter("src", mountPath))
     .on("img", new PrefixRewriter("src", mountPath))
@@ -368,7 +297,7 @@ async function proxy(request, targetBase, mountPath) {
   response
 );
 
-return injectPageEnhancements(rewrittenResponse);
+return injectAnalytics(rewrittenResponse);
 }
 
 //////////////////////////////////////////////////////
@@ -376,10 +305,9 @@ return injectPageEnhancements(rewrittenResponse);
 //////////////////////////////////////////////////////
 
 class PrefixRewriter {
-  constructor(attr, mountPath, preservePortalLinks = false) {
+  constructor(attr, mountPath) {
     this.attr = attr;
     this.mountPath = mountPath;
-    this.preservePortalLinks = preservePortalLinks;
   }
 
   element(el) {
@@ -395,45 +323,10 @@ class PrefixRewriter {
       return;
     }
 
-    const portalUrl = this.preservePortalLinks ? getPortalUrl(value) : null;
-
-    if (portalUrl) {
-      el.setAttribute(this.attr, portalUrl);
-      return;
-    }
-
     if (value.startsWith("/")) {
       el.setAttribute(this.attr, this.mountPath + value);
     }
   }
-}
-
-function getPortalUrl(value) {
-  const portalUrls = new Map([
-    ["/", "https://welmoa.kr/"],
-    ["/tools/", "https://tools.welmoa.kr/tools/"],
-    ["/about/", "https://tools.welmoa.kr/about/"],
-    ["/privacy/", "https://welmoa.kr/privacy/"],
-    ["/terms/", "https://welmoa.kr/terms/"],
-    ["/updates/", "https://tools.welmoa.kr/updates/"],
-    ["/guide/", "https://tools.welmoa.kr/guide/"],
-    ["/formatter/", "https://tools.welmoa.kr/formatter/"],
-    ["/shortener/", "https://tools.welmoa.kr/shortener/"],
-    ["/salary", "https://tools.welmoa.kr/salary"],
-    ["/salary/", "https://tools.welmoa.kr/salary/"],
-    ["/lottery", "https://tools.welmoa.kr/lottery"],
-    ["/lottery/", "https://tools.welmoa.kr/lottery/"]
-  ]);
-
-  if (portalUrls.has(value)) {
-    return portalUrls.get(value);
-  }
-
-  if (value.startsWith("/blog/")) {
-    return `https://blog.welmoa.kr${value}`;
-  }
-
-  return null;
 }
 
 //////////////////////////////////////////////////////
@@ -651,308 +544,6 @@ async function generateUniqueSlug(env) {
   throw new Error("slug generation failed");
 }
 
-//////////////////////////////////////////////////////
-// 콘텐츠·도구 반응 및 비공개 의견 API
-//////////////////////////////////////////////////////
-
-const ENGAGEMENT_ORIGINS = new Set([
-  "https://welmoa.kr",
-  "https://blog.welmoa.kr",
-  "https://tools.welmoa.kr"
-]);
-
-async function handleEngagementRequest(request, env) {
-  const url = new URL(request.url);
-  const origin = request.headers.get("origin") || "";
-  const corsHeaders = engagementCorsHeaders(origin);
-
-  if (request.method === "OPTIONS") {
-    return new Response(null, { status: 204, headers: corsHeaders });
-  }
-
-  try {
-    await ensureEngagementSchema(env);
-
-    if (url.pathname === "/api/engagement/summary" && request.method === "GET") {
-      const page = normalizeWelmoaPage(url.searchParams.get("page"));
-      if (!page) return engagementJson({ ok: false, message: "페이지 주소가 올바르지 않습니다." }, 400, corsHeaders);
-
-      const pageKey = pageKeyFromUrl(page);
-      const reactions = await env.DB.prepare(`
-        SELECT reaction, COUNT(*) AS count
-        FROM engagement_reactions
-        WHERE page_key = ?
-        GROUP BY reaction
-      `).bind(pageKey).all();
-
-      return engagementJson({
-        ok: true,
-        pageKey,
-        reactions: Object.fromEntries(reactions.results.map((row) => [row.reaction, Number(row.count)]))
-      }, 200, corsHeaders);
-    }
-
-    if (url.pathname === "/api/engagement/react" && request.method === "POST") {
-      const body = await readEngagementBody(request);
-      const page = normalizeWelmoaPage(body.pageUrl);
-      const visitorId = normalizeVisitorId(body.visitorId);
-      const reaction = ["helpful", "used"].includes(body.reaction) ? body.reaction : "";
-
-      if (!page || !visitorId || !reaction) {
-        return engagementJson({ ok: false, message: "반응 정보를 확인해 주세요." }, 400, corsHeaders);
-      }
-
-      const pageKey = pageKeyFromUrl(page);
-      const existing = await env.DB.prepare(`
-        SELECT id FROM engagement_reactions
-        WHERE page_key = ? AND reaction = ? AND visitor_id = ?
-      `).bind(pageKey, reaction, visitorId).first();
-
-      let selected = false;
-      if (existing) {
-        await env.DB.prepare("DELETE FROM engagement_reactions WHERE id = ?").bind(existing.id).run();
-      } else {
-        await env.DB.prepare(`
-          INSERT INTO engagement_reactions
-            (page_key, page_url, page_title, page_type, reaction, visitor_id)
-          VALUES (?, ?, ?, ?, ?, ?)
-        `).bind(
-          pageKey,
-          page,
-          cleanText(body.pageTitle, 180),
-          normalizePageType(body.pageType),
-          reaction,
-          visitorId
-        ).run();
-        selected = true;
-      }
-
-      const countRow = await env.DB.prepare(`
-        SELECT COUNT(*) AS count FROM engagement_reactions
-        WHERE page_key = ? AND reaction = ?
-      `).bind(pageKey, reaction).first();
-
-      return engagementJson({ ok: true, selected, count: Number(countRow?.count || 0) }, 200, corsHeaders);
-    }
-
-    if (url.pathname === "/api/engagement/share" && request.method === "POST") {
-      const body = await readEngagementBody(request);
-      const page = normalizeWelmoaPage(body.pageUrl);
-      const channel = ["copy", "kakao", "native"].includes(body.channel) ? body.channel : "copy";
-      if (!page) return engagementJson({ ok: false, message: "페이지 주소가 올바르지 않습니다." }, 400, corsHeaders);
-
-      await env.DB.prepare(`
-        INSERT INTO engagement_shares
-          (page_key, page_url, page_title, page_type, channel)
-        VALUES (?, ?, ?, ?, ?)
-      `).bind(
-        pageKeyFromUrl(page),
-        page,
-        cleanText(body.pageTitle, 180),
-        normalizePageType(body.pageType),
-        channel
-      ).run();
-
-      return engagementJson({ ok: true }, 200, corsHeaders);
-    }
-
-    if (url.pathname === "/api/engagement/feedback" && request.method === "POST") {
-      const body = await readEngagementBody(request);
-      const page = normalizeWelmoaPage(body.pageUrl);
-      const category = ["helpful", "suggestion", "correction", "error"].includes(body.category)
-        ? body.category
-        : "suggestion";
-      const message = cleanText(body.message, 2000);
-
-      if (!page || message.length < 5) {
-        return engagementJson({ ok: false, message: "의견을 5자 이상 입력해 주세요." }, 400, corsHeaders);
-      }
-
-      await env.DB.prepare(`
-        INSERT INTO engagement_feedback
-          (page_key, page_url, page_title, page_type, category, message)
-        VALUES (?, ?, ?, ?, ?, ?)
-      `).bind(
-        pageKeyFromUrl(page),
-        page,
-        cleanText(body.pageTitle, 180),
-        normalizePageType(body.pageType),
-        category,
-        message
-      ).run();
-
-      return engagementJson({ ok: true, message: "소중한 의견을 보내주셔서 감사합니다." }, 200, corsHeaders);
-    }
-
-    if (url.pathname === "/api/engagement/admin/dashboard" && request.method === "GET") {
-      const authError = requireEngagementAdmin(request, env, corsHeaders);
-      if (authError) return authError;
-
-      const [pages, feedback] = await Promise.all([
-        env.DB.prepare(`
-          SELECT
-            p.page_key,
-            MAX(p.page_url) AS page_url,
-            MAX(p.page_title) AS page_title,
-            MAX(p.page_type) AS page_type,
-            SUM(p.helpful) AS helpful,
-            SUM(p.used) AS used,
-            SUM(p.shares) AS shares,
-            SUM(p.feedback_count) AS feedback_count
-          FROM (
-            SELECT page_key, MAX(page_url) AS page_url, MAX(page_title) AS page_title,
-              MAX(page_type) AS page_type,
-              SUM(CASE WHEN reaction = 'helpful' THEN 1 ELSE 0 END) AS helpful,
-              SUM(CASE WHEN reaction = 'used' THEN 1 ELSE 0 END) AS used,
-              0 AS shares, 0 AS feedback_count
-            FROM engagement_reactions GROUP BY page_key
-            UNION ALL
-            SELECT page_key, MAX(page_url), MAX(page_title), MAX(page_type),
-              0, 0, COUNT(*), 0
-            FROM engagement_shares GROUP BY page_key
-            UNION ALL
-            SELECT page_key, MAX(page_url), MAX(page_title), MAX(page_type),
-              0, 0, 0, COUNT(*)
-            FROM engagement_feedback GROUP BY page_key
-          ) p
-          GROUP BY p.page_key
-          ORDER BY (helpful + used + shares + feedback_count) DESC
-          LIMIT 200
-        `).all(),
-        env.DB.prepare(`
-          SELECT id, page_url, page_title, page_type, category, message, status, created_at
-          FROM engagement_feedback
-          ORDER BY CASE WHEN status = 'new' THEN 0 ELSE 1 END, created_at DESC
-          LIMIT 300
-        `).all()
-      ]);
-
-      return engagementJson({ ok: true, pages: pages.results, feedback: feedback.results }, 200, corsHeaders);
-    }
-
-    if (url.pathname === "/api/engagement/admin/feedback" && request.method === "PATCH") {
-      const authError = requireEngagementAdmin(request, env, corsHeaders);
-      if (authError) return authError;
-      const body = await readEngagementBody(request);
-      const id = Number(body.id);
-      const status = ["new", "reviewed"].includes(body.status) ? body.status : "";
-      if (!Number.isInteger(id) || id < 1 || !status) {
-        return engagementJson({ ok: false, message: "처리 상태를 확인해 주세요." }, 400, corsHeaders);
-      }
-      await env.DB.prepare("UPDATE engagement_feedback SET status = ? WHERE id = ?").bind(status, id).run();
-      return engagementJson({ ok: true }, 200, corsHeaders);
-    }
-
-    return engagementJson({ ok: false, message: "요청한 기능을 찾을 수 없습니다." }, 404, corsHeaders);
-  } catch (error) {
-    console.error("engagement api error", error);
-    return engagementJson({ ok: false, message: "잠시 후 다시 시도해 주세요." }, 500, corsHeaders);
-  }
-}
-
-async function ensureEngagementSchema(env) {
-  await env.DB.batch([
-    env.DB.prepare(`CREATE TABLE IF NOT EXISTS engagement_reactions (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      page_key TEXT NOT NULL,
-      page_url TEXT NOT NULL,
-      page_title TEXT NOT NULL DEFAULT '',
-      page_type TEXT NOT NULL DEFAULT 'content',
-      reaction TEXT NOT NULL,
-      visitor_id TEXT NOT NULL,
-      created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      UNIQUE(page_key, reaction, visitor_id)
-    )`),
-    env.DB.prepare(`CREATE TABLE IF NOT EXISTS engagement_shares (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      page_key TEXT NOT NULL,
-      page_url TEXT NOT NULL,
-      page_title TEXT NOT NULL DEFAULT '',
-      page_type TEXT NOT NULL DEFAULT 'content',
-      channel TEXT NOT NULL,
-      created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
-    )`),
-    env.DB.prepare(`CREATE TABLE IF NOT EXISTS engagement_feedback (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      page_key TEXT NOT NULL,
-      page_url TEXT NOT NULL,
-      page_title TEXT NOT NULL DEFAULT '',
-      page_type TEXT NOT NULL DEFAULT 'content',
-      category TEXT NOT NULL,
-      message TEXT NOT NULL,
-      status TEXT NOT NULL DEFAULT 'new',
-      created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
-    )`),
-    env.DB.prepare("CREATE INDEX IF NOT EXISTS idx_engagement_reactions_page ON engagement_reactions(page_key)"),
-    env.DB.prepare("CREATE INDEX IF NOT EXISTS idx_engagement_feedback_status ON engagement_feedback(status, created_at)")
-  ]);
-}
-
-function normalizeWelmoaPage(value) {
-  try {
-    const url = new URL(String(value || ""));
-    if (!ENGAGEMENT_ORIGINS.has(url.origin)) return "";
-    url.search = "";
-    url.hash = "";
-    url.pathname = url.pathname.replace(/\/+$/, "") || "/";
-    return url.toString();
-  } catch {
-    return "";
-  }
-}
-
-function pageKeyFromUrl(value) {
-  return value.replace(/^https:\/\//, "").replace(/\/$/, "");
-}
-
-function normalizeVisitorId(value) {
-  const id = String(value || "");
-  return /^[a-zA-Z0-9_-]{16,80}$/.test(id) ? id : "";
-}
-
-function normalizePageType(value) {
-  return value === "tool" ? "tool" : "content";
-}
-
-function cleanText(value, maxLength) {
-  return String(value || "").replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, "").trim().slice(0, maxLength);
-}
-
-async function readEngagementBody(request) {
-  const length = Number(request.headers.get("content-length") || 0);
-  if (length > 12000) throw new Error("request body too large");
-  return request.json();
-}
-
-function engagementCorsHeaders(origin) {
-  const headers = new Headers({
-    "content-type": "application/json; charset=utf-8",
-    "cache-control": "no-store",
-    "vary": "Origin"
-  });
-  if (ENGAGEMENT_ORIGINS.has(origin)) {
-    headers.set("access-control-allow-origin", origin);
-    headers.set("access-control-allow-methods", "GET, POST, PATCH, OPTIONS");
-    headers.set("access-control-allow-headers", "Content-Type, Authorization");
-  }
-  return headers;
-}
-
-function engagementJson(data, status, headers) {
-  return new Response(JSON.stringify(data), { status, headers });
-}
-
-function requireEngagementAdmin(request, env, corsHeaders) {
-  if (!env.FEEDBACK_ADMIN_KEY) {
-    return engagementJson({ ok: false, message: "운영자 키가 아직 설정되지 않았습니다." }, 503, corsHeaders);
-  }
-  const supplied = request.headers.get("authorization") || "";
-  if (supplied !== `Bearer ${env.FEEDBACK_ADMIN_KEY}`) {
-    return engagementJson({ ok: false, message: "운영자 인증이 필요합니다." }, 401, corsHeaders);
-  }
-  return null;
-}
-
 async function handleCollectBizinfoGrants(env) {
   const apiUrl = new URL("https://www.bizinfo.go.kr/uss/rss/bizinfoApi.do");
 
@@ -1123,170 +714,13 @@ function json(data, status = 200) {
 }
 
 //////////////////////////////////////////////////////
-// 공통 콘텐츠 검색
+// shared (사용 안하지만 유지)
 //////////////////////////////////////////////////////
 
 function sharedCss() {
-  return `
-.welmoa-content-search-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 10px 12px;
-  border: 0;
-  border-radius: 999px;
-  background: transparent;
-  color: #334155;
-  font: inherit;
-  font-size: .95rem;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.welmoa-content-search-toggle:hover,
-.welmoa-content-search-toggle[aria-expanded="true"] {
-  background: #eff6ff;
-  color: #2563eb;
-}
-
-.welmoa-content-search-icon {
-  font-size: 1.25rem;
-  line-height: 1;
-}
-
-.welmoa-content-search-panel {
-  border-top: 1px solid #e2e8f0;
-  background: #f8fafc;
-}
-
-.welmoa-content-search-panel[hidden] {
-  display: none !important;
-}
-
-.welmoa-content-search-form {
-  width: min(1120px, calc(100% - 40px));
-  margin: 0 auto;
-  padding: 18px 0;
-}
-
-.welmoa-content-search-form label {
-  display: block;
-  margin-bottom: 7px;
-  color: #334155;
-  font-size: .9rem;
-  font-weight: 700;
-}
-
-.welmoa-content-search-field {
-  display: flex;
-  gap: 8px;
-}
-
-.welmoa-content-search-field input {
-  flex: 1;
-  min-width: 0;
-  min-height: 46px;
-  padding: 0 15px;
-  border: 1px solid #cbd5e1;
-  border-radius: 13px;
-  background: #fff;
-  color: #0f172a;
-  font: inherit;
-}
-
-.welmoa-content-search-field input:focus {
-  outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 4px rgba(37, 99, 235, .12);
-}
-
-.welmoa-content-search-field button {
-  min-width: 76px;
-  border: 0;
-  border-radius: 13px;
-  background: #2563eb;
-  color: #fff;
-  font: inherit;
-  font-weight: 800;
-  cursor: pointer;
-}
-
-@media (max-width: 640px) {
-  .welmoa-content-search-toggle {
-    padding: 8px 10px;
-  }
-
-  .welmoa-content-search-label {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
-}
-`;
+  return "";
 }
 
 function sharedJs() {
-  return `
-(() => {
-  if (document.querySelector('.welmoa-content-search-toggle')) return;
-
-  const header = document.querySelector('.site-header, header');
-  const nav = header?.querySelector('nav');
-
-  if (!header || !nav) return;
-
-  const toggle = document.createElement('button');
-  toggle.type = 'button';
-  toggle.className = 'welmoa-content-search-toggle';
-  toggle.setAttribute('aria-label', '검색 열기');
-  toggle.setAttribute('aria-expanded', 'false');
-  toggle.setAttribute('aria-controls', 'welmoaContentSearchPanel');
-  toggle.innerHTML = '<span class="welmoa-content-search-icon" aria-hidden="true">⌕</span><span class="welmoa-content-search-label">검색</span>';
-
-  const panel = document.createElement('div');
-  panel.id = 'welmoaContentSearchPanel';
-  panel.className = 'welmoa-content-search-panel';
-  panel.hidden = true;
-  panel.innerHTML = ` + "`" + `
-    <form class="welmoa-content-search-form" action="https://blog.welmoa.kr/blog/" method="get" role="search">
-      <label for="welmoaContentSearchInput">콘텐츠 검색</label>
-      <div class="welmoa-content-search-field">
-        <input id="welmoaContentSearchInput" name="q" type="search" placeholder="제목, 설명 또는 분류로 검색해 보세요" autocomplete="off">
-        <button type="submit">검색</button>
-      </div>
-    </form>
-  ` + "`" + `;
-
-  nav.append(toggle);
-  header.insertAdjacentElement('afterend', panel);
-
-  const input = panel.querySelector('input');
-  const close = () => {
-    panel.hidden = true;
-    toggle.setAttribute('aria-expanded', 'false');
-    toggle.setAttribute('aria-label', '검색 열기');
-  };
-
-  toggle.addEventListener('click', () => {
-    const willOpen = panel.hidden;
-    panel.hidden = !willOpen;
-    toggle.setAttribute('aria-expanded', String(willOpen));
-    toggle.setAttribute('aria-label', willOpen ? '검색 닫기' : '검색 열기');
-    if (willOpen) input?.focus();
-  });
-
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && !panel.hidden) {
-      close();
-      toggle.focus();
-    }
-  });
-})();
-`;
+  return "";
 }
