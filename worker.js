@@ -83,7 +83,7 @@ async function injectLatestPosts(html) {
     if (!cards) return html;
 
     return html.replace(
-      /(<div id="latest-posts"[^>]*>)[\\s\\S]*?(<\\/div>\\s*<div class="latest-more">)/,
+      /(<div id="latest-posts"[^>]*>)[\s\S]*?(<\/div>\s*<div class="latest-more">)/,
       `$1\n${cards}\n    $2`
     );
   } catch (error) {
@@ -146,7 +146,7 @@ function normalizeBlogUrl(value, requiredPathPrefix) {
 }
 
 function normalizePostDate(value) {
-  const match = String(value || "").match(/^\\d{4}-\\d{2}-\\d{2}/);
+  const match = String(value || "").match(/^\d{4}-\d{2}-\d{2}/);
   return match ? match[0] : "";
 }
 
