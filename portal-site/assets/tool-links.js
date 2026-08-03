@@ -24,13 +24,13 @@
       id: "shortener",
       title: "URL 단축 🔗",
       description: "링크 간편 공유",
-      url: "/shortener"
+      url: "/shortener/"
     },
     {
       id: "formatter",
       title: "명단정리 🧾",
       description: "데이터 정리 자동화",
-      url: "/formatter"
+      url: "/formatter/"
     },
     {
       id: "operation-log",
