@@ -34,6 +34,7 @@ async function injectPageEnhancements(response) {
   }
 
   let html = await response.text();
+  html = await injectLatestPosts(html);
 
   if (
     !html.includes("G-4TNGJX9WB9") &&
@@ -54,6 +55,114 @@ async function injectPageEnhancements(response) {
     statusText: response.statusText,
     headers: response.headers
   });
+}
+
+const LATEST_POSTS_URL = "https://blog.welmoa.kr/latest-posts.json";
+const LATEST_POSTS_LIMIT = 6;
+
+async function injectLatestPosts(html) {
+  if (!html.includes('id="latest-posts"')) return html;
+
+  try {
+    const response = await fetch(LATEST_POSTS_URL, {
+      headers: { accept: "application/json" },
+      cf: { cacheEverything: true, cacheTtl: 300 }
+    });
+
+    if (!response.ok) return html;
+
+    const data = await response.json();
+    if (!Array.isArray(data) || data.length === 0) return html;
+
+    const cards = data
+      .filter(isValidLatestPost)
+      .slice(0, LATEST_POSTS_LIMIT)
+      .map(renderLatestPostCard)
+      .join("\n");
+
+    if (!cards) return html;
+
+    return html.replace(
+      /(<div id="latest-posts"[^>]*>)[\\s\\S]*?(<\\/div>\\s*<div class="latest-more">)/,
+      `$1\n${cards}\n    $2`
+    );
+  } catch (error) {
+    console.error("latest posts injection failed", error);
+    return html;
+  }
+}
+
+function isValidLatestPost(post) {
+  if (!post || typeof post !== "object") return false;
+
+  try {
+    const url = new URL(String(post.url || ""), "https://blog.welmoa.kr");
+    return (
+      url.origin === "https://blog.welmoa.kr" &&
+      url.pathname.startsWith("/blog/") &&
+      String(post.title || "").trim() !== ""
+    );
+  } catch {
+    return false;
+  }
+}
+
+function renderLatestPostCard(post) {
+  const url = normalizeBlogUrl(post.url, "/blog/");
+  const thumbnail = normalizeBlogUrl(post.thumbnail, "/images/");
+  const title = escapeHtml(post.title);
+  const description = escapeHtml(post.description || "");
+  const category = escapeHtml(post.category || "콘텐츠");
+  const pubDate = normalizePostDate(post.pubDate);
+  const displayDate = formatPostDate(pubDate);
+
+  return `    <article class="latest-post-card">
+      <a class="post-thumb" href="${url}">
+        <img src="${thumbnail}" alt="${title}">
+      </a>
+      <div class="post-body">
+        <span class="post-category">${category}</span>
+        <h3><a href="${url}">${title}</a></h3>
+        <p>${description}</p>
+        <time class="post-date" datetime="${pubDate}">${displayDate}</time>
+      </div>
+    </article>`;
+}
+
+function normalizeBlogUrl(value, requiredPathPrefix) {
+  try {
+    const url = new URL(String(value || ""), "https://blog.welmoa.kr");
+    if (
+      url.origin === "https://blog.welmoa.kr" &&
+      url.pathname.startsWith(requiredPathPrefix)
+    ) {
+      return escapeHtml(url.toString());
+    }
+  } catch {}
+
+  return requiredPathPrefix === "/images/"
+    ? "https://blog.welmoa.kr/images/blog/default.webp"
+    : "https://blog.welmoa.kr/blog/";
+}
+
+function normalizePostDate(value) {
+  const match = String(value || "").match(/^\\d{4}-\\d{2}-\\d{2}/);
+  return match ? match[0] : "";
+}
+
+function formatPostDate(value) {
+  if (!value) return "";
+  const [year, month, day] = value.split("-").map(Number);
+  return `${year}. ${month}. ${day}.`;
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
 }
 
 export default {
