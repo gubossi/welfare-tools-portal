@@ -140,16 +140,16 @@
       box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
     }
 
-    .operator-disclaimer {
+    .operator-card {
       margin-top: 24px;
-      padding: 16px 18px;
+      padding: 24px;
       border: 1px solid #dbe4f0;
-      border-radius: 16px;
+      border-radius: 20px;
       background: #fff;
     }
 
-    .operator-disclaimer p {
-      margin: 0;
+    .operator-card h2 {
+      margin-top: 0;
     }
 
     @media (max-width: 600px) {
@@ -213,6 +213,11 @@
         margin: 0;
         border-radius: 20px;
         justify-self: center;
+      }
+
+      .operator-card {
+        padding: 18px;
+        border-radius: 16px;
       }
     }
   </style>
@@ -376,35 +381,6 @@
         사용 과정에서 발견한 오류와 개선 의견을 반영해 계속 보완하고 있습니다.
       </p>
 
-      <h2>운영자 소개</h2>
-      <h3>운영자 조상규</h3>
-      <div class="operator-profile">
-        <div class="operator-profile__content">
-          <p>
-            현재 경기도 수원시 호매실장애인종합복지관에서 근무하고 있는 사회복지사입니다.
-          </p>
-          <p>
-            노인복지관, 기업 사회공헌, 종합사회복지관, 장애인복지관 등 여러 현장에서
-            실무와 중간관리자 역할을 경험해 왔습니다. 프로그램 운영과 이용자 지원뿐 아니라
-            행정·회계, 인사노무, 사업기획, 공모사업, 실적관리, 지역자원 연계 등의 업무를
-            수행해 왔으며, 현재는 장애인복지 현장에서 아동·청소년 지원 업무를 담당하고 있습니다.
-          </p>
-          <p>
-            이러한 경험을 바탕으로 현장에서 반복해서 묻게 되는 질문,
-            신입직원이 처음 마주하는 어려움, 조금 더 효율적으로 바꿔볼 수 있는 업무를
-            콘텐츠와 도구로 기록하고 있습니다.
-          </p>
-        </div>
-        <img
-          class="operator-profile__image"
-          src="/assets/images/operator-cho-sangkyu.webp"
-          alt="Welmoa 운영자 조상규"
-          width="160"
-          height="160"
-          loading="lazy"
-        >
-      </div>
-
       <h2>Welmoa의 운영 원칙</h2>
       <ul class="list-clean">
         <li><strong>현장성</strong>: 실제 사회복지 업무에서 자주 발생하는 질문과 불편을 다룹니다.</li>
@@ -459,12 +435,40 @@
         이메일: <a href="mailto:gubossi@gmail.com">gubossi@gmail.com</a>
       </p>
 
-      <aside class="operator-disclaimer" aria-label="Welmoa 운영 안내">
-        <p>
-          <strong>※ Welmoa는 운영자가 개인적으로 기획·운영하는 프로젝트이며,
-          소속 기관의 공식 입장이나 사업과는 관련이 없습니다.</strong>
-        </p>
-      </aside>
+      <section class="operator-card" aria-labelledby="operator-title">
+        <h2 id="operator-title">운영자 소개</h2>
+        <h3>운영자 조상규</h3>
+        <div class="operator-profile">
+          <div class="operator-profile__content">
+            <p>
+              현재 경기도 수원시 호매실장애인종합복지관에서 근무하고 있는 사회복지사입니다.
+            </p>
+            <p>
+              노인복지관, 기업 사회공헌, 종합사회복지관, 장애인복지관 등 여러 현장에서
+              실무와 중간관리자 역할을 경험해 왔습니다. 프로그램 운영과 이용자 지원뿐 아니라
+              행정·회계, 인사노무, 사업기획, 공모사업, 실적관리, 지역자원 연계 등의 업무를
+              수행해 왔으며, 현재는 장애인복지 현장에서 아동·청소년 지원 업무를 담당하고 있습니다.
+            </p>
+            <p>
+              이러한 경험을 바탕으로 현장에서 반복해서 묻게 되는 질문,
+              신입직원이 처음 마주하는 어려움, 조금 더 효율적으로 바꿔볼 수 있는 업무를
+              콘텐츠와 도구로 기록하고 있습니다.
+            </p>
+            <p>
+              <strong>※ Welmoa는 운영자가 개인적으로 기획·운영하는 프로젝트이며,
+              소속 기관의 공식 입장이나 사업과는 관련이 없습니다.</strong>
+            </p>
+          </div>
+          <img
+            class="operator-profile__image"
+            src="/assets/images/operator-cho-sangkyu.webp"
+            alt="Welmoa 운영자 조상규"
+            width="160"
+            height="160"
+            loading="lazy"
+          >
+        </div>
+      </section>
     </article>
   </main>
 
