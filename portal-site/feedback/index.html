@@ -54,7 +54,11 @@
       .admin-card { padding: 18px; }
       .admin-card__head { align-items: stretch; flex-direction: column; }
       .admin-toolbar { align-items: stretch; flex-direction: column; }
-      .admin-filters input, .admin-filters select { width: 100%; }
+      .admin-filters { flex-wrap: nowrap; gap: 6px; width: 100%; }
+      .admin-filters input, .admin-filters select { min-width: 0; width: auto; }
+      .admin-filters select { flex: 0 1 auto; }
+      .admin-filters input { flex: 1 1 0; }
+      .feedback-filters input, .feedback-filters select { padding-right: 7px; padding-left: 7px; font-size: .88rem; }
       .responsive-table thead { display: none; }
       .responsive-table, .responsive-table tbody, .responsive-table tr, .responsive-table td { display: block; width: 100%; box-sizing: border-box; }
       .responsive-table tr { margin-bottom: 14px; padding: 12px 14px; border: 1px solid #e2e8f0; border-radius: 14px; background: #fff; }
@@ -103,7 +107,7 @@
       <section class="admin-card">
         <div class="admin-card__head">
           <h2>페이지별 반응</h2>
-          <div class="admin-filters">
+          <div class="admin-filters page-filters">
             <select id="pageTypeFilter" aria-label="페이지 구분">
               <option value="all">전체 구분</option>
               <option value="content">콘텐츠</option>
@@ -123,7 +127,7 @@
       <section class="admin-card">
         <div class="admin-card__head">
           <h2>접수된 의견</h2>
-          <div class="admin-filters">
+          <div class="admin-filters feedback-filters">
             <select id="feedbackStatusFilter" aria-label="의견 상태">
               <option value="all">전체 상태</option>
               <option value="new">미확인</option>
