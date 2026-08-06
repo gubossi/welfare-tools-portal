@@ -125,7 +125,7 @@
 
     .operator-profile {
       display: grid;
-      grid-template-columns: 160px minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1fr) 160px;
       gap: 24px;
       align-items: start;
     }
@@ -194,14 +194,17 @@
       }
 
       .operator-profile {
-        grid-template-columns: 120px minmax(0, 1fr);
+        grid-template-columns: 1fr;
         gap: 16px;
       }
 
       .operator-profile__image {
+        order: -1;
         width: 120px;
         height: 120px;
+        margin: 0;
         border-radius: 20px;
+        justify-self: center;
       }
     }
   </style>
@@ -367,14 +370,6 @@
 
       <h2>운영자 소개</h2>
       <div class="operator-profile">
-        <img
-          class="operator-profile__image"
-          src="/assets/images/operator-cho-sangkyu.webp"
-          alt="Welmoa 운영자 조상규"
-          width="160"
-          height="160"
-          loading="lazy"
-        >
         <div class="operator-profile__content">
           <h3>운영자 조상규</h3>
           <p>
@@ -396,6 +391,14 @@
             소속 기관의 공식 입장이나 사업과는 관련이 없습니다.</strong>
           </p>
         </div>
+        <img
+          class="operator-profile__image"
+          src="/assets/images/operator-cho-sangkyu.webp"
+          alt="Welmoa 운영자 조상규"
+          width="160"
+          height="160"
+          loading="lazy"
+        >
       </div>
 
       <h2>Welmoa의 운영 원칙</h2>
