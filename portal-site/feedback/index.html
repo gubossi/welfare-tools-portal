@@ -12,13 +12,22 @@
     .feedback-admin h1 { margin: 0 0 8px; font-size: clamp(1.8rem, 4vw, 2.5rem); }
     .feedback-admin__lead { margin: 0 0 26px; color: #64748b; }
     .admin-card { margin: 18px 0; padding: 24px; border: 1px solid #dbe4f0; border-radius: 20px; background: #fff; box-shadow: 0 12px 30px rgba(15,23,42,.05); }
+    .admin-card__head { display: flex; gap: 16px; align-items: end; justify-content: space-between; margin-bottom: 16px; }
+    .admin-card__head h2 { margin: 0; }
     .admin-login { display: flex; gap: 10px; align-items: end; }
     .admin-login label { flex: 1; font-weight: 750; }
     .admin-login input { display: block; width: 100%; box-sizing: border-box; min-height: 46px; margin-top: 7px; padding: 0 13px; border: 1px solid #cbd5e1; border-radius: 11px; font: inherit; }
     .feedback-admin button { min-height: 44px; padding: 9px 16px; border: 0; border-radius: 11px; background: #2563eb; color: #fff; font: inherit; font-weight: 750; cursor: pointer; }
-    .admin-status { min-height: 1.5em; color: #b91c1c; }
-    .admin-summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
+    .feedback-admin button:disabled { cursor: wait; opacity: .58; }
+    .feedback-admin button.secondary { border: 1px solid #cbd5e1; background: #fff; color: #334155; }
+    .feedback-admin button.ghost { background: #e2e8f0; color: #334155; }
+    .admin-status { min-height: 1.5em; margin: 10px 0; color: #b91c1c; }
+    .admin-toolbar { display: flex; flex-wrap: wrap; gap: 9px; align-items: center; justify-content: space-between; margin: 18px 0; }
+    .admin-toolbar__actions { display: flex; flex-wrap: wrap; gap: 9px; }
+    .admin-updated { color: #64748b; font-size: .88rem; }
+    .admin-summary { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin-bottom: 18px; }
     .admin-stat { padding: 18px; border: 1px solid #dbe4f0; border-radius: 16px; background: #fff; }
+    .admin-stat.is-new { border-color: #93c5fd; background: #eff6ff; }
     .admin-stat span { display: block; color: #64748b; font-size: .9rem; }
     .admin-stat strong { display: block; margin-top: 5px; font-size: 1.65rem; }
     .table-wrap { overflow-x: auto; }
@@ -26,15 +35,36 @@
     th, td { padding: 12px 10px; border-bottom: 1px solid #e2e8f0; text-align: left; vertical-align: top; }
     th { color: #475569; white-space: nowrap; }
     td a { color: #1d4ed8; }
+    tr.has-new-activity td { background: #eff6ff; }
+    tr.has-new-activity td:first-child { box-shadow: inset 4px 0 #3b82f6; }
+    .new-badge, .delta-badge { display: inline-flex; align-items: center; margin-left: 6px; border-radius: 999px; font-size: .75rem; font-weight: 850; line-height: 1; }
+    .new-badge { padding: 5px 7px; background: #2563eb; color: #fff; }
+    .delta-badge { padding: 4px 6px; background: #dbeafe; color: #1d4ed8; }
     .feedback-message { min-width: 300px; white-space: pre-wrap; line-height: 1.55; }
     .status-new { color: #b45309; font-weight: 800; }
     .status-reviewed { color: #15803d; font-weight: 800; }
     .empty { padding: 24px 0; color: #64748b; text-align: center; }
+    .admin-filters { display: flex; flex-wrap: wrap; gap: 9px; }
+    .admin-filters input, .admin-filters select { min-height: 40px; box-sizing: border-box; padding: 7px 10px; border: 1px solid #cbd5e1; border-radius: 10px; background: #fff; color: #0f172a; font: inherit; }
+    .admin-filters input { width: min(260px, 100%); }
     [hidden] { display: none !important; }
     @media (max-width: 720px) {
       .admin-login { align-items: stretch; flex-direction: column; }
       .admin-summary { grid-template-columns: 1fr 1fr; }
       .admin-card { padding: 18px; }
+      .admin-card__head { align-items: stretch; flex-direction: column; }
+      .admin-toolbar { align-items: stretch; flex-direction: column; }
+      .admin-filters input, .admin-filters select { width: 100%; }
+      .responsive-table thead { display: none; }
+      .responsive-table, .responsive-table tbody, .responsive-table tr, .responsive-table td { display: block; width: 100%; box-sizing: border-box; }
+      .responsive-table tr { margin-bottom: 14px; padding: 12px 14px; border: 1px solid #e2e8f0; border-radius: 14px; background: #fff; }
+      .responsive-table tr.has-new-activity { border-color: #93c5fd; background: #eff6ff; box-shadow: inset 4px 0 #3b82f6; }
+      .responsive-table tr.has-new-activity td, .responsive-table tr.has-new-activity td:first-child { background: transparent; box-shadow: none; }
+      .responsive-table td { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 10px; padding: 7px 0; border: 0; }
+      .responsive-table td::before { content: attr(data-label); color: #64748b; font-size: .82rem; font-weight: 750; }
+      .responsive-table .feedback-message { min-width: 0; }
+      .responsive-table .empty { display: block; }
+      .responsive-table .empty::before { content: none; }
     }
   </style>
 </head>
@@ -55,16 +85,35 @@
         <label>운영자 키<input id="adminKey" type="password" autocomplete="current-password" required></label>
         <button type="submit">확인하기</button>
       </form>
-      <p class="admin-status" id="adminStatus" role="status"></p>
     </section>
+    <p class="admin-status" id="adminStatus" role="status"></p>
 
     <div id="dashboard" hidden>
+      <section class="admin-toolbar" aria-label="관리 기능">
+        <span class="admin-updated" id="lastUpdated">마지막 조회: -</span>
+        <div class="admin-toolbar__actions">
+          <button class="secondary" id="refreshDashboard" type="button">새로고침</button>
+          <button id="acknowledgeChanges" type="button">변경사항 확인 완료</button>
+          <button class="ghost" id="logoutAdmin" type="button">로그아웃</button>
+        </div>
+      </section>
+
       <section class="admin-summary" id="adminSummary"></section>
 
       <section class="admin-card">
-        <h2>페이지별 반응</h2>
+        <div class="admin-card__head">
+          <h2>페이지별 반응</h2>
+          <div class="admin-filters">
+            <select id="pageTypeFilter" aria-label="페이지 구분">
+              <option value="all">전체 구분</option>
+              <option value="content">콘텐츠</option>
+              <option value="tool">도구</option>
+            </select>
+            <input id="pageSearch" type="search" placeholder="페이지 제목 검색" aria-label="페이지 제목 검색">
+          </div>
+        </div>
         <div class="table-wrap">
-          <table>
+          <table class="responsive-table">
             <thead><tr><th>페이지</th><th>구분</th><th>도움</th><th>활용</th><th>공유</th><th>의견</th></tr></thead>
             <tbody id="pageRows"></tbody>
           </table>
@@ -72,9 +121,26 @@
       </section>
 
       <section class="admin-card">
-        <h2>접수된 의견</h2>
+        <div class="admin-card__head">
+          <h2>접수된 의견</h2>
+          <div class="admin-filters">
+            <select id="feedbackStatusFilter" aria-label="의견 상태">
+              <option value="all">전체 상태</option>
+              <option value="new">미확인</option>
+              <option value="reviewed">확인함</option>
+            </select>
+            <select id="feedbackCategoryFilter" aria-label="의견 유형">
+              <option value="all">전체 유형</option>
+              <option value="helpful">도움이 된 점</option>
+              <option value="suggestion">내용·기능 제안</option>
+              <option value="correction">내용 수정</option>
+              <option value="error">오류 제보</option>
+            </select>
+            <input id="feedbackSearch" type="search" placeholder="페이지·의견 검색" aria-label="페이지 또는 의견 검색">
+          </div>
+        </div>
         <div class="table-wrap">
-          <table>
+          <table class="responsive-table">
             <thead><tr><th>접수일</th><th>페이지</th><th>유형</th><th>의견</th><th>상태</th><th>처리</th></tr></thead>
             <tbody id="feedbackRows"></tbody>
           </table>
@@ -85,15 +151,65 @@
 
   <script>
     const API = '/api/engagement';
+    const SNAPSHOT_KEY = 'welmoa-feedback-activity-snapshot';
     const loginForm = document.querySelector('#adminLogin');
+    const loginPanel = document.querySelector('#loginPanel');
     const keyInput = document.querySelector('#adminKey');
     const status = document.querySelector('#adminStatus');
     const dashboard = document.querySelector('#dashboard');
+    const acknowledgeButton = document.querySelector('#acknowledgeChanges');
+    const refreshButton = document.querySelector('#refreshDashboard');
     let adminKey = sessionStorage.getItem('welmoa-feedback-admin-key') || '';
+    let latestData = { pages: [], feedback: [] };
+    let pageChanges = {};
 
     const escapeHtml = (value) => String(value ?? '').replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char]));
     const categoryLabels = { helpful: '도움이 된 점', suggestion: '내용·기능 제안', correction: '내용 수정', error: '오류 제보' };
     const formatDate = (value) => value ? new Date(`${value.replace(' ', 'T')}Z`).toLocaleString('ko-KR') : '-';
+    const countFields = ['helpful', 'used', 'shares', 'feedback_count'];
+
+    function setStatus(message = '', type = 'error') {
+      status.textContent = message;
+      status.style.color = type === 'info' ? '#475569' : '#b91c1c';
+    }
+
+    function pageCounts(page) {
+      return Object.fromEntries(countFields.map((field) => [field, Number(page[field] || 0)]));
+    }
+
+    function currentSnapshot(pages) {
+      return Object.fromEntries(pages.map((page) => [page.page_key, pageCounts(page)]));
+    }
+
+    function loadChanges(pages) {
+      const current = currentSnapshot(pages);
+      let previous;
+      try { previous = JSON.parse(localStorage.getItem(SNAPSHOT_KEY) || 'null'); } catch { previous = null; }
+
+      if (!previous || typeof previous !== 'object') {
+        localStorage.setItem(SNAPSHOT_KEY, JSON.stringify(current));
+        return {};
+      }
+
+      return Object.fromEntries(pages.flatMap((page) => {
+        const before = previous[page.page_key] || {};
+        const changes = Object.fromEntries(countFields.map((field) => [field, Math.max(0, Number(page[field] || 0) - Number(before[field] || 0))]));
+        return Object.values(changes).some(Boolean) ? [[page.page_key, changes]] : [];
+      }));
+    }
+
+    function pageTotal(page) {
+      return countFields.reduce((sum, field) => sum + Number(page[field] || 0), 0);
+    }
+
+    function changeTotal(pageKey) {
+      return countFields.reduce((sum, field) => sum + Number(pageChanges[pageKey]?.[field] || 0), 0);
+    }
+
+    function deltaBadge(pageKey, field) {
+      const delta = Number(pageChanges[pageKey]?.[field] || 0);
+      return delta ? `<span class="delta-badge">+${delta.toLocaleString('ko-KR')}</span>` : '';
+    }
 
     async function adminApi(path, options = {}) {
       const response = await fetch(`${API}${path}`, {
@@ -105,49 +221,123 @@
       return data;
     }
 
-    function render(data) {
+    function renderSummary(data) {
       const totals = data.pages.reduce((sum, page) => ({
         reactions: sum.reactions + Number(page.helpful || 0) + Number(page.used || 0),
         shares: sum.shares + Number(page.shares || 0),
         feedback: sum.feedback + Number(page.feedback_count || 0)
       }), { reactions: 0, shares: 0, feedback: 0 });
       const newFeedback = data.feedback.filter((item) => item.status === 'new').length;
+      const changedPages = Object.keys(pageChanges).length;
 
       document.querySelector('#adminSummary').innerHTML = [
-        ['전체 반응', totals.reactions], ['공유', totals.shares], ['전체 의견', totals.feedback], ['미확인 의견', newFeedback]
-      ].map(([label, value]) => `<div class="admin-stat"><span>${label}</span><strong>${Number(value).toLocaleString('ko-KR')}</strong></div>`).join('');
+        ['전체 반응', totals.reactions, false],
+        ['공유', totals.shares, false],
+        ['전체 의견', totals.feedback, false],
+        ['미확인 의견', newFeedback, newFeedback > 0],
+        ['새 변화 페이지', changedPages, changedPages > 0]
+      ].map(([label, value, highlight]) => `<div class="admin-stat${highlight ? ' is-new' : ''}"><span>${label}</span><strong>${Number(value).toLocaleString('ko-KR')}</strong></div>`).join('');
 
-      document.querySelector('#pageRows').innerHTML = data.pages.length ? data.pages.map((page) => `
-        <tr>
-          <td><a href="${escapeHtml(page.page_url)}" target="_blank" rel="noopener">${escapeHtml(page.page_title || page.page_url)}</a></td>
-          <td>${page.page_type === 'tool' ? '도구' : '콘텐츠'}</td>
-          <td>${Number(page.helpful || 0)}</td><td>${Number(page.used || 0)}</td><td>${Number(page.shares || 0)}</td><td>${Number(page.feedback_count || 0)}</td>
-        </tr>`).join('') : '<tr><td class="empty" colspan="6">아직 수집된 반응이 없습니다.</td></tr>';
+      acknowledgeButton.disabled = changedPages === 0;
+    }
 
-      document.querySelector('#feedbackRows').innerHTML = data.feedback.length ? data.feedback.map((item) => `
+    function renderPages(data) {
+      const type = document.querySelector('#pageTypeFilter').value;
+      const keyword = document.querySelector('#pageSearch').value.trim().toLocaleLowerCase('ko-KR');
+      const pages = data.pages
+        .filter((page) => type === 'all' || page.page_type === type)
+        .filter((page) => !keyword || `${page.page_title} ${page.page_url}`.toLocaleLowerCase('ko-KR').includes(keyword))
+        .sort((a, b) => changeTotal(b.page_key) - changeTotal(a.page_key) || pageTotal(b) - pageTotal(a));
+
+      document.querySelector('#pageRows').innerHTML = pages.length ? pages.map((page) => {
+        const isChanged = changeTotal(page.page_key) > 0;
+        return `
+        <tr class="${isChanged ? 'has-new-activity' : ''}">
+          <td data-label="페이지"><a href="${escapeHtml(page.page_url)}" target="_blank" rel="noopener">${escapeHtml(page.page_title || page.page_url)}</a>${isChanged ? '<span class="new-badge">NEW</span>' : ''}</td>
+          <td data-label="구분">${page.page_type === 'tool' ? '도구' : '콘텐츠'}</td>
+          <td data-label="도움">${Number(page.helpful || 0).toLocaleString('ko-KR')}${deltaBadge(page.page_key, 'helpful')}</td>
+          <td data-label="활용">${Number(page.used || 0).toLocaleString('ko-KR')}${deltaBadge(page.page_key, 'used')}</td>
+          <td data-label="공유">${Number(page.shares || 0).toLocaleString('ko-KR')}${deltaBadge(page.page_key, 'shares')}</td>
+          <td data-label="의견">${Number(page.feedback_count || 0).toLocaleString('ko-KR')}${deltaBadge(page.page_key, 'feedback_count')}</td>
+        </tr>`;
+      }).join('') : '<tr><td class="empty" colspan="6">조건에 맞는 페이지가 없습니다.</td></tr>';
+    }
+
+    function renderFeedback(data) {
+      const selectedStatus = document.querySelector('#feedbackStatusFilter').value;
+      const category = document.querySelector('#feedbackCategoryFilter').value;
+      const keyword = document.querySelector('#feedbackSearch').value.trim().toLocaleLowerCase('ko-KR');
+      const feedback = data.feedback
+        .filter((item) => selectedStatus === 'all' || item.status === selectedStatus)
+        .filter((item) => category === 'all' || item.category === category)
+        .filter((item) => !keyword || `${item.page_title} ${item.page_url} ${item.message}`.toLocaleLowerCase('ko-KR').includes(keyword));
+
+      document.querySelector('#feedbackRows').innerHTML = feedback.length ? feedback.map((item) => `
         <tr>
-          <td>${formatDate(item.created_at)}</td>
-          <td><a href="${escapeHtml(item.page_url)}" target="_blank" rel="noopener">${escapeHtml(item.page_title || item.page_url)}</a></td>
-          <td>${categoryLabels[item.category] || escapeHtml(item.category)}</td>
-          <td class="feedback-message">${escapeHtml(item.message)}</td>
-          <td class="status-${escapeHtml(item.status)}">${item.status === 'new' ? '미확인' : '확인함'}</td>
-          <td><button type="button" data-feedback-id="${Number(item.id)}" data-next-status="${item.status === 'new' ? 'reviewed' : 'new'}">${item.status === 'new' ? '확인 처리' : '미확인으로'}</button></td>
-        </tr>`).join('') : '<tr><td class="empty" colspan="6">아직 접수된 의견이 없습니다.</td></tr>';
+          <td data-label="접수일">${formatDate(item.created_at)}</td>
+          <td data-label="페이지"><a href="${escapeHtml(item.page_url)}" target="_blank" rel="noopener">${escapeHtml(item.page_title || item.page_url)}</a></td>
+          <td data-label="유형">${categoryLabels[item.category] || escapeHtml(item.category)}</td>
+          <td data-label="의견" class="feedback-message">${escapeHtml(item.message)}</td>
+          <td data-label="상태" class="status-${item.status === 'new' ? 'new' : 'reviewed'}">${item.status === 'new' ? '미확인' : '확인함'}</td>
+          <td data-label="처리"><button type="button" data-feedback-id="${Number(item.id)}" data-next-status="${item.status === 'new' ? 'reviewed' : 'new'}">${item.status === 'new' ? '확인 처리' : '미확인으로'}</button></td>
+        </tr>`).join('') : '<tr><td class="empty" colspan="6">조건에 맞는 의견이 없습니다.</td></tr>';
+    }
+
+    function render(data) {
+      renderSummary(data);
+      renderPages(data);
+      renderFeedback(data);
     }
 
     async function loadDashboard() {
-      status.textContent = '자료를 불러오는 중입니다.';
-      const data = await adminApi('/admin/dashboard');
-      render(data);
-      sessionStorage.setItem('welmoa-feedback-admin-key', adminKey);
-      dashboard.hidden = false;
-      status.textContent = '';
+      setStatus('자료를 불러오는 중입니다.', 'info');
+      refreshButton.disabled = true;
+      try {
+        latestData = await adminApi('/admin/dashboard');
+        pageChanges = loadChanges(latestData.pages);
+        render(latestData);
+        sessionStorage.setItem('welmoa-feedback-admin-key', adminKey);
+        loginPanel.hidden = true;
+        dashboard.hidden = false;
+        document.querySelector('#lastUpdated').textContent = `마지막 조회: ${new Date().toLocaleString('ko-KR')}`;
+        setStatus();
+      } finally {
+        refreshButton.disabled = false;
+      }
     }
 
     loginForm.addEventListener('submit', async (event) => {
       event.preventDefault();
       adminKey = keyInput.value.trim();
-      try { await loadDashboard(); } catch (error) { status.textContent = error.message; dashboard.hidden = true; }
+      try { await loadDashboard(); } catch (error) { setStatus(error.message); dashboard.hidden = true; loginPanel.hidden = false; }
+    });
+
+    refreshButton.addEventListener('click', async () => {
+      try { await loadDashboard(); } catch (error) { setStatus(error.message); }
+    });
+
+    acknowledgeButton.addEventListener('click', () => {
+      localStorage.setItem(SNAPSHOT_KEY, JSON.stringify(currentSnapshot(latestData.pages)));
+      pageChanges = {};
+      render(latestData);
+      setStatus('현재까지의 변경사항을 확인 처리했습니다.', 'info');
+    });
+
+    document.querySelector('#logoutAdmin').addEventListener('click', () => {
+      adminKey = '';
+      sessionStorage.removeItem('welmoa-feedback-admin-key');
+      dashboard.hidden = true;
+      loginPanel.hidden = false;
+      keyInput.value = '';
+      setStatus();
+      keyInput.focus();
+    });
+
+    ['pageTypeFilter', 'feedbackStatusFilter', 'feedbackCategoryFilter'].forEach((id) => {
+      document.querySelector(`#${id}`).addEventListener('change', () => render(latestData));
+    });
+    ['pageSearch', 'feedbackSearch'].forEach((id) => {
+      document.querySelector(`#${id}`).addEventListener('input', () => render(latestData));
     });
 
     document.querySelector('#feedbackRows').addEventListener('click', async (event) => {
@@ -157,10 +347,18 @@
       try {
         await adminApi('/admin/feedback', { method: 'PATCH', body: JSON.stringify({ id: Number(button.dataset.feedbackId), status: button.dataset.nextStatus }) });
         await loadDashboard();
-      } catch (error) { status.textContent = error.message; button.disabled = false; }
+      } catch (error) { setStatus(error.message); button.disabled = false; }
     });
 
-    if (adminKey) loadDashboard().catch(() => { sessionStorage.removeItem('welmoa-feedback-admin-key'); });
+    if (adminKey) {
+      loadDashboard().catch((error) => {
+        sessionStorage.removeItem('welmoa-feedback-admin-key');
+        adminKey = '';
+        loginPanel.hidden = false;
+        dashboard.hidden = true;
+        setStatus(error.message);
+      });
+    }
   </script>
 </body>
 </html>
