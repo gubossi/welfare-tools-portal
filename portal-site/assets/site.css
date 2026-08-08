@@ -370,7 +370,7 @@ main > p, main > ul, main > ol {
 .latest-post-card {
   display: flex;
   flex-direction: column;
-  min-height: 280px;
+  min-height: 0;
   border-radius: 28px;
   border: 1px solid #e2e8f0;
   background: rgba(255,255,255,0.9);
@@ -403,9 +403,9 @@ main > p, main > ul, main > ol {
 }
 
 .latest-post-card h3 {
-  margin: 18px 0 14px;
-  font-size: 1.38rem;
-  line-height: 1.42;
+  margin: 0 0 10px;
+  font-size: 1.32rem;
+  line-height: 1.32;
   letter-spacing: -0.04em;
 
   display: -webkit-box;
@@ -425,8 +425,8 @@ main > p, main > ul, main > ol {
 
 .latest-post-card p {
   color: #64748b;
-  line-height: 1.8;
-  font-size: 0.98rem;
+  line-height: 1.6;
+  font-size: 0.96rem;
 
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -436,7 +436,7 @@ main > p, main > ul, main > ol {
 
 .latest-post-card .post-date {
   margin-top: auto;
-  padding-top: 24px;
+  padding-top: 14px;
   color: #94a3b8;
   font-size: 0.9rem;
   font-weight: 600;
@@ -487,7 +487,7 @@ main > p, main > ul, main > ol {
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: 24px;
+  padding: 20px 22px;
 }
 
 .post-hero-image {
