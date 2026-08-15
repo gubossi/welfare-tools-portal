@@ -175,6 +175,14 @@ export default {
       return redirectToCanonical(url, "/salary");
     }
 
+    if (
+      pathname === "/tools/operation-log/setup" ||
+      pathname === "/tools/operation-log/setup/" ||
+      pathname === "/tools/operation-log/setup.html"
+    ) {
+      return redirectToCanonical(url, "/tools/operation-log/");
+    }
+
     const directoryRoutes = new Set([
       "/tools",
       "/tools/hobong",
