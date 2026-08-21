@@ -60,6 +60,52 @@ async function injectPageEnhancements(response) {
 const LATEST_POSTS_URL = "https://blog.welmoa.kr/latest-posts.json";
 const LATEST_POSTS_LIMIT = 6;
 
+// Welmoa 2.0으로 통합된 공개 페이지는 기존 주소의 검색 신호와 북마크를
+// 보존할 수 있도록 최종 주소로 직접 영구 이동시킨다.
+const MIGRATED_PAGE_REDIRECTS = new Map([
+  ["/", "/tools/"],
+  ["/index.html", "/tools/"],
+  ["/tools", "/tools/"],
+  ["/tools/", "/tools/"],
+  ["/tools/index.html", "/tools/"],
+  ["/tools/hobong", "/tools/hobong/"],
+  ["/tools/hobong/", "/tools/hobong/"],
+  ["/tools/hobong/index.html", "/tools/hobong/"],
+  ["/salary", "/tools/salary/"],
+  ["/salary/", "/tools/salary/"],
+  ["/salary/index.html", "/tools/salary/"],
+  ["/lottery", "/tools/lottery/"],
+  ["/lottery/", "/tools/lottery/"],
+  ["/lottery/index.html", "/tools/lottery/"],
+  ["/shortener", "/tools/shortener/"],
+  ["/shortener/", "/tools/shortener/"],
+  ["/shortener/index.html", "/tools/shortener/"],
+  ["/formatter", "/tools/formatter/"],
+  ["/formatter/", "/tools/formatter/"],
+  ["/formatter/index.html", "/tools/formatter/"],
+  ["/tools/operation-log", "/tools/operation-log/"],
+  ["/tools/operation-log/", "/tools/operation-log/"],
+  ["/tools/operation-log/index.html", "/tools/operation-log/"],
+  ["/tools/operation-log/guide", "/tools/operation-log/guide/"],
+  ["/tools/operation-log/guide/", "/tools/operation-log/guide/"],
+  ["/tools/operation-log/guide/index.html", "/tools/operation-log/guide/"],
+  ["/tools/operation-log/app", "/tools/operation-log/app/"],
+  ["/tools/operation-log/app/", "/tools/operation-log/app/"],
+  ["/tools/operation-log/app/index.html", "/tools/operation-log/app/"],
+  ["/tools/eapproval", "/tools/eapproval/"],
+  ["/tools/eapproval/", "/tools/eapproval/"],
+  ["/tools/eapproval/index.html", "/tools/eapproval/"],
+  ["/about", "/about/"],
+  ["/about/", "/about/"],
+  ["/about/index.html", "/about/"],
+  ["/privacy", "/privacy/"],
+  ["/privacy/", "/privacy/"],
+  ["/privacy/index.html", "/privacy/"],
+  ["/terms", "/terms/"],
+  ["/terms/", "/terms/"],
+  ["/terms/index.html", "/terms/"]
+]);
+
 async function injectLatestPosts(html) {
   if (!html.includes('id="latest-posts"')) return html;
 
@@ -170,6 +216,11 @@ export default {
     const url = new URL(request.url);
     const pathname = url.pathname;
 
+    const migratedPath = MIGRATED_PAGE_REDIRECTS.get(pathname);
+    if (migratedPath) {
+      return redirectToWelmoa2(url, migratedPath);
+    }
+
     // GA4에서 같은 화면이 여러 경로로 나뉘지 않도록 대표 URL로 통일한다.
     if (pathname === "/salary/") {
       return redirectToCanonical(url, "/salary");
@@ -184,13 +235,7 @@ export default {
     }
 
     const directoryRoutes = new Set([
-      "/tools",
-      "/tools/hobong",
-      "/tools/eapproval",
-      "/tools/operation-log",
       "/tools/grants",
-      "/shortener",
-      "/formatter"
     ]);
 
     if (directoryRoutes.has(pathname)) {
@@ -354,6 +399,12 @@ return injectPageEnhancements(assetResponse);
 function redirectToCanonical(url, pathname) {
   const destination = new URL(url.toString());
   destination.pathname = pathname;
+  return Response.redirect(destination.toString(), 301);
+}
+
+function redirectToWelmoa2(url, pathname) {
+  const destination = new URL(pathname, "https://welmoa.kr");
+  destination.search = url.search;
   return Response.redirect(destination.toString(), 301);
 }
 
