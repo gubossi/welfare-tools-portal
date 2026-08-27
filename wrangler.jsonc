@@ -39,8 +39,8 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "welmoa-grants",
-      "database_id": "0c1b0708-ca7b-4dba-9f50-1aa870f72d91"
+      "database_name": "welmoa-engagement",
+      "database_id": "f5905234-cc68-4bbd-9540-ab9ee2b90204"
     }
   ]
 }
